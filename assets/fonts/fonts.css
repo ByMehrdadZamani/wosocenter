@@ -1,0 +1,14 @@
+/* WoSoCenter — verified open-license Persian families. Loaded only on demand.
+   The project currently uses CDN-hosted WOFF2 font files; all families retain
+   the same stable CSS family names for later self-hosting. */
+@font-face{font-family:'Estedad';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/estedad/Estedad-VF.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Mikhak';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/mikhak/Mikhak-VF.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Sahel';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/sahel/Sahel-VF.woff2') format('woff2');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Shabnam';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/shabnam/Shabnam.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Shabnam';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/shabnam/Shabnam-Bold.woff2') format('woff2');font-weight:700 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Gandom';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/gandom/Gandom.woff2') format('woff2');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Fandogh';src:url('https://cdn.jsdelivr.net/gh/aminabedi68/Fandogh@master/V%201.00/font/Fandogh.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Rooyin';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/rooyin/RooyinFree-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Rooyin';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/rooyin/RooyinFree-Bold.woff2') format('woff2');font-weight:700 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Noqte';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/noqte/noqte.woff2') format('woff2');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Ario';src:url('https://cdn.jsdelivr.net/npm/next-persian-fonts@1.5.0/ario/Ario-Dots1.woff2') format('woff2');font-weight:400 900;font-style:normal;font-display:swap}

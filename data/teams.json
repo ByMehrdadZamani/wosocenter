@@ -19,13 +19,13 @@
   },
   {
     "id": "liverpool-fc",
-    "name": "Liverpool FC",
+    "name": "لیورپول ۲",
     "image": "assets/teams/liverpool-fc.png",
     "color": "#18544a"
   },
   {
     "id": "montpellier-fc-logo",
-    "name": "Montpellier FC logo",
+    "name": "مون پلیه",
     "image": "assets/teams/montpellier-fc-logo.png",
     "color": "#e3eaf7"
   },
@@ -484,12 +484,6 @@
     "name": "یوونتوس",
     "image": "assets/teams/ywwntws.png",
     "color": "#a7bad7"
-  },
-  {
-    "id": "servette",
-    "name": "سروت ژنو",
-    "image": "assets/teams/servette.png",
-    "color": "#83182e"
   },
   {
     "id": "nordsjaelland",
