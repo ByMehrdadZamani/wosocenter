@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#100b19" />
-  <meta name="description" content="کنداکتورساز فوتبال — طراحی جدول بازی‌های روز با انتخاب تیم، پرچم، رنگ و فونت و خروجی تصویر" />
-  <title>کنداکتورساز فوتبال | قالب شماره ۱</title>
+  <meta name="description" content="WoSoCenter — کنداکتورساز آنلاین فوتبال با قالب آماده، بانک لوگو و خروجی تصویر" />
+  <title>کنداکتورساز فوتبال | WoSoCenter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700;800;900&family=Lalezar&family=Noto+Sans+Arabic:wght@400;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -14,40 +14,79 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="identity"><span class="appmark">⚽</span><div><strong>کنداکتورساز فوتبال</strong><small>WoSoCenter • قالب شماره ۱</small></div></div>
-    <div class="top-actions"><span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار فعال است</span><button id="downloadBtn" class="btn primary" type="button">↓ دریافت PNG</button></div>
+    <div class="identity"><span class="appmark" aria-hidden="true">⚽</span><div><strong>کنداکتورساز فوتبال</strong><small>WoSoCenter · قالب ۰۱</small></div></div>
+    <div class="top-actions">
+      <div class="history-actions" aria-label="ویرایش‌های قبلی">
+        <button id="undoBtn" class="tool-btn" type="button" title="بازگشت به تغییر قبلی (Ctrl+Z)" aria-label="واگرد">↶</button>
+        <button id="redoBtn" class="tool-btn" type="button" title="بازگرداندن تغییر (Ctrl+Y)" aria-label="بازانجام">↷</button>
+        <button id="showHistoryBtn" class="tool-btn history-icon" type="button" title="مشاهده تاریخچه" aria-label="تاریخچه تغییرات">☷</button>
+      </div>
+      <button id="themeToggle" class="tool-btn theme-btn" type="button" title="تغییر حالت روشن و تاریک" aria-label="تغییر حالت روشن و تاریک">☀</button>
+      <span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار</span>
+      <button id="downloadBtn" class="btn primary" type="button">↓ دریافت PNG</button>
+    </div>
   </header>
   <main class="workspace">
-    <aside class="editor" aria-label="ویرایش کنداکتور">
-      <div class="section-head"><div><h1>تنظیمات کنداکتور</h1><p>اطلاعات را وارد کن؛ جای هر عنصر از قبل مشخص است.</p></div><span class="template-tag">طرح ۰۱</span></div>
-      <nav class="tabs" aria-label="دسته‌بندی تنظیمات">
+    <aside class="editor" aria-label="پنل تنظیمات کنداکتور">
+      <div class="section-head"><div><h1>تنظیمات کنداکتور</h1><p>تیم‌ها، متن‌ها، رنگ‌ها و فونت‌ها را انتخاب کنید.</p></div><span class="template-tag">طرح ۰۱</span></div>
+      <nav class="tabs" aria-label="بخش‌های ویرایش">
         <button class="tab active" data-tab="games" aria-selected="true" type="button">مسابقات</button>
-        <button class="tab" data-tab="header" aria-selected="false" type="button">هدر و پاورقی</button>
-        <button class="tab" data-tab="design" aria-selected="false" type="button">رنگ‌های کلی</button>
+        <button class="tab" data-tab="header" aria-selected="false" type="button">هدر و پایین</button>
+        <button class="tab" data-tab="design" aria-selected="false" type="button">طرح و رنگ</button>
+        <button class="tab" data-tab="history" aria-selected="false" type="button">تاریخچه</button>
       </nav>
       <div class="tab-content" id="gamesTab">
-        <div class="subheading"><div><h2>بازی‌ها</h2><small id="gameCount">۱ از ۶ مسابقه</small></div><button id="addGameBtn" class="btn accent" type="button"><span aria-hidden="true">＋</span> افزودن بازی</button></div>
+        <div class="subheading"><div><h2>بازی‌ها</h2><small id="gameCount">۱ از ۶ مسابقه</small></div><button id="addGameBtn" class="btn accent" type="button">＋ افزودن بازی</button></div>
         <div id="gamesList" class="games-list"></div>
-        <p class="hint">فهرست لوگوها و پرچم‌ها از بانک فایل‌های خودت خوانده می‌شود. برای هر بازی رنگ و فونت مستقل داری.</p>
+        <p class="hint">برای انتخاب لوگوی تیم یا پرچم، روی گزینه مربوط بزنید و در فهرست جست‌وجو کنید.</p>
       </div>
       <div class="tab-content hidden" id="headerTab">
-        <div class="settings-group"><h2>تاریخ در بالای تصویر</h2><div class="two-col"><label>روز هفته<input id="weekDay" maxlength="22" type="text" placeholder="شنبه" /></label><label>روز و ماه<input id="monthDay" maxlength="22" type="text" placeholder="۱۶ آبان" /></label></div><div class="two-col"><label>رنگ روز هفته<input id="dayColor" type="color" /></label><label>رنگ روز و ماه<input id="dateColor" type="color" /></label></div><div class="two-col"><label>فونت روز هفته<select id="dayFont" class="font-select"></select></label><label>فونت روز و ماه<select id="dateFont" class="font-select"></select></label></div><label>رنگ خط نقطه‌چین<input id="dateLineColor" type="color" /></label></div>
-        <div class="settings-group"><h2>عنوان ثابت گرافیکی</h2><p class="hint">طرح حروف دقیقاً از عکس ارسالی برداشته شده؛ فقط رنگ هر قسمت عوض می‌شود.</p><div class="two-col"><label>رنگ «برنامه»<input id="titlePurple" type="color" /></label><label>رنگ «بازی‌های امروز»<input id="titleWhite" type="color" /></label></div></div>
-        <div class="settings-group"><h2>پاورقی کانال</h2><label>آیدی یا نام کانال<input id="footerText" maxlength="45" type="text" placeholder="WoSoCenter" /></label><div class="two-col"><label>رنگ نوشته<input id="footerColor" type="color" /></label><label>رنگ آیکون تلگرام<input id="telegramColor" type="color" /></label></div><label>فونت نوشته<select id="footerFont" class="font-select"></select></label></div>
+        <div class="settings-group"><h2>تاریخ بالای تصویر</h2>
+          <div class="two-col"><label>روز هفته<input id="weekDay" maxlength="22" type="text" placeholder="شنبه" /></label><label>روز و ماه<input id="monthDay" maxlength="22" type="text" placeholder="۱۶ آبان" /></label></div>
+          <div class="two-col"><label>رنگ روز هفته<button type="button" class="color-trigger" data-global-color="dayColor"></button></label><label>رنگ روز و ماه<button type="button" class="color-trigger" data-global-color="dateColor"></button></label></div>
+          <div class="two-col"><label>فونت روز هفته<select id="dayFont" class="font-select"></select></label><label>فونت روز و ماه<select id="dateFont" class="font-select"></select></label></div>
+          <label>رنگ خط نقطه‌چین<button type="button" class="color-trigger" data-global-color="dateLineColor"></button></label>
+        </div>
+        <div class="settings-group"><h2>عنوان گرافیکی</h2>
+          <div class="two-col"><label>رنگ «برنامه»<button type="button" class="color-trigger" data-global-color="titlePurple"></button></label><label>رنگ «بازی‌های امروز»<button type="button" class="color-trigger" data-global-color="titleWhite"></button></label></div>
+        </div>
+        <div class="settings-group"><h2>آیدی کانال در تصویر</h2>
+          <label>نام یا آیدی کانال<input id="footerText" maxlength="45" type="text" placeholder="WoSoCenter" /></label>
+          <div class="two-col"><label>رنگ نوشته<button type="button" class="color-trigger" data-global-color="footerColor"></button></label><label>رنگ آیکون تلگرام<button type="button" class="color-trigger" data-global-color="telegramColor"></button></label></div>
+          <label>فونت نوشته<select id="footerFont" class="font-select"></select></label>
+        </div>
       </div>
       <div class="tab-content hidden" id="designTab">
-        <div class="settings-group"><h2>رنگ اجزای اصلی تصویر</h2><p class="hint">همه رنگ‌ها در خروجی نهایی PNG هم اعمال می‌شوند.</p><div class="two-col"><label>رنگ زمینه<input id="background" type="color" /></label><label>رنگ پترن<input id="patternColor" type="color" /></label><label>لایه کادر اصلی<input id="frameColor" type="color" /></label><label>رنگ کادر مسابقات<input id="cardColor" type="color" /></label></div></div>
-        <div class="settings-group"><h2>تغییر گروهی فونت‌ها</h2><label>فونت دلخواه<select id="globalFont" class="font-select"></select></label><button class="btn secondary full" type="button" id="applyAllFonts">اعمال فونت به همه متن‌ها</button><p class="hint">عنوان گرافیکی «برنامه بازی‌های امروز» تغییر نمی‌کند. پس از اعمال گروهی همچنان می‌توانی فونت تک‌تک متن‌ها را جدا کنی.</p></div>
-        <div class="settings-group"><h2>مدیریت پروژه</h2><div class="two-col"><button class="btn secondary" id="exportProject" type="button">ذخیره تنظیمات JSON</button><button class="btn secondary" id="importProjectBtn" type="button">بازیابی تنظیمات</button></div><input id="projectFile" type="file" accept=".json,application/json" hidden /><button class="btn danger-text full" id="resetBtn" type="button">بازگردانی طرح اولیه</button><p class="hint">اطلاعات در مرورگر خودت ذخیره می‌شوند؛ به سرور یا حساب کاربری فرستاده نمی‌شوند.</p></div>
+        <div class="settings-group"><h2>ترکیب رنگی آماده</h2><p class="hint compact">برای تغییر هماهنگ رنگ تمام اجزای تصویر، یک ترکیب را انتخاب کنید.</p><div id="paletteList" class="palette-list"></div></div>
+        <div class="settings-group"><h2>پترن پس‌زمینه</h2><button id="patternPick" type="button" class="asset-pick large" data-pick="patternId"><span class="asset-sample" id="patternSample"></span><span class="asset-pick-name" id="patternName">انتخاب پترن</span><span class="pick-arrow">⌄</span></button><p class="hint compact">پترن‌ها از بانک طرح‌های سایت انتخاب می‌شوند.</p></div>
+        <div class="settings-group"><h2>رنگ اجزای تصویر</h2>
+          <div class="two-col"><label>رنگ زمینه<button type="button" class="color-trigger" data-global-color="background"></button></label><label>رنگ پترن<button type="button" class="color-trigger" data-global-color="patternColor"></button></label><label>رنگ لایه مرکزی<button type="button" class="color-trigger" data-global-color="frameColor"></button></label><label>رنگ کادر مسابقه<button type="button" class="color-trigger" data-global-color="cardColor"></button></label><label>رنگ لوگوی بالای تصویر<button type="button" class="color-trigger" data-global-color="brandLogoColor"></button></label></div>
+        </div>
+        <div class="settings-group"><h2>فونت یکسان برای متن‌ها</h2><label>انتخاب فونت<select id="globalFont" class="font-select"></select></label><button class="btn secondary full" type="button" id="applyAllFonts">اعمال روی تمام نوشته‌های قابل ویرایش</button><p class="hint compact">عنوان گرافیکی بالای تصویر ثابت می‌ماند.</p></div>
+        <div class="settings-group"><h2>مدیریت طرح</h2><div class="two-col"><button class="btn secondary" id="exportProject" type="button">دریافت تنظیمات JSON</button><button class="btn secondary" id="importProjectBtn" type="button">بازیابی تنظیمات</button></div><input id="projectFile" type="file" accept=".json,application/json" hidden /><button class="btn danger-text full" id="resetBtn" type="button">بازگشت به طرح پیش‌فرض</button><p class="hint compact">تنظیمات و تاریخچه تغییرات در همین مرورگر نگهداری می‌شوند.</p></div>
       </div>
+      <div class="tab-content hidden" id="historyTab"><div class="subheading"><div><h2>تاریخچه تغییرات</h2><small id="historyCount">۰ تغییر</small></div><div class="inline-tools"><button type="button" class="btn secondary" id="historyUndo">↶ واگرد</button><button type="button" class="btn secondary" id="historyRedo">↷ بازانجام</button></div></div><p class="hint compact history-hint">هر ردیف یک مرحله است. روی هر مرحله بزنید تا طرح به همان وضعیت برگردد. تا ۵۰۰ مرحله اخیر نگهداری می‌شود.</p><div id="historyList" class="history-list"></div></div>
       <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
     </aside>
     <section class="preview-area" aria-label="پیش‌نمایش خروجی">
-      <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>قالب ثابت • تصویر نهایی با وضوح اصلی</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div>
-      <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش کنداکتور فوتبال"></canvas></div>
-      <div class="preview-foot"><span>✓ ترتیب بازی‌ها و فاصله‌ها ثابت می‌مانند.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
+      <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div>
+      <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش برنامه بازی‌های فوتبال"></canvas></div>
+      <div class="preview-foot"><span>تصویر خروجی ۱۰۸۰ × ۱۳۵۰ پیکسل است.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
     </section>
   </main>
-  <footer class="site-footer">نسخه آزمایشی قالب ۱ · اجرا در مرورگر · قابل انتشار در GitHub Pages</footer>
+  <footer class="site-footer">WoSoCenter <span aria-hidden="true">·</span> ارتباط با سازنده: <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" dir="ltr">@ByMehrdad</a></footer>
+  <dialog class="picker-dialog" id="assetDialog" aria-labelledby="assetDialogTitle">
+    <div class="dialog-head"><div><h2 id="assetDialogTitle">انتخاب از فهرست</h2><p id="assetCount">برای انتخاب روی یک مورد بزنید.</p></div><button type="button" class="dialog-close" data-close-dialog="assetDialog" aria-label="بستن">×</button></div>
+    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="assetSearch" type="search" autocomplete="off" placeholder="جست‌وجوی نام تیم، کشور یا پترن…" aria-label="جست‌وجوی فهرست"/></div>
+    <div class="asset-results" id="assetResults"></div>
+  </dialog>
+  <dialog class="picker-dialog color-dialog" id="colorDialog" aria-labelledby="colorDialogTitle">
+    <div class="dialog-head"><div><h2 id="colorDialogTitle">انتخاب رنگ</h2><p>رنگ دلخواه یا کد HEX را وارد کنید.</p></div><button type="button" class="dialog-close" data-close-dialog="colorDialog" aria-label="بستن">×</button></div>
+    <div class="color-preview-row"><div id="colorPreview" class="color-preview"></div><label>کد رنگ HEX<input type="text" id="colorHex" maxlength="7" dir="ltr" inputmode="text" spellcheck="false" value="#FFFFFF" /></label><input type="color" id="colorNative" title="انتخابگر رنگ گوشی" aria-label="انتخابگر رنگ دستگاه" /></div>
+    <div class="picker-sv" id="pickerSV" aria-label="روشنایی و غلظت رنگ"><span class="picker-target" id="pickerTarget"></span></div>
+    <label class="hue-label">طیف رنگ<input id="pickerHue" type="range" min="0" max="360" value="270" /></label>
+    <div id="colorSwatches" class="color-swatches" aria-label="رنگ‌های پیشنهادی"></div>
+    <button class="btn primary full" id="colorDone" type="button">تأیید رنگ</button>
+  </dialog>
 </body>
 </html>
