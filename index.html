@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#100b19" />
+  <meta name="description" content="کنداکتورساز فوتبال — طراحی جدول بازی‌های روز با انتخاب تیم، پرچم، رنگ و فونت و خروجی تصویر" />
+  <title>کنداکتورساز فوتبال | قالب شماره ۱</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700;800;900&family=Lalezar&family=Noto+Sans+Arabic:wght@400;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="identity"><span class="appmark">⚽</span><div><strong>کنداکتورساز فوتبال</strong><small>WoSoCenter • قالب شماره ۱</small></div></div>
+    <div class="top-actions"><span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار فعال است</span><button id="downloadBtn" class="btn primary" type="button">↓ دریافت PNG</button></div>
+  </header>
+  <main class="workspace">
+    <aside class="editor" aria-label="ویرایش کنداکتور">
+      <div class="section-head"><div><h1>تنظیمات کنداکتور</h1><p>اطلاعات را وارد کن؛ جای هر عنصر از قبل مشخص است.</p></div><span class="template-tag">طرح ۰۱</span></div>
+      <nav class="tabs" aria-label="دسته‌بندی تنظیمات">
+        <button class="tab active" data-tab="games" aria-selected="true" type="button">مسابقات</button>
+        <button class="tab" data-tab="header" aria-selected="false" type="button">هدر و پاورقی</button>
+        <button class="tab" data-tab="design" aria-selected="false" type="button">رنگ‌های کلی</button>
+      </nav>
+      <div class="tab-content" id="gamesTab">
+        <div class="subheading"><div><h2>بازی‌ها</h2><small id="gameCount">۱ از ۶ مسابقه</small></div><button id="addGameBtn" class="btn accent" type="button"><span aria-hidden="true">＋</span> افزودن بازی</button></div>
+        <div id="gamesList" class="games-list"></div>
+        <p class="hint">فهرست لوگوها و پرچم‌ها از بانک فایل‌های خودت خوانده می‌شود. برای هر بازی رنگ و فونت مستقل داری.</p>
+      </div>
+      <div class="tab-content hidden" id="headerTab">
+        <div class="settings-group"><h2>تاریخ در بالای تصویر</h2><div class="two-col"><label>روز هفته<input id="weekDay" maxlength="22" type="text" placeholder="شنبه" /></label><label>روز و ماه<input id="monthDay" maxlength="22" type="text" placeholder="۱۶ آبان" /></label></div><div class="two-col"><label>رنگ روز هفته<input id="dayColor" type="color" /></label><label>رنگ روز و ماه<input id="dateColor" type="color" /></label></div><div class="two-col"><label>فونت روز هفته<select id="dayFont" class="font-select"></select></label><label>فونت روز و ماه<select id="dateFont" class="font-select"></select></label></div><label>رنگ خط نقطه‌چین<input id="dateLineColor" type="color" /></label></div>
+        <div class="settings-group"><h2>عنوان ثابت گرافیکی</h2><p class="hint">طرح حروف دقیقاً از عکس ارسالی برداشته شده؛ فقط رنگ هر قسمت عوض می‌شود.</p><div class="two-col"><label>رنگ «برنامه»<input id="titlePurple" type="color" /></label><label>رنگ «بازی‌های امروز»<input id="titleWhite" type="color" /></label></div></div>
+        <div class="settings-group"><h2>پاورقی کانال</h2><label>آیدی یا نام کانال<input id="footerText" maxlength="45" type="text" placeholder="WoSoCenter" /></label><div class="two-col"><label>رنگ نوشته<input id="footerColor" type="color" /></label><label>رنگ آیکون تلگرام<input id="telegramColor" type="color" /></label></div><label>فونت نوشته<select id="footerFont" class="font-select"></select></label></div>
+      </div>
+      <div class="tab-content hidden" id="designTab">
+        <div class="settings-group"><h2>رنگ اجزای اصلی تصویر</h2><p class="hint">همه رنگ‌ها در خروجی نهایی PNG هم اعمال می‌شوند.</p><div class="two-col"><label>رنگ زمینه<input id="background" type="color" /></label><label>رنگ پترن<input id="patternColor" type="color" /></label><label>لایه کادر اصلی<input id="frameColor" type="color" /></label><label>رنگ کادر مسابقات<input id="cardColor" type="color" /></label></div></div>
+        <div class="settings-group"><h2>تغییر گروهی فونت‌ها</h2><label>فونت دلخواه<select id="globalFont" class="font-select"></select></label><button class="btn secondary full" type="button" id="applyAllFonts">اعمال فونت به همه متن‌ها</button><p class="hint">عنوان گرافیکی «برنامه بازی‌های امروز» تغییر نمی‌کند. پس از اعمال گروهی همچنان می‌توانی فونت تک‌تک متن‌ها را جدا کنی.</p></div>
+        <div class="settings-group"><h2>مدیریت پروژه</h2><div class="two-col"><button class="btn secondary" id="exportProject" type="button">ذخیره تنظیمات JSON</button><button class="btn secondary" id="importProjectBtn" type="button">بازیابی تنظیمات</button></div><input id="projectFile" type="file" accept=".json,application/json" hidden /><button class="btn danger-text full" id="resetBtn" type="button">بازگردانی طرح اولیه</button><p class="hint">اطلاعات در مرورگر خودت ذخیره می‌شوند؛ به سرور یا حساب کاربری فرستاده نمی‌شوند.</p></div>
+      </div>
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+    </aside>
+    <section class="preview-area" aria-label="پیش‌نمایش خروجی">
+      <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>قالب ثابت • تصویر نهایی با وضوح اصلی</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div>
+      <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش کنداکتور فوتبال"></canvas></div>
+      <div class="preview-foot"><span>✓ ترتیب بازی‌ها و فاصله‌ها ثابت می‌مانند.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
+    </section>
+  </main>
+  <footer class="site-footer">نسخه آزمایشی قالب ۱ · اجرا در مرورگر · قابل انتشار در GitHub Pages</footer>
+</body>
+</html>

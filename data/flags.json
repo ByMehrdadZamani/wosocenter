@@ -1,0 +1,12 @@
+[
+  {"id":"belgium","name":"بلژیک","image":"assets/flags/belgium.svg"},
+  {"id":"iran","name":"ایران","image":"assets/flags/iran.svg"},
+  {"id":"spain","name":"اسپانیا","image":"assets/flags/spain.svg"},
+  {"id":"england","name":"انگلیس","image":"assets/flags/england.svg"},
+  {"id":"germany","name":"آلمان","image":"assets/flags/germany.svg"},
+  {"id":"italy","name":"ایتالیا","image":"assets/flags/italy.svg"},
+  {"id":"france","name":"فرانسه","image":"assets/flags/france.svg"},
+  {"id":"portugal","name":"پرتغال","image":"assets/flags/portugal.svg"},
+  {"id":"netherlands","name":"هلند","image":"assets/flags/netherlands.svg"},
+  {"id":"turkey","name":"ترکیه","image":"assets/flags/turkey.svg"}
+]

@@ -1,0 +1,33 @@
+:root { color-scheme: dark; --bg:#0c0b10; --panel:#16151c; --panel2:#1f1d26; --edge:#37323f; --muted:#aba4b7; --white:#f6f3fa; --violet:#b85ad5; --violet2:#7a318d; --green:#73d0ad; }
+* {box-sizing:border-box}
+html {font-family:Vazirmatn,Tahoma,sans-serif;scroll-behavior:smooth}
+body {margin:0;background:radial-gradient(ellipse 70% 45% at 95% 0%, #24102d 0%,transparent 80%),var(--bg); color:var(--white)}
+button,input,select {font:inherit}
+button {cursor:pointer}
+button:focus-visible, input:focus-visible,select:focus-visible {outline:2px solid #ca7feb;outline-offset:2px}
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(14px,3vw,38px);border-bottom:1px solid #302734;background:rgba(13,12,17,.87)}
+.identity{display:flex;align-items:center;gap:13px}.identity strong{display:block;font-size:16px}.identity small{display:block;font-size:11px;color:var(--muted);margin-top:3px}.appmark{font-size:28px;display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:#36213d}
+.top-actions{display:flex;align-items:center;gap:13px}.saved{font-size:11px;color:#9d94a7}
+.btn {border:1px solid #514557;border-radius:11px;padding:10px 13px;color:#eee6f4;background:#2d2834;font-size:12px;font-weight:700;transition:.14s transform,.14s background;white-space:nowrap}.btn:hover{background:#43364c}.btn:active{transform:scale(.98)}
+.btn.primary{background:#b65ad4;color:#1c0e23;border-color:#b65ad4;font-weight:900}.btn.primary:hover,.btn.accent:hover{background:#d380ef}
+.btn.accent{color:#1e0d24;background:#bd6ad8;border-color:#c371df}.btn.secondary{background:#29252f}.btn.danger-text{color:#ff9fa9;border-color:#653a46;background:#281a21}.btn.full{width:100%;margin-top:11px}
+.workspace{display:grid;grid-template-columns:minmax(355px,465px) minmax(360px,1fr);gap:24px;padding:24px clamp(14px,3vw,38px);align-items:start;max-width:1580px;margin:auto}
+.editor{border:1px solid var(--edge);background:var(--panel);border-radius:20px;min-width:0;overflow:hidden;box-shadow:0 16px 38px #0002}
+.section-head{padding:22px 22px 18px;display:flex;align-items:center;justify-content:space-between;gap:8px}.section-head h1{font-size:18px;margin:0 0 7px}.section-head p,.preview-head p{font-size:11px;color:var(--muted);margin:0;line-height:1.9}.template-tag{font-size:11px;padding:6px 9px;color:#ebc5f5;border:1px solid #65416e;border-radius:9px;white-space:nowrap}
+.tabs{display:flex;gap:5px;border-bottom:1px solid var(--edge);padding:0 16px}.tab{background:transparent;color:#9b93a3;border:0;border-bottom:2px solid transparent;padding:12px 9px;font-size:12px;font-weight:700;flex:1;white-space:nowrap}.tab:hover{color:#fff}.tab.active{border-color:#c573e3;color:#e9b0f5}
+.tab-content{padding:20px}.tab-content.hidden{display:none}
+.subheading,.game-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.subheading{margin-bottom:17px}.subheading h2,.settings-group h2{font-size:14px;margin:0 0 5px}.subheading small{font-size:11px;color:var(--muted)}
+.games-list{display:grid;gap:13px}.game-editor{background:var(--panel2);border-radius:13px;border:1px solid #3b3544;padding:15px}.game-editor h3{margin:0;font-size:13px}.game-editor .game-info{font-size:10px;color:var(--muted);margin-top:4px}.remove-game{border:1px solid #593943;color:#f08c9b;background:#32232a;border-radius:9px;font-size:13px;font-weight:700;width:31px;height:31px}.remove-game:hover{background:#56313c}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}.field-grid .span2{grid-column:span 2}
+label{display:grid;gap:6px;font-size:11px;color:#bdb5c5;font-weight:650}label input:not([type=color]),label select{min-width:0;width:100%;background:#101016;color:#fff;border:1px solid #474151;border-radius:9px;padding:9px 11px;height:40px;font-size:12px;direction:rtl}
+label input[type=color]{height:39px;width:100%;padding:4px;border:1px solid #52475b;background:#110f16;border-radius:9px;cursor:pointer}
+label input[type=color]::-webkit-color-swatch-wrapper{padding:0}label input[type=color]::-webkit-color-swatch{border-radius:5px;border:0}
+.details{margin-top:13px}.details summary{font-size:11px;color:#d6b9e0;cursor:pointer;user-select:none}.details[open] summary{margin-bottom:10px}
+.mini-title{font-size:11px;color:#bcb2c5;margin:13px 0 0}.hint{color:#a99fad;font-size:11px;line-height:1.9;margin:14px 0 0}.settings-group{background:var(--panel2);padding:16px;border-radius:13px;border:1px solid #3b3544;margin-bottom:14px}.settings-group h2{margin-bottom:12px}.settings-group>label{margin-top:12px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px}.settings-group .two-col:first-of-type{margin-top:0}
+.feedback{font-size:11px;color:#94e0b5;line-height:1.8;min-height:10px;margin-top:8px}.feedback.warning{color:#ffce83}.feedback.error{color:#ff9fa8}
+.preview-area{background:#17131d;border:1px solid var(--edge);border-radius:20px;padding:20px 24px;min-width:0;box-shadow:0 16px 45px #0003;position:sticky;top:18px}.preview-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:19px}.preview-head h2{font-size:16px;margin:0 0 5px}.resolution{border:1px solid #52415a;color:#c9acd0;border-radius:8px;padding:7px 10px;font-size:11px;white-space:nowrap;direction:ltr}
+.canvas-holder{width:100%;max-width:540px;margin:auto;background:#000;box-shadow:0 12px 38px #0007;overflow:hidden;border-radius:4px}.canvas-holder canvas{display:block;width:100%;height:auto;aspect-ratio:4/5}
+.preview-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:17px;font-size:11px;color:#9f94a8}.site-footer{font-size:11px;color:#766e7e;text-align:center;padding:16px 10px 25px}
+@media (max-width:1050px){.workspace{grid-template-columns:minmax(310px,420px) 1fr;gap:16px;padding:16px}.preview-area{padding:15px}}
+@media (max-width:800px){.workspace{display:flex;flex-direction:column;align-items:stretch}.preview-area{position:static;order:0}.editor{order:1}.topbar{padding:0 14px}.saved{display:none}.preview-foot{flex-wrap:wrap}}
+@media (max-width:470px){.section-head,.tab-content{padding:16px}.top-actions .btn{padding:9px;font-size:11px}.identity strong{font-size:12px}.identity small{font-size:10px}.appmark{font-size:21px;width:34px;height:34px}.identity{gap:8px}.preview-head{flex-wrap:wrap}.preview-area{border-radius:13px;padding:11px}.tabs{padding:0 7px}.tab{font-size:11px;padding:11px 5px}.field-grid,.two-col{gap:8px}}
