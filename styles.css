@@ -21,5 +21,24 @@ button,input,select{font:inherit}button{cursor:pointer}a{color:var(--violet)}but
 @media(max-width:510px){.topbar{padding:9px 10px;gap:4px}.identity strong{font-size:12px}.identity small{font-size:9px}.appmark{width:30px;height:30px;font-size:17px}.identity{gap:6px}.top-actions{gap:5px}.tool-btn{width:29px;height:30px;font-size:18px}.history-actions{gap:0;padding:1px}.top-actions .btn.primary{padding:9px 8px;font-size:10px}.saved{display:none}.section-head,.tab-content{padding:15px}.preview-area{border-radius:13px;padding:11px}.preview-head{flex-wrap:wrap}.tabs{padding:0 5px}.tab{font-size:10px;padding:11px 4px}.field-grid,.two-col{gap:8px}.game-editor{padding:11px}.asset-pick,.color-trigger{gap:5px;padding:5px}.asset-pick-name{font-size:10px}.hex-caption{font-size:10px}.asset-sample{width:28px;height:28px}.picker-dialog{padding:14px;border-radius:12px;max-height:calc(100dvh - 15px)}.picker-sv{height:190px}.result-thumb{width:41px;height:39px}}
 @media(max-width:365px){.identity small{display:none}.theme-btn{display:none}.history-icon{display:none}.field-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 
-/* Pattern recolor switch; no keyboard is opened when asset dialogs appear. */
-.pattern-switch{display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid var(--edge);border-radius:11px;background:var(--input);padding:12px;margin-top:14px;min-height:59px}.pattern-switch input{appearance:none;-webkit-appearance:none;width:41px;height:24px;background:#7c7384;border-radius:30px;position:relative;cursor:pointer;flex:none;direction:ltr}.pattern-switch input:before{content:"";position:absolute;left:4px;top:4px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .14s}.pattern-switch input:checked{background:var(--violet)}.pattern-switch input:checked:before{transform:translateX(17px)}.pattern-switch input:disabled{opacity:.6;cursor:not-allowed}.pattern-switch span{display:grid;gap:3px}.pattern-switch b{font-size:12px;color:var(--text)}.pattern-switch small{font-size:10px;font-weight:400;color:var(--muted);line-height:1.8}.picker-dialog:focus{outline:none}.dialog-search:focus-within{border-color:var(--violet);box-shadow:0 0 0 2px color-mix(in srgb,var(--violet) 13%,transparent)}
+/* Compact, mobile-friendly recolor controls: native checkbox remains keyboard accessible. */
+.pattern-color-card{margin-top:14px;background:var(--input);border:1px solid var(--input-border);border-radius:12px;padding:12px;min-width:0}
+.pattern-color-head{display:flex;align-items:center;justify-content:space-between;gap:14px;min-width:0}
+.pattern-color-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px;text-align:right}
+.pattern-color-copy strong{font-size:12px;font-weight:750;color:var(--text)}
+.pattern-color-copy>span{font-size:10px;line-height:1.7;color:var(--muted);font-weight:450}
+.pattern-toggle{display:flex;position:relative;align-items:center;justify-content:center;flex:none;width:48px;height:42px;cursor:pointer;min-width:48px}
+/* Strong selector avoids the generic label input styling used by text fields. */
+label.pattern-toggle input[type="checkbox"]{position:absolute;opacity:0;top:50%;right:50%;width:1px;height:1px;padding:0;border:0;margin:0;pointer-events:none}
+.pattern-toggle-track{position:relative;display:block;width:43px;height:25px;border-radius:999px;background:#7c7384;border:1px solid var(--edge);transition:background .15s;box-sizing:border-box}
+.pattern-toggle-track::before{content:"";position:absolute;top:3px;right:3px;width:17px;height:17px;background:#fff;border-radius:50%;box-shadow:0 1px 4px #0004;transition:transform .15s}
+.pattern-toggle input:checked+.pattern-toggle-track{background:var(--violet)}
+.pattern-toggle input:checked+.pattern-toggle-track::before{transform:translateX(-18px)}
+.pattern-toggle input:focus-visible+.pattern-toggle-track{outline:3px solid var(--violet);outline-offset:3px}
+.pattern-toggle:has(input:disabled){cursor:default;opacity:.75}
+.pattern-color-picker{display:flex;align-items:center;gap:12px;justify-content:space-between;min-width:0;border-top:1px solid var(--edge);margin-top:12px;padding-top:12px}
+.pattern-color-picker[hidden]{display:none!important}
+.pattern-color-picker>span{font-size:11px;font-weight:650;color:var(--fieldtext);white-space:nowrap}
+.pattern-color-picker .color-trigger{width:130px;max-width:60%;height:40px;min-width:0;flex:none}
+.picker-dialog:focus{outline:none}.dialog-search:focus-within{border-color:var(--violet);box-shadow:0 0 0 2px color-mix(in srgb,var(--violet) 13%,transparent)}
+@media(max-width:510px){.pattern-color-card{padding:11px}.pattern-color-head{gap:10px}.pattern-color-copy>span{font-size:10px}.pattern-color-picker .color-trigger{width:126px;max-width:60%}}
