@@ -58,7 +58,7 @@
       </div>
       <div class="tab-content hidden" id="designTab">
         <div class="settings-group"><h2>ترکیب رنگی آماده</h2><p class="hint compact">برای تغییر هماهنگ رنگ تمام اجزای تصویر، یک ترکیب را انتخاب کنید.</p><div id="paletteList" class="palette-list"></div></div>
-        <div class="settings-group"><h2>پترن پس‌زمینه</h2><button id="patternPick" type="button" class="asset-pick large" data-pick="patternId"><span class="asset-sample" id="patternSample"></span><span class="asset-pick-name" id="patternName">انتخاب پترن</span><span class="pick-arrow">⌄</span></button><p class="hint compact">پترن‌ها از بانک طرح‌های سایت انتخاب می‌شوند.</p></div>
+        <div class="settings-group"><h2>پترن پس‌زمینه</h2><button id="patternPick" type="button" class="asset-pick large" data-pick="patternId"><span class="asset-sample" id="patternSample"></span><span class="asset-pick-name" id="patternName">انتخاب پترن</span><span class="pick-arrow">⌄</span></button><p class="hint compact">پترن‌ها از بانک طرح‌های سایت انتخاب می‌شوند.</p><label class="pattern-switch"><input id="patternTintToggle" type="checkbox" checked /><span><b>رنگ دلخواه برای پترن</b><small id="patternTintHint">رنگ‌های تصویر را شخصی‌سازی کنید.</small></span></label></div>
         <div class="settings-group"><h2>رنگ اجزای تصویر</h2>
           <div class="two-col"><label>رنگ زمینه<button type="button" class="color-trigger" data-global-color="background"></button></label><label>رنگ پترن<button type="button" class="color-trigger" data-global-color="patternColor"></button></label><label>رنگ لایه مرکزی<button type="button" class="color-trigger" data-global-color="frameColor"></button></label><label>رنگ کادر مسابقه<button type="button" class="color-trigger" data-global-color="cardColor"></button></label><label>رنگ لوگوی بالای تصویر<button type="button" class="color-trigger" data-global-color="brandLogoColor"></button></label></div>
         </div>
@@ -75,9 +75,9 @@
     </section>
   </main>
   <footer class="site-footer">WoSoCenter <span aria-hidden="true">·</span> ارتباط با سازنده: <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" dir="ltr">@ByMehrdad</a></footer>
-  <dialog class="picker-dialog" id="assetDialog" aria-labelledby="assetDialogTitle">
+  <dialog class="picker-dialog" id="assetDialog" tabindex="-1" aria-labelledby="assetDialogTitle">
     <div class="dialog-head"><div><h2 id="assetDialogTitle">انتخاب از فهرست</h2><p id="assetCount">برای انتخاب روی یک مورد بزنید.</p></div><button type="button" class="dialog-close" data-close-dialog="assetDialog" aria-label="بستن">×</button></div>
-    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="assetSearch" type="search" autocomplete="off" placeholder="جست‌وجوی نام تیم، کشور یا پترن…" aria-label="جست‌وجوی فهرست"/></div>
+    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="assetSearch" type="search" autocomplete="off" autocapitalize="off" inputmode="search" placeholder="جست‌وجوی نام تیم، کشور یا پترن…" aria-label="جست‌وجوی فهرست"/></div>
     <div class="asset-results" id="assetResults"></div>
   </dialog>
   <dialog class="picker-dialog color-dialog" id="colorDialog" aria-labelledby="colorDialogTitle">

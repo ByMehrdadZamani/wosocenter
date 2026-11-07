@@ -1,10 +1,30 @@
 [
   {
-    "id": "woso-petals",
-    "name": "گلبرگ کلاسیک",
-    "image": "assets/patterns/woso-petals.png",
-    "tileWidth": 432,
-    "tileHeight": 430,
-    "mode": "mask"
+    "id": "woso-petals", "name": "گلبرگ کلاسیک", "image": "assets/patterns/woso-petals.png",
+    "tileWidth": 432, "tileHeight": 430, "mode": "mask", "layout": "tile", "recolorDefault": true
+  },
+  {
+    "id": "memphis-cubes", "name": "ممفیس مکعبی", "image": "assets/patterns/memphis-cubes.png",
+    "tileWidth": 750, "tileHeight": 750, "mode": "hue", "layout": "tile", "referenceHue": 24, "recolorDefault": true
+  },
+  {
+    "id": "memphis-waves", "name": "ممفیس رنگارنگ", "image": "assets/patterns/memphis-waves.png",
+    "tileWidth": 800, "tileHeight": 800, "mode": "hue", "layout": "tile", "referenceHue": 267, "recolorDefault": true
+  },
+  {
+    "id": "champions-starball", "name": "ستاره‌های لیگ قهرمانان", "image": "assets/patterns/champions-starball.png",
+    "tileWidth": 540, "tileHeight": 383, "mode": "hue", "layout": "tile", "referenceHue": 212, "recolorDefault": true
+  },
+  {
+    "id": "champions-neon-ball", "name": "لیگ قهرمانان · توپ نئونی", "image": "assets/patterns/champions-neon-ball.png",
+    "mode": "hue", "layout": "cover", "referenceHue": 224, "focusX": 0.64, "recolorDefault": false
+  },
+  {
+    "id": "champions-blue-lines", "name": "لیگ قهرمانان · خطوط آبی", "image": "assets/patterns/champions-blue-lines.png",
+    "mode": "hue", "layout": "cover", "referenceHue": 229, "recolorDefault": false
+  },
+  {
+    "id": "champions-women-trophy", "name": "لیگ قهرمانان زنان · جام", "image": "assets/patterns/champions-women-trophy.png",
+    "mode": "hue", "layout": "cover", "referenceHue": 204, "recolorDefault": false
   }
 ]
