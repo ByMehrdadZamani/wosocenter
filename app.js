@@ -6,13 +6,13 @@ const STORE='wosocenter-project-v2', HISTORY_STORE='wosocenter-history-v2';
 const FONTS=[
  ['Vazirmatn','وزیرمتن','متنی'],['Estedad','استعداد','مدرن'],['Mikhak','میخک','نیمه‌دست‌نویس'],
  ['Sahel','ساحل','متنی'],['Shabnam','شبنم','متنی'],['Gandom','گندم','صمیمی'],
- ['Fandogh','فندوق','فانتزی'],['Rooyin','رویین','پیکسلی'],['Noqte','نقطه','پیکسلی'],['Ario','آریو','نمایشی'],
+ ['Rooyin','رویین','پیکسلی'],['Noqte','نقطه','پیکسلی'],['Ario','آریو','نمایشی'],
  ['Lalezar','لاله‌زار','نمایشی'],['Noto Sans Arabic','Noto Sans Arabic','ساده'],['Cairo','Cairo','ساده'],['Amiri','امیری','کلاسیک'],['Tahoma','Tahoma','سیستمی']
 ];
 const ASSETS={titlePurple:'assets/brand/title-purple-hq.png',titleWhite:'assets/brand/title-white-alpha.png',logo:'assets/brand/logo-alpha.png'};
 const COLORS={background:'پس‌زمینه',patternColor:'رنگ پترن',frameColor:'کادر اصلی',cardColor:'کادر مسابقه',brandLogoColor:'لوگوی WoSoCenter',dayColor:'روز هفته',dateColor:'تاریخ',dateLineColor:'خط تاریخ',titlePurple:'عنوان برنامه',titleWhite:'عنوان بازی‌های امروز',footerColor:'آیدی کانال',telegramColor:'آیکون تلگرام',leftBg:'زمینه تیم اول',rightBg:'زمینه تیم دوم',leagueColor:'نام لیگ',timeColor:'ساعت',clockColor:'آیکون ساعت'};
-const DEFAULT_MATCH={flag:'belgium',league:'لیگ برتر بلژیک',time:'۲۲:۳۰',leftTeam:'barcelona',rightTeam:'real-madrid',leftBg:'#873d58',rightBg:'#e2b944',leftBgInitialized:true,rightBgInitialized:true,leftBgLocked:false,rightBgLocked:false,leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2',leagueFont:'Vazirmatn',timeFont:'Vazirmatn'};
-const DEFAULTS={weekDay:'شنبه',monthDay:'۱۶ آبان',dayColor:'#aa55bc',dateColor:'#ffffff',dayFont:'Vazirmatn',dateFont:'Vazirmatn',dateLineColor:'#a64db6',titlePurple:'#a457bf',titleWhite:'#d9d9d9',brandLogoColor:'#9141aa',footerText:'WoSoCenter',footerColor:'#ae58c7',telegramColor:'#af58c8',footerFont:'Vazirmatn',background:'#030303',patternColor:'#320a3e',frameColor:'#09050c',cardColor:'#181818',globalFont:'Vazirmatn',patternId:'woso-petals',patternTintEnabled:true,paletteId:'classic',matches:[{...DEFAULT_MATCH}]};
+const DEFAULT_MATCH={flag:'spain',league:'لیگا اف اسپانیا',time:'۲۲:۳۰',leftTeam:'barcelona',rightTeam:'real-madrid',leftBg:'#873d58',rightBg:'#e2b944',leftBgInitialized:true,rightBgInitialized:true,leftBgLocked:false,rightBgLocked:false,leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2',leagueFont:'Ario',timeFont:'Ario'};
+const DEFAULTS={weekDay:'شنبه',monthDay:'۱۶ آبان',dayColor:'#aa55bc',dateColor:'#ffffff',dayFont:'Ario',dateFont:'Ario',dateLineColor:'#a64db6',titlePurple:'#a457bf',titleWhite:'#d9d9d9',brandLogoColor:'#9141aa',footerText:'WoSoCenter',footerColor:'#ae58c7',telegramColor:'#af58c8',footerFont:'Ario',background:'#030303',patternColor:'#320a3e',frameColor:'#09050c',cardColor:'#181818',globalFont:'Ario',patternId:'woso-petals',patternTintEnabled:true,paletteId:'classic',matches:[{...DEFAULT_MATCH}]};
 const PALETTES=[
   {id:'classic',name:'بنفش کلاسیک',colors:['#030303','#320a3e','#a457bf','#181818'],settings:{background:'#030303',patternColor:'#320a3e',frameColor:'#09050c',cardColor:'#181818',brandLogoColor:'#9141aa',titlePurple:'#a457bf',titleWhite:'#d9d9d9',dayColor:'#aa55bc',dateColor:'#ffffff',dateLineColor:'#a64db6',footerColor:'#ae58c7',telegramColor:'#af58c8'},match:{leftBg:'#85152d',rightBg:'#ffdb0d',leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2'}},
   {id:'midnight',name:'آبی نیمه‌شب',colors:['#071426','#154576','#4abafa','#10243e'],settings:{background:'#061321',patternColor:'#154576',frameColor:'#071a2c',cardColor:'#11263d',brandLogoColor:'#4abafa',titlePurple:'#3fa9f5',titleWhite:'#f5faff',dayColor:'#4abafa',dateColor:'#ffffff',dateLineColor:'#3fa9f5',footerColor:'#72cdfd',telegramColor:'#3fa9f5'},match:{leftBg:'#173b6a',rightBg:'#0b687a',leagueColor:'#ffffff',timeColor:'#e6f7ff',clockColor:'#47c7f1'}},
@@ -38,7 +38,7 @@ const PALETTES=[
   }))
 ];
 function safeHex(v,fallback){return typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v)?v.toLowerCase():fallback;}
-function validFont(v){return FONTS.some(x=>x[0]===v)?v:'Vazirmatn';}
+function validFont(v){return FONTS.some(x=>x[0]===v)?v:'Ario';}
 function cleanMatch(item){const m={...DEFAULT_MATCH,...(item&&typeof item==='object'?item:{})};for(const k of ['leftBg','rightBg','leagueColor','timeColor','clockColor'])m[k]=safeHex(m[k],DEFAULT_MATCH[k]);for(const k of ['leagueFont','timeFont'])m[k]=validFont(m[k]);for(const k of ['flag','leftTeam','rightTeam','league','time'])m[k]=String(m[k]??DEFAULT_MATCH[k]).slice(0,100);for(const side of ['left','right']){
  const key=side+'BgInitialized',lock=side+'BgLocked';
  m[key]=typeof item?.[key]==='boolean'?item[key]:Boolean(m[side+'Team']);
@@ -69,7 +69,7 @@ async function loadTeamColors(){
   }catch{return {};}
 }
 const fallbackTeams=[{id:'barcelona',name:'بارسلونا',image:'assets/teams/barcelona.png',color:'#873d58'},{id:'real-madrid',name:'رئال مادرید',image:'assets/teams/real-madrid.png',color:'#e2b944'},{id:'bayern-munich',name:'بایرن مونیخ',image:'assets/teams/bayern-munich.png',color:'#b63a4a'},{id:'servette',name:'سروت ژنو',image:'assets/teams/servette.png',color:'#83182e'},{id:'nordsjaelland',name:'نورشلاند',image:'assets/teams/nordsjaelland.png',color:'#ecce24'}];
-const fallbackFlags=[{id:'belgium',name:'بلژیک',image:'assets/flags/belgium.svg'}];
+const fallbackFlags=[{id:'spain',name:'اسپانیا',image:'assets/flags/spain.svg'}];
 const fallbackPatterns=[{id:'woso-petals',name:'گلبرگ کلاسیک',image:'assets/patterns/woso-petals.png',tileWidth:432,tileHeight:430,mode:'mask'}];
 const fontInfo=id=>FONTS.find(f=>f[0]===id)||FONTS[0];
 const fontButton=(key,value,kind='game')=>`<button type="button" class="font-pick" data-${kind==='game'?'game':'global'}-font="${esc(key)}" aria-label="انتخاب فونت"><span class="font-pick-title" style="font-family:'${esc(validFont(value))}',Tahoma,sans-serif">${esc(fontInfo(value)[1])}</span><span class="font-pick-chevron">⌄</span></button>`;
@@ -137,7 +137,7 @@ function openFont(kind,key,index){
  $('fontDialog').showModal();
  try{$('fontDialog').focus({preventScroll:true});}catch{$('fontDialog').focus();}
 }
-function fontCurrentValue(){return !fontContext?DEFAULTS.globalFont:fontContext.kind==='global'?state[fontContext.key]:(state.matches[fontContext.index]?.[fontContext.key]||'Vazirmatn');}
+function fontCurrentValue(){return !fontContext?DEFAULTS.globalFont:fontContext.kind==='global'?state[fontContext.key]:(state.matches[fontContext.index]?.[fontContext.key]||'Ario');}
 function renderFontOptions(){
  const q=normalizeTeamQuery($('fontSearch').value),selected=fontCurrentValue();
  const all=FONTS.filter(f=>normalizeTeamQuery(f[1]).includes(q)||normalizeTeamQuery(f[0]).includes(q));

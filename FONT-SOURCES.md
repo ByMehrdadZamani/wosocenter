@@ -1,6 +1,6 @@
 # منابع فونت‌های جدید WoSoCenter
 
-این فایل برای اطلاع از منشأ و شرایط استفاده از فونت‌هاست. در نسخه ۳.۴ فونت‌ها در مرورگر از CDN خوانده می‌شوند و فایل باینری فونت در ZIP **وجود ندارد**. سایر امکانات سایت بدون این منابع خارجی نیز فعال‌اند، اما برای نمایش دقیق فونت انتخابی اتصال به CDN لازم است.
+این فایل برای اطلاع از منشأ و شرایط استفاده از فونت‌هاست. آریو فونت پیش‌فرض متن‌های کنداکتور در پروژه تازه است؛ فندوق از مجموعه حذف شده است. در نسخه ۳.۵ فونت‌ها در مرورگر از CDN خوانده می‌شوند و فایل باینری فونت در ZIP **وجود ندارد**. سایر امکانات سایت بدون این منابع خارجی نیز فعال‌اند، اما برای نمایش دقیق فونت انتخابی اتصال به CDN لازم است.
 
 | نام | مرجع اصلی | منبع میزبانی وب |
 |---|---|---|
@@ -9,7 +9,6 @@
 | ساحل | [rastikerdar/sahel-font](https://github.com/rastikerdar/sahel-font) | next-persian-fonts 1.5.0 |
 | شبنم | [rastikerdar/shabnam-font](https://github.com/rastikerdar/shabnam-font) | next-persian-fonts 1.5.0 |
 | گندم | [rastikerdar/gandom-font](https://github.com/rastikerdar/gandom-font) | next-persian-fonts 1.5.0 |
-| فندوق | [aminabedi68/Fandogh](https://github.com/aminabedi68/Fandogh) | jsDelivr GitHub CDN |
 | رویین | [MohamadDarvishi/Rooyin](https://github.com/MohamadDarvishi/Rooyin) | next-persian-fonts 1.5.0 |
 | نقطه | [mehdisadeghi/Noqte](https://github.com/mehdisadeghi/Noqte) | next-persian-fonts 1.5.0 |
 | آریو | [MohamadDarvishi/Ario](https://github.com/MohamadDarvishi/Ario) | next-persian-fonts 1.5.0 |
