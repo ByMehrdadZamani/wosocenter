@@ -4,10 +4,26 @@ const $ = id => document.getElementById(id);
 const WIDTH=1080, HEIGHT=1350, MAX_GAMES=6, HISTORY_LIMIT=500;
 const STORE='wosocenter-project-v2', HISTORY_STORE='wosocenter-history-v2';
 const FONTS=[
- ['Vazirmatn','وزیرمتن','متنی'],['Estedad','استعداد','مدرن'],['Mikhak','میخک','نیمه‌دست‌نویس'],
- ['Sahel','ساحل','متنی'],['Shabnam','شبنم','متنی'],['Gandom','گندم','صمیمی'],
- ['Rooyin','رویین','پیکسلی'],['Noqte','نقطه','پیکسلی'],['Ario','آریو','نمایشی'],
- ['Lalezar','لاله‌زار','نمایشی'],['Noto Sans Arabic','Noto Sans Arabic','ساده'],['Cairo','Cairo','ساده'],['Amiri','امیری','کلاسیک'],['Tahoma','Tahoma','سیستمی']
+ ['Ario','آریو','پیش‌فرض'],
+ ["DastNevis","دست‌نویس","دست‌نویس"],
+ ["ShahGosh","شاهگوش","فانتزی"],
+ ["Shokoh","شکوه","نمایشی"],
+ ["Paeez","پاییز","فانتزی"],
+ ["Tehran","تهران","تیتر"],
+ ["Titr","تیتر","تیتر ضخیم"],
+ ["Hayat","حیات","کلاسیک"],
+ ["DinArabic","دینا عربیک","مدرن"],
+ ["Sahel","ساحل","متنی"],
+ ["Soltan","سلطان","نمایشی"],
+ ["Sepahbod","سپهبد","نمایشی"],
+ ["Cinema","سینما","فانتزی"],
+ ["Lalezar","لاله‌زار","تیتر"],
+ ["Matin","متین","متنی"],
+ ["Mikhak","میخک","مدرن"],
+ ["Haftad","هفتاد","نمایشی"],
+ ["Casablanca","کازابلانکا","فانتزی"],
+ ["GraphikArabic","گرافیک عربیک","نمایشی"],
+ ["YekanBoom","یکان بوم","نمایشی"]
 ];
 const ASSETS={titlePurple:'assets/brand/title-purple-hq.png',titleWhite:'assets/brand/title-white-alpha.png',logo:'assets/brand/logo-alpha.png'};
 const COLORS={background:'پس‌زمینه',patternColor:'رنگ پترن',frameColor:'کادر اصلی',cardColor:'کادر مسابقه',brandLogoColor:'لوگوی WoSoCenter',dayColor:'روز هفته',dateColor:'تاریخ',dateLineColor:'خط تاریخ',titlePurple:'عنوان برنامه',titleWhite:'عنوان بازی‌های امروز',footerColor:'آیدی کانال',telegramColor:'آیکون تلگرام',leftBg:'زمینه تیم اول',rightBg:'زمینه تیم دوم',leagueColor:'نام لیگ',timeColor:'ساعت',clockColor:'آیکون ساعت'};
@@ -320,7 +336,7 @@ function drawCover(c,img,focusX=.5,focusY=.5){
   c.drawImage(img,sx,sy,cropW,cropH,0,0,WIDTH,HEIGHT);
 }
 function drawTint(c,path,x,y,w,h,color){const src=tintedImage(path,color);if(src)c.drawImage(src,x,y,w,h);}
-function drawRtl(c,text,x,y,maxWidth,font,color,size=28,weight=800){c.save();c.direction='rtl';c.textAlign='right';c.textBaseline='alphabetic';c.font=`${weight} ${size}px "${validFont(font)}","Noto Sans Arabic",Tahoma,sans-serif`;c.fillStyle=color;c.fillText(String(text??''),x,y,maxWidth);c.restore();}
+function drawRtl(c,text,x,y,maxWidth,font,color,size=28,weight=800){c.save();c.direction='rtl';c.textAlign='right';c.textBaseline='alphabetic';c.font=`${weight} ${size}px "${validFont(font)}","Mikhak",Tahoma,sans-serif`;c.fillStyle=color;c.fillText(String(text??''),x,y,maxWidth);c.restore();}
 function drawClock(c,x,y,color){c.save();c.strokeStyle=color;c.lineWidth=2.7;c.lineCap='round';c.beginPath();c.arc(x,y,14,0,Math.PI*2);c.stroke();c.beginPath();c.moveTo(x,y-9);c.lineTo(x,y+0.5);c.lineTo(x+6,y+5.5);c.stroke();c.restore();}
 function drawTelegram(c,x,y,s,color){c.save();c.translate(x,y);c.scale(s/40,s/40);c.strokeStyle=color;c.lineJoin='round';c.lineCap='round';c.lineWidth=3.3;c.beginPath();c.moveTo(3,17);c.lineTo(37,4);c.lineTo(29,36);c.lineTo(21,27);c.lineTo(15,35);c.lineTo(15,23);c.closePath();c.stroke();c.beginPath();c.moveTo(15,23);c.lineTo(34,7);c.stroke();c.restore();}
 function contain(c,img,x,y,w,h){if(!img)return;const ratio=Math.min(w/img.naturalWidth,h/img.naturalHeight);const dw=img.naturalWidth*ratio,dh=img.naturalHeight*ratio;c.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);}
@@ -337,7 +353,7 @@ function drawGame(c,m,index){const x=87,y=215+index*171,w=899,h=157;c.save();rou
   drawRtl(c,m.league,textAnchorX,y+57,365,m.leagueFont,m.leagueColor,28,800);
   drawClock(c,iconCX,y+105,m.clockColor);
   drawRtl(c,'ساعت '+m.time,textAnchorX,y+113,365,m.timeFont,m.timeColor,27,800);}
-function drawFooter(c){const label=String(state.footerText||'');const isLatin=/^[\x00-\x7f\s]+$/.test(label),font=validFont(state.footerFont);c.font=`800 29px "${font}","Noto Sans Arabic",Tahoma,sans-serif`;const textWidth=Math.min(c.measureText(label).width,540),total=textWidth+52,left=(WIDTH-total)/2;drawTelegram(c,left,1254,38,state.telegramColor);c.save();c.fillStyle=state.footerColor;c.font=`800 29px "${font}","Noto Sans Arabic",Tahoma,sans-serif`;c.direction=isLatin?'ltr':'rtl';c.textAlign=isLatin?'left':'right';c.textBaseline='alphabetic';if(isLatin)c.fillText(label,left+49,1282,540);else c.fillText(label,left+49+textWidth,1282,540);c.restore();}
+function drawFooter(c){const label=String(state.footerText||'');const isLatin=/^[\x00-\x7f\s]+$/.test(label),font=validFont(state.footerFont);c.font=`800 29px "${font}","Mikhak",Tahoma,sans-serif`;const textWidth=Math.min(c.measureText(label).width,540),total=textWidth+52,left=(WIDTH-total)/2;drawTelegram(c,left,1254,38,state.telegramColor);c.save();c.fillStyle=state.footerColor;c.font=`800 29px "${font}","Mikhak",Tahoma,sans-serif`;c.direction=isLatin?'ltr':'rtl';c.textAlign=isLatin?'left':'right';c.textBaseline='alphabetic';if(isLatin)c.fillText(label,left+49,1282,540);else c.fillText(label,left+49+textWidth,1282,540);c.restore();}
 function drawPoster(canvas,pageState=state){if(!canvas)return;const savedState=state;state=pageState;const c=canvas.getContext('2d');c.save();c.setTransform(canvas.width/WIDTH,0,0,canvas.height/HEIGHT,0,0);c.clearRect(0,0,WIDTH,HEIGHT);c.fillStyle=state.background;c.fillRect(0,0,WIDTH,HEIGHT);const p=findPattern(state.patternId)||patterns[0];if(p){
   const pic=p.mode==='mask'?tintedImage(p.image,state.patternColor):((state.patternTintEnabled&&p.mode==='hue')?recoloredPattern(p.image,state.patternColor,p.referenceHue):image(p.image));
   if(pic){if(p.layout==='cover'){drawCover(c,pic,p.focusX??.5,p.focusY??.5);}else{

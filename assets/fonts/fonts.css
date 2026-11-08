@@ -1,22 +1,25 @@
-/* WoSoCenter v4.0: all listed fonts resolve to local assets only.
-   Remote font/CDN requests are intentionally removed.
-   Missing font binaries are installed by the bundled GitHub Action. */
-@font-face{font-family:'Vazirmatn';src:url('./files/Vazirmatn-FD-Regular.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:'Vazirmatn';src:url('./files/Vazirmatn-FD-Medium.woff2') format('woff2');font-style:normal;font-weight:500 600;font-display:swap}
-@font-face{font-family:'Vazirmatn';src:url('./files/Vazirmatn-FD-Bold.woff2') format('woff2');font-style:normal;font-weight:700 900;font-display:swap}
-@font-face{font-family:'Estedad';src:url('./files/Estedad-VF.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
-@font-face{font-family:'Mikhak';src:url('./files/Mikhak-VF.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
-@font-face{font-family:'Sahel';src:url('./files/Sahel-VF.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
-@font-face{font-family:'Shabnam';src:url('./files/Shabnam.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:'Shabnam';src:url('./files/Shabnam-Bold.woff2') format('woff2');font-style:normal;font-weight:700 900;font-display:swap}
-@font-face{font-family:'Gandom';src:url('./files/Gandom.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
-@font-face{font-family:'Rooyin';src:url('./files/RooyinFree-Regular.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:'Rooyin';src:url('./files/RooyinFree-Bold.woff2') format('woff2');font-style:normal;font-weight:700 900;font-display:swap}
-@font-face{font-family:'Noqte';src:url('./files/noqte.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
-@font-face{font-family:'Ario';src:url('./files/Ario-Dots1.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
-@font-face{font-family:'Lalezar';src:url('./files/Lalezar-Regular.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
-@font-face{font-family:'Cairo';src:url('./files/Cairo-VF.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
-@font-face{font-family:'Amiri';src:url('./files/Amiri-Regular.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:'Amiri';src:url('./files/Amiri-Bold.woff2') format('woff2');font-style:normal;font-weight:700 900;font-display:swap}
-@font-face{font-family:'Noto Sans Arabic';src:url('./files/NotoSansArabic-Regular.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:'Noto Sans Arabic';src:url('./files/NotoSansArabic-Bold.woff2') format('woff2');font-style:normal;font-weight:700 900;font-display:swap}
+/* WoSoCenter v4.1 — each font bundled locally; no CDN dependencies. */
+@font-face{font-family:"Ario";src:url("./files/Ario-Dots1.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"DastNevis";src:url("./files/DastNevis.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"ShahGosh";src:url("./files/ShahGosh.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Shokoh";src:url("./files/Shokoh.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Paeez";src:url("./files/Paeez.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Tehran";src:url("./files/Tehran.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Titr";src:url("./files/Titr.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Hayat";src:url("./files/Hayat.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"DinArabic";src:url("./files/DinArabic.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Sahel";src:url("./files/Sahel.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Soltan";src:url("./files/Soltan.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Sepahbod";src:url("./files/Sepahbod.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Cinema";src:url("./files/Cinema.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Lalezar";src:url("./files/Lalezar.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Matin";src:url("./files/Matin.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Mikhak";src:url("./files/Mikhak.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Haftad";src:url("./files/Haftad.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Casablanca";src:url("./files/Casablanca.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"GraphikArabic";src:url("./files/GraphikArabic.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"YekanBoom";src:url("./files/YekanBoom.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:400}
+@font-face{font-family:"Mikhak";src:url("./files/Mikhak-Bold.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:700}
+@font-face{font-family:"Mikhak";src:url("./files/Mikhak-Light.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:300}
+@font-face{font-family:"DinArabic";src:url("./files/DinArabic-Bold.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:700}
+@font-face{font-family:"DinArabic";src:url("./files/DinArabic-Black.woff2") format("woff2");font-display:swap;font-style:normal;font-weight:900}
