@@ -91,3 +91,53 @@ label.pattern-toggle input[type="checkbox"]{position:absolute;opacity:0;top:50%;
 .pattern-grid .result-name{font-size:12px;flex:none;min-height:20px}
 @media (max-width:825px){.picker-dialog.pattern-dialog{width:min(95vw,650px);max-height:88dvh}.page-manager{padding:10px}.page-buttons .btn{font-size:10px}}
 @media (max-width:510px){.pattern-dialog .asset-results.pattern-grid{gap:8px;padding:2px 3px 12px}.pattern-grid .pattern-item{padding:6px}.page-buttons{width:100%}.page-buttons .btn{flex:1}.pages-toolbar{gap:8px}}
+
+/* v3.7: multi-page gallery dialog and selection states */
+.preview-head-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.page-manage-trigger{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.page-manage-trigger span{font-size:10px;opacity:.77;border-radius:99px;background:color-mix(in srgb,var(--violet) 10%,var(--panel));padding:3px 7px}
+.picker-dialog.pages-dialog{width:min(940px,calc(100vw - 22px));max-height:min(94dvh,930px);min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:18px}
+.pages-dialog:not([open]){display:none}
+.pages-dialog-head{flex:none}
+.pages-dialog-buttons{display:flex;gap:10px;margin-bottom:15px;flex:none;flex-wrap:wrap}
+.pages-dialog-buttons .btn{flex:1;max-width:360px;font-size:12px}
+.page-gallery{min-height:0;flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;overflow-y:auto;overflow-x:hidden;padding:4px 7px 18px;scrollbar-width:auto;scrollbar-color:var(--violet) var(--panel2);scroll-snap-type:none;align-content:start}
+.page-gallery .page-tile{width:auto;min-width:0;max-width:none;flex:none;position:relative;border-radius:14px;overflow:hidden;background:var(--panel2);border:2px solid var(--edge);box-shadow:0 4px 20px #0001}
+.page-gallery .page-tile.current{border:3px solid var(--violet);box-shadow:0 0 0 2px color-mix(in srgb,var(--violet) 19%,transparent)}
+.page-gallery .page-select{display:block;position:relative;width:100%;min-height:0;padding:0;border:none;border-radius:12px;overflow:hidden;cursor:pointer;text-align:right;background:#131118}
+.page-gallery .page-select:hover .page-thumb{transform:scale(1.015)}
+.page-gallery .page-thumb{display:block;width:100%;aspect-ratio:4/5;background:#1a1722;object-fit:cover;transition:transform .2s ease}
+.page-gallery .page-overlay{position:absolute;inset:auto 0 0 0;display:flex;align-items:center;gap:9px;text-align:right;padding:23px 12px 12px;color:#fff;background:linear-gradient(0deg,#08060beb 0%,#08060bc8 57%,transparent 100%)}
+.page-gallery .page-number{flex:none;display:grid;place-items:center;background:#a452cb;color:white;width:29px;height:29px;border-radius:9px;font-weight:900;font-size:13px}
+.page-gallery .page-title-wrap{display:grid;gap:2px;min-width:0;flex:1}.page-gallery .page-title{font-size:13px;color:white;font-weight:800}.page-gallery .page-title-wrap small{font-size:10px;color:#eee}
+.page-gallery .page-active-mark{position:absolute;top:10px;right:10px;font-size:10px;font-weight:800;background:#16a34a;color:#fff;padding:6px 9px;border-radius:99px;box-shadow:0 2px 6px #0006}
+.page-gallery .page-actions{position:absolute;top:10px;left:10px;display:flex;gap:6px;border:0;background:transparent;z-index:2}
+.page-gallery .page-actions button{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1px solid #fff5;background:#18141bcc;backdrop-filter:blur(5px);color:#fff;font-size:19px;padding:0}
+.page-gallery .page-actions button:hover{background:#8c42a7;color:white}.page-gallery .page-actions button:disabled{opacity:.35}
+.pages-download-hint{font-size:10px;line-height:1.8;margin:10px 2px 0;flex:none;color:var(--muted)}
+/* Active palette: solid green; suggested remains violet unless selected */
+.palette-option.selected{border:2px solid #16a34a;background:#16a34a!important;color:#fff!important;outline:2px solid #16a34a!important;outline-offset:-2px}
+.palette-option.selected b{color:#fff}
+.palette-option.palette-recommended.selected .palette-tag{color:#fff;background:#ffffff2e}
+.palette-option.palette-recommended:not(.selected){outline:2px solid var(--violet);outline-offset:-2px}
+/* Pattern thumbnails: full 4:5, with visible name caption over picture */
+.pattern-grid .pattern-thumb{aspect-ratio:4/5;overflow:hidden;border-radius:10px;position:relative;background:var(--input)}
+.pattern-grid .pattern-thumb img{width:100%;height:100%;object-fit:contain}
+.pattern-grid .pattern-item{display:block;position:relative;aspect-ratio:4/5;overflow:hidden;padding:0;border-radius:12px;background:var(--panel2)}
+.pattern-grid .pattern-item .pattern-thumb{height:100%;width:100%;display:grid;place-items:center}
+.pattern-grid .pattern-item .result-name{position:absolute;left:0;right:0;bottom:0;padding:23px 7px 9px;display:block;min-height:0;font-weight:800;font-size:12px;color:#fff;text-shadow:0 1px 4px #000;background:linear-gradient(to top,#000d,transparent);white-space:normal;line-height:1.5;text-align:center;pointer-events:none}
+@media(max-width:510px){
+ .preview-head-tools{width:100%;justify-content:space-between}
+ .page-manage-trigger{font-size:11px;min-height:39px}
+ .picker-dialog.pages-dialog{padding:12px 10px;max-height:calc(100dvh - 12px);width:calc(100vw - 12px);border-radius:14px}
+ .page-gallery{gap:10px;padding:2px 2px 14px}
+ .page-gallery .page-overlay{padding:20px 8px 8px;gap:6px}
+ .page-gallery .page-title{font-size:11px}
+ .page-gallery .page-number{width:24px;height:24px;font-size:11px}
+ .page-gallery .page-actions{gap:4px;top:7px;left:7px}
+ .page-gallery .page-actions button{width:30px;height:30px;font-size:17px}
+ .pages-dialog-buttons .btn{font-size:11px;padding:10px 8px}
+}
+@media(prefers-reduced-motion:reduce){.page-gallery .page-thumb{transition:none}}
+/* Keep grid tracks as tall as each 4:5 tile; never allow tall cards to overlap rows. */
+.asset-results.pattern-grid{grid-auto-rows:max-content;align-content:start;align-items:start}

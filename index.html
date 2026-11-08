@@ -76,16 +76,19 @@
       <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
     </aside>
     <section class="preview-area" aria-label="پیش‌نمایش خروجی">
-      <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div>
-      <div class="page-manager" aria-label="مدیریت صفحات کنداکتور">
-        <div class="pages-toolbar"><div><strong>صفحات کنداکتور</strong><small id="pageTotal">۱ صفحه</small></div><div class="page-buttons"><button type="button" id="addPageBtn" class="btn accent">＋ افزودن صفحه</button><button type="button" id="downloadAllPagesBtn" class="btn secondary" title="دانلود همه صفحات به صورت ZIP">↓ همه صفحات</button></div></div>
-        <div id="pageTabs" class="page-tabs" aria-label="فهرست صفحات"></div>
-      </div>
+      <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><div class="preview-head-tools"><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span><button type="button" id="openPagesBtn" class="btn secondary page-manage-trigger" aria-haspopup="dialog" aria-controls="pagesDialog">▦ مدیریت صفحات <span id="pageTotal">۱ صفحه</span></button></div></div>
+
       <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش برنامه بازی‌های فوتبال"></canvas></div>
       <div class="preview-foot"><span>تصویر خروجی ۱۰۸۰ × ۱۳۵۰ پیکسل است.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
     </section>
   </main>
   <footer class="site-footer">WoSoCenter <span aria-hidden="true">·</span> ارتباط با سازنده: <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" dir="ltr">@ByMehrdad</a></footer>
+  <dialog class="picker-dialog pages-dialog" id="pagesDialog" tabindex="-1" aria-labelledby="pagesDialogTitle">
+    <div class="dialog-head pages-dialog-head"><div><h2 id="pagesDialogTitle">مدیریت صفحات کنداکتور</h2><p>برای ویرایش هر صفحه روی پیش‌نمایش آن بزنید.</p></div><button type="button" class="dialog-close" data-close-dialog="pagesDialog" aria-label="بستن مدیریت صفحات">×</button></div>
+    <div class="page-buttons pages-dialog-buttons"><button type="button" id="addPageBtn" class="btn accent">＋ افزودن صفحه</button><button type="button" id="downloadAllPagesBtn" class="btn secondary">↓ دانلود همه صفحات</button></div>
+    <div id="pageTabs" class="page-tabs page-gallery" aria-label="فهرست صفحات"></div>
+    <p class="pages-download-hint">فایل هر صفحه جداگانه با فرمت PNG دانلود می‌شود. ممکن است مرورگر اجازه دانلود چند فایل را درخواست کند.</p>
+  </dialog>
   <dialog class="picker-dialog" id="assetDialog" tabindex="-1" aria-labelledby="assetDialogTitle">
     <div class="dialog-head"><div><h2 id="assetDialogTitle">انتخاب از فهرست</h2><p id="assetCount">برای انتخاب روی یک مورد بزنید.</p></div><button type="button" class="dialog-close" data-close-dialog="assetDialog" aria-label="بستن">×</button></div>
     <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="assetSearch" type="search" autocomplete="off" autocapitalize="off" inputmode="search" placeholder="جست‌وجوی نام تیم، کشور یا پترن…" aria-label="جست‌وجوی فهرست"/></div>

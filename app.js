@@ -30,7 +30,8 @@ const PALETTES=[
     ['royal','ارغوان سلطنتی','#190e37','#56399b','#211542','#36265f','#c7a6ff','#fbf6ff','#6035b2','#b77b9e'],
     ['steel','استیل سرد','#111925','#5b8193','#152030','#273a4a','#b7dcf0','#f4fbff','#35526e','#667f98'],
     ['rose','رز روشن','#fff1f3','#eac3d1','#fffafd','#ead8e0','#a8577f','#3a2734','#b77595','#e4a8a6'],
-    ['lime','سبز لیمویی','#101c12','#385a2d','#142518','#274129','#d6fc65','#f6ffe6','#5e7b2d','#aba145']
+    ['lime','سبز لیمویی','#101c12','#385a2d','#142518','#274129','#d6fc65','#f6ffe6','#5e7b2d','#aba145'],
+    ['aurora','شفق مرجانی','#101b32','#294d6a','#16273d','#203448','#ffad78','#fff2ed','#a95b68','#54b4bc']
   ].map(([id,name,background,patternColor,frameColor,cardColor,titlePurple,titleWhite,leftBg,rightBg])=>({
     id,name,colors:[background,patternColor,titlePurple,cardColor],
     settings:{background,patternColor,frameColor,cardColor,brandLogoColor:titlePurple,titlePurple,titleWhite,dayColor:titlePurple,dateColor:titleWhite,dateLineColor:titlePurple,footerColor:titlePurple,telegramColor:titlePurple},
@@ -88,9 +89,31 @@ function displayPage(){activatePageState();syncGlobals();refreshGames();refreshP
 function refreshPages(){
  const tabs=$('pageTabs');if(!tabs)return;
  $('pageTotal').textContent=`${project.pages.length.toLocaleString('fa-IR')} صفحه`;
- tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}"><span class="page-number">${(i+1).toLocaleString('fa-IR')}</span><span class="page-title">${esc(pg.title)}</span><small>${pg.data.matches.length.toLocaleString('fa-IR')} بازی</small></button><div class="page-actions"><button type="button" data-page-clone="${esc(pg.id)}" title="کپی کامل این صفحه" aria-label="کپی ${esc(pg.title)}">⧉</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف این صفحه" aria-label="حذف ${esc(pg.title)}" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
+ tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}" aria-label="انتخاب و ویرایش ${esc(pg.title)}"><canvas class="page-thumb" width="216" height="270" data-thumb-id="${esc(pg.id)}" aria-hidden="true"></canvas>${pg.id===project.activePageId?'<span class="page-active-mark">فعال ✓</span>':''}<span class="page-overlay"><span class="page-number">${(i+1).toLocaleString('fa-IR')}</span><span class="page-title-wrap"><span class="page-title">${esc(pg.title)}</span><small>${pg.data.matches.length.toLocaleString('fa-IR')} بازی · لمس برای ویرایش</small></span></span></button><div class="page-actions"><button type="button" data-page-clone="${esc(pg.id)}" title="دوپلیکیت این صفحه" aria-label="کپی ${esc(pg.title)}">⧉</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف این صفحه" aria-label="حذف ${esc(pg.title)}" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
  $('addPageBtn').disabled=project.pages.length>=40;
+ if($('pagesDialog').open)void refreshPageThumbs();
 }
+let thumbRefreshId=0;
+function preloadForPage(data){const pattern=findPattern(data.patternId)||patterns[0];const paths=[...Object.values(ASSETS),pattern?.image,...data.matches.flatMap(m=>[findTeam(m.leftTeam)?.image,findTeam(m.rightTeam)?.image,findFlag(m.flag)?.image])];return Promise.all(paths.filter(Boolean).map(preload));}
+async function refreshPageThumbs(){
+ const rid=++thumbRefreshId,dialog=$('pagesDialog');
+ for(const pg of project.pages){
+  if(rid!==thumbRefreshId||!dialog.open)return;
+  const canvas=[...$('pageTabs').querySelectorAll('canvas[data-thumb-id]')].find(el=>el.dataset.thumbId===pg.id);
+  if(!canvas)continue;
+  // Immediate first paint, then a second paint when that page's images/fonts are ready.
+  drawPoster(canvas,pg.data);
+  try{
+   await preloadForPage(pg.data);
+   const families=new Set([pg.data.dayFont,pg.data.dateFont,pg.data.footerFont,...pg.data.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);
+   if(document.fonts)await Promise.allSettled([...families].map(f=>document.fonts.load(`800 28px "${validFont(f)}"`,'بارسلونا')));
+  }catch(e){console.warn('Page thumbnail assets',e);}
+  if(rid!==thumbRefreshId||!dialog.open)return;
+  drawPoster(canvas,pg.data);
+ }
+}
+function openPages(){refreshPages();$('pagesDialog').showModal();void refreshPageThumbs();try{$('pagesDialog').focus({preventScroll:true});}catch{}}
+
 function addPage(fromId,duplicate=false){
  if(project.pages.length>=40){message('حداکثر ۴۰ صفحه در هر پروژه قابل ایجاد است.','warning');return;}
  const source=project.pages.find(pg=>pg.id===fromId)||activePage();
@@ -281,60 +304,53 @@ function drawGame(c,m,index){const x=87,y=215+index*171,w=899,h=157;c.save();rou
   drawClock(c,iconCX,y+105,m.clockColor);
   drawRtl(c,'ساعت '+m.time,textAnchorX,y+113,365,m.timeFont,m.timeColor,27,800);}
 function drawFooter(c){const label=String(state.footerText||'');const isLatin=/^[\x00-\x7f\s]+$/.test(label),font=validFont(state.footerFont);c.font=`800 29px "${font}",Tahoma,sans-serif`;const textWidth=Math.min(c.measureText(label).width,540),total=textWidth+52,left=(WIDTH-total)/2;drawTelegram(c,left,1254,38,state.telegramColor);c.save();c.fillStyle=state.footerColor;c.font=`800 29px "${font}",Tahoma,sans-serif`;c.direction=isLatin?'ltr':'rtl';c.textAlign=isLatin?'left':'right';c.textBaseline='alphabetic';if(isLatin)c.fillText(label,left+49,1282,540);else c.fillText(label,left+49+textWidth,1282,540);c.restore();}
-function render(){const canvas=$('poster');if(!canvas)return;const c=canvas.getContext('2d');c.clearRect(0,0,WIDTH,HEIGHT);c.fillStyle=state.background;c.fillRect(0,0,WIDTH,HEIGHT);const p=findPattern(state.patternId)||patterns[0];if(p){
+function drawPoster(canvas,pageState=state){if(!canvas)return;const savedState=state;state=pageState;const c=canvas.getContext('2d');c.save();c.setTransform(canvas.width/WIDTH,0,0,canvas.height/HEIGHT,0,0);c.clearRect(0,0,WIDTH,HEIGHT);c.fillStyle=state.background;c.fillRect(0,0,WIDTH,HEIGHT);const p=findPattern(state.patternId)||patterns[0];if(p){
   const pic=p.mode==='mask'?tintedImage(p.image,state.patternColor):((state.patternTintEnabled&&p.mode==='hue')?recoloredPattern(p.image,state.patternColor,p.referenceHue):image(p.image));
   if(pic){if(p.layout==='cover'){drawCover(c,pic,p.focusX??.5,p.focusY??.5);}else{
     const tw=Math.max(32,Math.min(2048,Number(p.tileWidth)||432)),th=Math.max(32,Math.min(2048,Number(p.tileHeight)||430));
     for(let y=0;y<HEIGHT;y+=th){for(let x=0;x<WIDTH;x+=tw)c.drawImage(pic,x,y,tw,th);}
   }}
-}c.save();roundPath(c,38,34,1004,1282,37);c.globalAlpha=.60;c.fillStyle=state.frameColor;c.fill();c.restore();drawBrand(c);drawDate(c);state.matches.forEach((m,i)=>drawGame(c,m,i));drawFooter(c);}
+}c.save();roundPath(c,38,34,1004,1282,37);c.globalAlpha=.60;c.fillStyle=state.frameColor;c.fill();c.restore();drawBrand(c);drawDate(c);state.matches.forEach((m,i)=>drawGame(c,m,i));drawFooter(c);c.restore();state=savedState;}
+function render(){drawPoster($('poster'),state);}
 async function ensureFonts(){if(!document.fonts)return;const fonts=new Set([state.dayFont,state.dateFont,state.footerFont,...state.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);const res=await Promise.allSettled([...fonts].map(f=>document.fonts.load(`800 28px "${validFont(f)}"`,'بارسلونا')));if(res.some(x=>x.status==='rejected'))throw Error('Font loading failed');}
 
 function preloadCurrentImages(){const paths=[...Object.values(ASSETS),(findPattern(state.patternId)||patterns[0])?.image,...state.matches.flatMap(m=>[findTeam(m.leftTeam)?.image,findTeam(m.rightTeam)?.image,findFlag(m.flag)?.image])];return Promise.all(paths.filter(Boolean).map(preload));}
 async function downloadPNG(){const btn=$('downloadBtn');btn.disabled=true;btn.textContent='آماده‌سازی…';try{await Promise.all([ensureFonts(),preloadCurrentImages()]);render();const blob=await new Promise(resolve=>$('poster').toBlob(resolve,'image/png'));if(!blob)throw Error('Failed to encode canvas');downloadBlob(blob,`WoSoCenter-${project.pages.findIndex(p=>p.id===project.activePageId)+1}-${state.matches.length}-games.png`);message('تصویر ۱۰۸۰×۱۳۵۰ با موفقیت دانلود شد.');}catch(e){console.error(e);message('در ساخت تصویر مشکلی پیش آمد؛ صفحه را تازه‌سازی کنید.','error');}finally{btn.disabled=false;btn.textContent='↓ دریافت PNG';}}
 function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);}
-// Export all designed pages as a single ZIP containing one full-resolution PNG per page.
-const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let x=n;for(let k=0;k<8;k++)x=x&1?(0xedb88320^(x>>>1)):(x>>>1);t[n]=x>>>0;}return t;})();
-function crc32(bytes){let c=0xffffffff;for(const b of bytes)c=CRC_TABLE[(c^b)&255]^(c>>>8);return(c^0xffffffff)>>>0;}
-function zipPngFiles(files){
- const local=[],central=[];let offset=0;
- const u16=(view,at,v)=>view.setUint16(at,v,true),u32=(view,at,v)=>view.setUint32(at,v>>>0,true);
- for(const f of files){
-  const name=new TextEncoder().encode(f.name),data=f.bytes,crc=crc32(data);
-  const l=new Uint8Array(30+name.length),lv=new DataView(l.buffer);
-  u32(lv,0,0x04034b50);u16(lv,4,20);u16(lv,6,0x800);u16(lv,8,0);u32(lv,14,crc);u32(lv,18,data.length);u32(lv,22,data.length);u16(lv,26,name.length);l.set(name,30);
-  const c=new Uint8Array(46+name.length),cv=new DataView(c.buffer);
-  u32(cv,0,0x02014b50);u16(cv,4,20);u16(cv,6,20);u16(cv,8,0x800);u16(cv,10,0);u32(cv,16,crc);u32(cv,20,data.length);u32(cv,24,data.length);u16(cv,28,name.length);u32(cv,42,offset);c.set(name,46);
-  local.push(l,data);central.push(c);offset+=l.length+data.length;
- }
- const centralSize=central.reduce((n,x)=>n+x.length,0),end=new Uint8Array(22),ev=new DataView(end.buffer);
- u32(ev,0,0x06054b50);u16(ev,8,files.length);u16(ev,10,files.length);u32(ev,12,centralSize);u32(ev,16,offset);
- return new Blob([...local,...central,end],{type:'application/zip'});
-}
+// Download all pages as separate full-resolution PNG files (no ZIP).
+// Browser may ask the user to allow multiple automatic downloads.
 async function downloadAllPages(){
- const btn=$('downloadAllPagesBtn'),previousState=state;btn.disabled=true;btn.textContent='در حال ساخت…';
+ const btn=$('downloadAllPagesBtn'),oldLabel=btn.textContent;
+ btn.disabled=true;btn.textContent='در حال آماده‌سازی…';
+ const output=document.createElement('canvas');output.width=WIDTH;output.height=HEIGHT;
  try{
-  const files=[];
   for(let i=0;i<project.pages.length;i++){
-   state=project.pages[i].data;
-   await Promise.all([preloadCurrentImages(),ensureFonts()]);
-   render();
-   const blob=await new Promise(resolve=>$('poster').toBlob(resolve,'image/png'));
-   if(!blob)throw new Error('Failed PNG page '+(i+1));
-   files.push({name:`WoSoCenter-page-${String(i+1).padStart(2,'0')}.png`,bytes:new Uint8Array(await blob.arrayBuffer())});
+   const page=project.pages[i];
+   await preloadForPage(page.data);
+   const fonts=new Set([page.data.dayFont,page.data.dateFont,page.data.footerFont,...page.data.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);
+   if(document.fonts)await Promise.allSettled([...fonts].map(f=>document.fonts.load(`800 28px "${validFont(f)}"`,'بارسلونا')));
+   drawPoster(output,page.data);
+   const blob=await new Promise(resolve=>output.toBlob(resolve,'image/png'));
+   if(!blob)throw new Error('PNG export failed on page '+(i+1));
+   downloadBlob(blob,`WoSoCenter-page-${String(i+1).padStart(2,'0')}.png`);
+   btn.textContent=`${(i+1).toLocaleString('fa-IR')} از ${project.pages.length.toLocaleString('fa-IR')} صفحه`;
+   // Prevent consecutive download clicks from landing in the very same event loop.
+   await new Promise(resolve=>setTimeout(resolve,300));
   }
-  downloadBlob(zipPngFiles(files),'WoSoCenter-all-pages.zip');message(`${files.length.toLocaleString('fa-IR')} صفحه به‌صورت ZIP دانلود شد.`);
- }catch(e){console.error(e);message('ساخت فایل همه صفحات انجام نشد. هر صفحه را جدا دانلود کنید.','error');}
- finally{state=previousState;queueRender();btn.disabled=false;btn.textContent='↓ همه صفحات';}
+  message(`دانلود ${project.pages.length.toLocaleString('fa-IR')} تصویر درخواست شد؛ در صورت نیاز، اجازه دانلود چند فایل را به مرورگر بدهید.`);
+ }catch(e){console.error(e);message('در دانلود صفحات خطایی رخ داد. می‌توانید هر صفحه را جدا دانلود کنید.','error');}
+ finally{btn.disabled=false;btn.textContent=oldLabel;queueRender();}
 }
+
 function downloadJSON(){downloadBlob(new Blob([JSON.stringify(projectSnapshot(),null,2)],{type:'application/json;charset=utf-8'}),'WoSoCenter-project-pages.json');message('فایل تنظیمات دانلود شد.');}
 function handleGameField(e){const input=e.target,art=input.closest('.game-editor');if(!art||!input.dataset.field)return;if(input.tagName!=='INPUT'||e.type!=='input')return;const i=Number(art.dataset.index),key=input.dataset.field;if(!state.matches[i]||!(key in DEFAULT_MATCH))return;if(state.matches[i][key]===input.value)return;state.matches[i][key]=input.value;commitHistory(`بازی ${i+1} · ${key==='league'?'نام لیگ':key==='time'?'ساعت بازی':'فونت'}`);if(key.endsWith('Font'))ensureFonts().then(queueRender).catch(()=>message("فونت انتخابی بارگذاری نشد؛ اتصال اینترنت را بررسی کنید.","warning"));}
 function attachEvents(){
   document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
   $('themeToggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme!=='light'));
   $('undoBtn').addEventListener('click',undo);$('redoBtn').addEventListener('click',redo);$('historyUndo').addEventListener('click',undo);$('historyRedo').addEventListener('click',redo);$('showHistoryBtn').addEventListener('click',()=>{switchTab('history');requestAnimationFrame(()=>$('historyTab').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));});
-  $('addPageBtn').addEventListener('click',()=>addPage(project.activePageId,false));
-  $('pageTabs').addEventListener('click',e=>{const del=e.target.closest('[data-page-delete]'),dup=e.target.closest('[data-page-clone]'),pick=e.target.closest('[data-page-select]');if(del)deletePage(del.dataset.pageDelete);else if(dup)addPage(dup.dataset.pageClone,true);else if(pick&&project.activePageId!==pick.dataset.pageSelect){project.activePageId=pick.dataset.pageSelect;displayPage();commitHistory('رفتن به صفحه '+activePage().title);}});
+  $('openPagesBtn').addEventListener('click',openPages);
+  $('addPageBtn').addEventListener('click',()=>{addPage(project.activePageId,false);$('pagesDialog').close();document.querySelector('.preview-area').scrollIntoView({behavior:'smooth',block:'start'});});
+  $('pageTabs').addEventListener('click',e=>{const del=e.target.closest('[data-page-delete]'),dup=e.target.closest('[data-page-clone]'),pick=e.target.closest('[data-page-select]');if(del)deletePage(del.dataset.pageDelete);else if(dup)addPage(dup.dataset.pageClone,true);else if(pick){if(project.activePageId!==pick.dataset.pageSelect){project.activePageId=pick.dataset.pageSelect;displayPage();commitHistory('رفتن به صفحه '+activePage().title);} $('pagesDialog').close();document.querySelector('.preview-area').scrollIntoView({behavior:'smooth',block:'start'});}});
   $('historyList').addEventListener('click',e=>{const b=e.target.closest('[data-revision]');if(b)restoreHistory(Number(b.dataset.revision));});
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}else if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='y'){e.preventDefault();redo();}});
   $('addGameBtn').addEventListener('click',()=>{if(state.matches.length>=MAX_GAMES)return;const last=state.matches.at(-1);state.matches.push({...last,league:'',time:'',leftTeam:'',rightTeam:'',leftBgInitialized:false,rightBgInitialized:false,leftBgLocked:state.paletteId!==''&&state.paletteId!=='classic',rightBgLocked:state.paletteId!==''&&state.paletteId!=='classic'});refreshGames();commitHistory(`افزودن بازی ${state.matches.length}`);});
@@ -358,7 +374,8 @@ function attachEvents(){
   $('projectFile').addEventListener('change',async e=>{try{const f=e.target.files?.[0];if(!f)return;if(f.size>1000000)throw Error('size');project=normalizeProject(JSON.parse(await f.text()));displayPage();await preloadCurrentImages();await ensureFonts();commitHistory('بازیابی فایل تنظیمات');message('تنظیمات بازیابی شد.');}catch(err){console.error(err);message('فایل JSON معتبر نیست.','error');}finally{e.target.value='';}});
   $('downloadBtn').addEventListener('click',downloadPNG);$('downloadBtnBottom').addEventListener('click',downloadPNG);$('downloadAllPagesBtn').addEventListener('click',downloadAllPages);
   document.querySelectorAll('[data-close-dialog]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.closeDialog).close()));
-  for(const id of ['assetDialog','colorDialog','fontDialog'])$(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
+  for(const id of ['assetDialog','colorDialog','fontDialog','pagesDialog'])$(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
+  $('pagesDialog').addEventListener('close',()=>{thumbRefreshId++;});
   $('assetSearch').addEventListener('input',e=>{const kind=pickContext?.kind;const group=kind==='flag'?flags:kind==='patternId'?patterns:teams;renderAssetResults(group,e.target.value);});
   $('assetResults').addEventListener('click',e=>{const b=e.target.closest('[data-asset-id]');if(b)chooseAsset(b.dataset.assetId);});
   $('pickerSV').addEventListener('pointerdown',e=>{e.preventDefault();$('pickerSV').setPointerCapture(e.pointerId);handleSvPointer(e);});
@@ -371,7 +388,7 @@ function attachEvents(){
   $('colorDone').addEventListener('click',()=>$('colorDialog').close());
   $('colorDialog').addEventListener('close',finishColor);
 }
-async function main(){let uiLight=true;try{uiLight=localStorage.getItem('wosocenter-ui-theme')!=='dark';}catch{}setTheme(uiLight);populateColorSwatches();attachEvents();[teams,flags,patterns]=await Promise.all([loadList('data/teams.json',fallbackTeams),loadList('data/flags.json',fallbackFlags),loadList('data/patterns.json',fallbackPatterns)]);const suggestedTeamColors=await loadTeamColors();teams=teams.map(t=>({...t,color:safeHex(suggestedTeamColors[t.id],safeHex(t.color,'#38445b'))}));// Resolve v3.3 projects without a lock flag. Colors unlike current suggestions are
+async function main(){let uiLight=false;try{uiLight=localStorage.getItem('wosocenter-ui-theme')==='light';}catch{}setTheme(uiLight);populateColorSwatches();attachEvents();[teams,flags,patterns]=await Promise.all([loadList('data/teams.json',fallbackTeams),loadList('data/flags.json',fallbackFlags),loadList('data/patterns.json',fallbackPatterns)]);const suggestedTeamColors=await loadTeamColors();teams=teams.map(t=>({...t,color:safeHex(suggestedTeamColors[t.id],safeHex(t.color,'#38445b'))}));// Resolve v3.3 projects without a lock flag. Colors unlike current suggestions are
  // treated as user chosen and protected. Existing explicit locks take priority.
  function migrateLocks(project){
   if(!project?.matches)return;
