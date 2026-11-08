@@ -235,7 +235,7 @@ function syncPattern(){const p=findPattern(state.patternId)||patterns[0];if(!p)r
   const toggle=$('patternTintToggle');const canRecolor=p.mode==='mask'||p.mode==='hue';const enabled=p.mode==='mask'||(p.mode==='hue'&&state.patternTintEnabled);
   toggle.checked=enabled;toggle.disabled=p.mode!=='hue';
   $('patternColorPicker').hidden=!canRecolor||!enabled;
-  $('patternTintHint').textContent=p.mode==='mask'?'این پترن همیشه با رنگ انتخابی شما نمایش داده می‌شود.':p.mode==='image'?'این تصویر فقط با رنگ اصلی نمایش داده می‌شود.':enabled?'رنگ انتخابی روی پترن اعمال می‌شود.':'رنگ اصلی تصویر نمایش داده می‌شود.';
+  $('patternTintHint').textContent=p.mode==='mask'?'این پترن همیشه با رنگ انتخابی شما نمایش داده می‌شود.':p.mode==='image'?'این تصویر فقط با رنگ اصلی نمایش داده می‌شود.':enabled?'بخش‌های رنگی پترن دقیقاً با رنگ انتخابی نمایش داده می‌شوند؛ سایه‌ها حفظ می‌شوند.':'رنگ اصلی تصویر نمایش داده می‌شود.';
 }
 function message(text,kind='success'){$('feedback').textContent=text;$('feedback').className='feedback '+kind;clearTimeout(feedbackTimer);feedbackTimer=setTimeout(()=>{if($('feedback').textContent===text)$('feedback').textContent='';},5500);}
 function persist(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{
@@ -315,17 +315,54 @@ function populateColorSwatches(){const colors=['#ffffff','#030303','#181818','#a
 // Fixed 1080 × 1350 canvas drawing (shared by preview and PNG download).
 function roundPath(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();}
 function tintedImage(path,color){const src=image(path);if(!src)return null;const key=path+'|'+color;if(tinted.has(key))return tinted.get(key);const temp=document.createElement('canvas');temp.width=src.naturalWidth;temp.height=src.naturalHeight;const t=temp.getContext('2d');t.drawImage(src,0,0);t.globalCompositeOperation='source-in';t.fillStyle=color;t.fillRect(0,0,temp.width,temp.height);t.globalCompositeOperation='source-over';tinted.set(key,temp);if(tinted.size>75)tinted.delete(tinted.keys().next().value);return temp;}
-function recoloredPattern(path,color,referenceHue=210){
+// Exact HSV colorization: CSS hue-rotate uses an RGB color matrix and can
+// turn a requested purple into blue. Set the hue of colored source pixels to
+// the chosen hue directly, while preserving brightness/texture, highlights,
+// low-saturation neutrals and original alpha. Never change the image asset.
+function recoloredPattern(path,color){
   const src=image(path);if(!src)return null;
-  const targetHue=rgbToHsv(color).h;
-  const shift=((targetHue-(Number(referenceHue)||0)+540)%360)-180;
-  const key='hue|'+path+'|'+Math.round(shift);
+  const key='hsv|'+path+'|'+color.toLowerCase();
   if(hueCache.has(key))return hueCache.get(key);
   const temp=document.createElement('canvas');temp.width=src.naturalWidth;temp.height=src.naturalHeight;
-  const t=temp.getContext('2d',{willReadFrequently:false});
-  if('filter' in t){t.filter=`hue-rotate(${shift}deg)`;t.drawImage(src,0,0);t.filter='none';}
-  else{t.drawImage(src,0,0);t.globalCompositeOperation='hue';t.fillStyle=color;t.fillRect(0,0,temp.width,temp.height);t.globalCompositeOperation='source-over';}
-  hueCache.set(key,temp);if(hueCache.size>8)hueCache.delete(hueCache.keys().next().value);return temp;
+  const t=temp.getContext('2d',{willReadFrequently:true});
+  t.drawImage(src,0,0);
+  try{
+    const pixels=t.getImageData(0,0,temp.width,temp.height),data=pixels.data;
+    const target=rgbToHsv(color);
+    const hue=target.h/60,sector=Math.floor(hue)%6,fraction=hue-Math.floor(hue);
+    const chromaFactor=1-Math.abs((hue%2)-1);
+    const brightnessFactor=.55+.45*target.v;
+    for(let i=0;i<data.length;i+=4){
+      if(data[i+3]===0)continue;
+      const r=data[i],g=data[i+1],b=data[i+2];
+      const high=Math.max(r,g,b),low=Math.min(r,g,b),span=high-low;
+      // Keep black backgrounds, whites, gray textures and faint neutral lines.
+      if(high<12||span<Math.max(8,high*.085))continue;
+      const saturation=target.s*(.55+.45*span/high);
+      const value=high*brightnessFactor,chrom=value*saturation;
+      const x=chrom*chromaFactor,base=value-chrom;
+      let nr=0,ng=0,nb=0;
+      switch(sector){
+        case 0:nr=chrom;ng=x;break;
+        case 1:nr=x;ng=chrom;break;
+        case 2:ng=chrom;nb=x;break;
+        case 3:ng=x;nb=chrom;break;
+        case 4:nr=x;nb=chrom;break;
+        default:nr=chrom;nb=x;
+      }
+      data[i]=Math.round(nr+base);
+      data[i+1]=Math.round(ng+base);
+      data[i+2]=Math.round(nb+base);
+    }
+    t.putImageData(pixels,0,0);
+  }catch(err){
+    // Unsupported/tainted canvas: return the unmodified original rather than
+    // a blank preview or a crash. Local site images are same-origin normally.
+    console.warn('Pattern recoloring unavailable:',err);
+    return src;
+  }
+  hueCache.set(key,temp);if(hueCache.size>8)hueCache.delete(hueCache.keys().next().value);
+  return temp;
 }
 function drawCover(c,img,focusX=.5,focusY=.5){
   const sw=img.width||img.naturalWidth,sh=img.height||img.naturalHeight;
@@ -355,7 +392,7 @@ function drawGame(c,m,index){const x=87,y=215+index*171,w=899,h=157;c.save();rou
   drawRtl(c,'ساعت '+m.time,textAnchorX,y+113,365,m.timeFont,m.timeColor,27,800);}
 function drawFooter(c){const label=String(state.footerText||'');const isLatin=/^[\x00-\x7f\s]+$/.test(label),font=validFont(state.footerFont);c.font=`800 29px "${font}","Mikhak",Tahoma,sans-serif`;const textWidth=Math.min(c.measureText(label).width,540),total=textWidth+52,left=(WIDTH-total)/2;drawTelegram(c,left,1254,38,state.telegramColor);c.save();c.fillStyle=state.footerColor;c.font=`800 29px "${font}","Mikhak",Tahoma,sans-serif`;c.direction=isLatin?'ltr':'rtl';c.textAlign=isLatin?'left':'right';c.textBaseline='alphabetic';if(isLatin)c.fillText(label,left+49,1282,540);else c.fillText(label,left+49+textWidth,1282,540);c.restore();}
 function drawPoster(canvas,pageState=state){if(!canvas)return;const savedState=state;state=pageState;const c=canvas.getContext('2d');c.save();c.setTransform(canvas.width/WIDTH,0,0,canvas.height/HEIGHT,0,0);c.clearRect(0,0,WIDTH,HEIGHT);c.fillStyle=state.background;c.fillRect(0,0,WIDTH,HEIGHT);const p=findPattern(state.patternId)||patterns[0];if(p){
-  const pic=p.mode==='mask'?tintedImage(p.image,state.patternColor):((state.patternTintEnabled&&p.mode==='hue')?recoloredPattern(p.image,state.patternColor,p.referenceHue):image(p.image));
+  const pic=p.mode==='mask'?tintedImage(p.image,state.patternColor):((state.patternTintEnabled&&p.mode==='hue')?recoloredPattern(p.image,state.patternColor):image(p.image));
   if(pic){if(p.layout==='cover'){drawCover(c,pic,p.focusX??.5,p.focusY??.5);}else{
     const tw=Math.max(32,Math.min(2048,Number(p.tileWidth)||432)),th=Math.max(32,Math.min(2048,Number(p.tileHeight)||430));
     for(let y=0;y<HEIGHT;y+=th){for(let x=0;x<WIDTH;x+=tw)c.drawImage(pic,x,y,tw,th);}
