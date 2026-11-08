@@ -20,7 +20,7 @@
       <div class="history-actions" aria-label="ویرایش‌های قبلی">
         <button id="undoBtn" class="tool-btn" type="button" title="بازگشت به تغییر قبلی (Ctrl+Z)" aria-label="واگرد">↶</button>
         <button id="redoBtn" class="tool-btn" type="button" title="بازگرداندن تغییر (Ctrl+Y)" aria-label="بازانجام">↷</button>
-        <button id="showHistoryBtn" class="tool-btn history-icon" type="button" title="مشاهده تاریخچه" aria-label="تاریخچه تغییرات">☷</button>
+        <button id="showHistoryBtn" class="tool-btn history-icon" type="button" title="مشاهده تاریخچه" aria-label="تاریخچه تغییرات"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/></svg></button>
       </div>
       <button id="themeToggle" class="tool-btn theme-btn" type="button" title="تغییر حالت روشن و تاریک" aria-label="تغییر حالت روشن و تاریک">☀</button>
       <span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار</span>
@@ -51,6 +51,7 @@
         <div class="settings-group"><h2>عنوان گرافیکی</h2>
           <div class="two-col"><label>رنگ «برنامه»<button type="button" class="color-trigger" data-global-color="titlePurple"></button></label><label>رنگ «بازی‌های امروز»<button type="button" class="color-trigger" data-global-color="titleWhite"></button></label></div>
         </div>
+        <div class="settings-group"><h2>لوگوی WoSoCenter</h2><label>رنگ لوگوی بالای تصویر<button type="button" class="color-trigger" data-global-color="brandLogoColor"></button></label></div>
         <div class="settings-group"><h2>آیدی کانال در تصویر</h2>
           <label>نام یا آیدی کانال<input id="footerText" maxlength="45" type="text" placeholder="WoSoCenter" /></label>
           <div class="two-col"><label>رنگ نوشته<button type="button" class="color-trigger" data-global-color="footerColor"></button></label><label>رنگ آیکون تلگرام<button type="button" class="color-trigger" data-global-color="telegramColor"></button></label></div>
@@ -66,7 +67,7 @@
           </div>
         </div>
         <div class="settings-group"><h2>رنگ اجزای تصویر</h2>
-          <div class="two-col"><label>رنگ زمینه<button type="button" class="color-trigger" data-global-color="background"></button></label><label>رنگ لایه مرکزی<button type="button" class="color-trigger" data-global-color="frameColor"></button></label><label>رنگ کادر مسابقه<button type="button" class="color-trigger" data-global-color="cardColor"></button></label><label>رنگ لوگوی بالای تصویر<button type="button" class="color-trigger" data-global-color="brandLogoColor"></button></label></div>
+          <div class="two-col"><label>رنگ زمینه<button type="button" class="color-trigger" data-global-color="background"></button></label><label>رنگ لایه مرکزی<button type="button" class="color-trigger" data-global-color="frameColor"></button></label><label>رنگ کادر مسابقه<button type="button" class="color-trigger" data-global-color="cardColor"></button></label></div>
         </div>
         <div class="settings-group"><h2>فونت یکسان برای متن‌ها</h2><label>انتخاب فونت<button id="globalFontPick" type="button" class="font-pick" data-global-font="globalFont" aria-label="انتخاب فونت"></button></label><button class="btn secondary full" type="button" id="applyAllFonts">اعمال روی تمام نوشته‌های قابل ویرایش</button><p class="hint compact">عنوان گرافیکی بالای تصویر ثابت می‌ماند.</p></div>
         <div class="settings-group"><h2>مدیریت طرح</h2><div class="two-col"><button class="btn secondary" id="exportProject" type="button">دریافت تنظیمات JSON</button><button class="btn secondary" id="importProjectBtn" type="button">بازیابی تنظیمات</button></div><input id="projectFile" type="file" accept=".json,application/json" hidden /><button class="btn danger-text full" id="resetBtn" type="button">بازگشت به طرح پیش‌فرض</button><p class="hint compact">تنظیمات و تاریخچه تغییرات در همین مرورگر نگهداری می‌شوند.</p></div>
@@ -76,6 +77,10 @@
     </aside>
     <section class="preview-area" aria-label="پیش‌نمایش خروجی">
       <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div>
+      <div class="page-manager" aria-label="مدیریت صفحات کنداکتور">
+        <div class="pages-toolbar"><div><strong>صفحات کنداکتور</strong><small id="pageTotal">۱ صفحه</small></div><div class="page-buttons"><button type="button" id="addPageBtn" class="btn accent">＋ افزودن صفحه</button><button type="button" id="downloadAllPagesBtn" class="btn secondary" title="دانلود همه صفحات به صورت ZIP">↓ همه صفحات</button></div></div>
+        <div id="pageTabs" class="page-tabs" aria-label="فهرست صفحات"></div>
+      </div>
       <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش برنامه بازی‌های فوتبال"></canvas></div>
       <div class="preview-foot"><span>تصویر خروجی ۱۰۸۰ × ۱۳۵۰ پیکسل است.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
     </section>

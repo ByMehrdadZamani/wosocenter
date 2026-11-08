@@ -11,7 +11,7 @@ const FONTS=[
 ];
 const ASSETS={titlePurple:'assets/brand/title-purple-hq.png',titleWhite:'assets/brand/title-white-alpha.png',logo:'assets/brand/logo-alpha.png'};
 const COLORS={background:'پس‌زمینه',patternColor:'رنگ پترن',frameColor:'کادر اصلی',cardColor:'کادر مسابقه',brandLogoColor:'لوگوی WoSoCenter',dayColor:'روز هفته',dateColor:'تاریخ',dateLineColor:'خط تاریخ',titlePurple:'عنوان برنامه',titleWhite:'عنوان بازی‌های امروز',footerColor:'آیدی کانال',telegramColor:'آیکون تلگرام',leftBg:'زمینه تیم اول',rightBg:'زمینه تیم دوم',leagueColor:'نام لیگ',timeColor:'ساعت',clockColor:'آیکون ساعت'};
-const DEFAULT_MATCH={flag:'spain',league:'لیگا اف اسپانیا',time:'۲۲:۳۰',leftTeam:'barcelona',rightTeam:'real-madrid',leftBg:'#873d58',rightBg:'#e2b944',leftBgInitialized:true,rightBgInitialized:true,leftBgLocked:false,rightBgLocked:false,leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2',leagueFont:'Ario',timeFont:'Ario'};
+const DEFAULT_MATCH={flag:'liga-af-spain',league:'لیگا اف اسپانیا',time:'۲۲:۳۰',leftTeam:'barcelona',rightTeam:'real-madrid',leftBg:'#873d58',rightBg:'#e2b944',leftBgInitialized:true,rightBgInitialized:true,leftBgLocked:false,rightBgLocked:false,leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2',leagueFont:'Ario',timeFont:'Ario'};
 const DEFAULTS={weekDay:'شنبه',monthDay:'۱۶ آبان',dayColor:'#aa55bc',dateColor:'#ffffff',dayFont:'Ario',dateFont:'Ario',dateLineColor:'#a64db6',titlePurple:'#a457bf',titleWhite:'#d9d9d9',brandLogoColor:'#9141aa',footerText:'WoSoCenter',footerColor:'#ae58c7',telegramColor:'#af58c8',footerFont:'Ario',background:'#030303',patternColor:'#320a3e',frameColor:'#09050c',cardColor:'#181818',globalFont:'Ario',patternId:'woso-petals',patternTintEnabled:true,paletteId:'classic',matches:[{...DEFAULT_MATCH}]};
 const PALETTES=[
   {id:'classic',name:'بنفش کلاسیک',colors:['#030303','#320a3e','#a457bf','#181818'],settings:{background:'#030303',patternColor:'#320a3e',frameColor:'#09050c',cardColor:'#181818',brandLogoColor:'#9141aa',titlePurple:'#a457bf',titleWhite:'#d9d9d9',dayColor:'#aa55bc',dateColor:'#ffffff',dateLineColor:'#a64db6',footerColor:'#ae58c7',telegramColor:'#af58c8'},match:{leftBg:'#85152d',rightBg:'#ffdb0d',leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2'}},
@@ -52,6 +52,65 @@ function safeLoad(key){try{return JSON.parse(localStorage.getItem(key)||'null');
 let state=cleanState(safeLoad(STORE)||safeLoad('football-conductor-v1'));
 let history=[{label:'شروع ویرایش',time:Date.now(),snapshot:clone(state)}],historyIndex=0;
 try{const saved=safeLoad(HISTORY_STORE);if(saved&&Array.isArray(saved.entries)&&saved.entries.length&&saved.entries.length<=HISTORY_LIMIT+1&&Number.isInteger(saved.index)&&saved.index>=0&&saved.index<saved.entries.length){history=saved.entries.map(x=>({label:String(x.label||'تغییر').slice(0,120),time:Number(x.time)||Date.now(),snapshot:cleanState(x.snapshot)}));historyIndex=saved.index;state=clone(history[historyIndex].snapshot);}}catch{}
+// Each page contains its own template-01 design state; team and league catalogs remain shared.
+const PROJECT_STORE='wosocenter-pages-v1', MULTI_HISTORY='wosocenter-pages-history-v1';
+let pageSequence=0;
+function normalizeProject(raw){
+ if(!raw||!Array.isArray(raw.pages)||!raw.pages.length){
+  return {pages:[{id:'page-1',title:'صفحه ۱',data:cleanState(raw&&raw.matches?raw:state)}],activePageId:'page-1'};
+ }
+ const used=new Set();
+ const pages=raw.pages.slice(0,40).map((pg,i)=>{
+  const id=String(pg.id||'page-'+(i+1)).replace(/[^a-zA-Z0-9_-]/g,'').slice(0,35)||'page-'+(i+1);
+  const safeId=used.has(id)?'page-'+(i+1)+'-'+String(i):id;used.add(safeId);
+  return {id:safeId,title:String(pg.title||`صفحه ${i+1}`).slice(0,35),data:cleanState(pg.data||pg.state||pg)};
+ });
+ return {pages,activePageId:pages.some(pg=>pg.id===raw.activePageId)?raw.activePageId:pages[0].id};
+}
+let project=normalizeProject(safeLoad(PROJECT_STORE)||state);
+function activePage(){return project.pages.find(pg=>pg.id===project.activePageId)||project.pages[0];}
+function activatePageState(){state=activePage().data;}
+function projectSnapshot(){return clone(project);}
+activatePageState();
+const savedMultiHistory=safeLoad(MULTI_HISTORY);
+if(savedMultiHistory&&Array.isArray(savedMultiHistory.entries)&&savedMultiHistory.entries.length&&Number.isInteger(savedMultiHistory.index)&&savedMultiHistory.index>=0&&savedMultiHistory.index<savedMultiHistory.entries.length){
+ history=savedMultiHistory.entries.slice(-HISTORY_LIMIT-1).map(h=>({label:String(h.label||'تغییر'),time:Number(h.time)||Date.now(),snapshot:normalizeProject(h.snapshot)}));
+ historyIndex=Math.min(savedMultiHistory.index,history.length-1);
+ project=normalizeProject(history[historyIndex].snapshot);activatePageState();
+}else{
+ history=history.map(h=>({...h,snapshot:normalizeProject(h.snapshot)}));
+ historyIndex=Math.min(historyIndex,history.length-1);
+ // existing historical states continue as a one-page project; last state gets latest project data
+ history[historyIndex].snapshot=projectSnapshot();
+}
+function nextPageId(){return 'pg-'+Date.now().toString(36)+'-'+(++pageSequence).toString(36);}
+function displayPage(){activatePageState();syncGlobals();refreshGames();refreshPalettes();refreshPages();preloadCurrentImages();ensureFonts().then(queueRender).catch(()=>{});queueRender();}
+function refreshPages(){
+ const tabs=$('pageTabs');if(!tabs)return;
+ $('pageTotal').textContent=`${project.pages.length.toLocaleString('fa-IR')} صفحه`;
+ tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}"><span class="page-number">${(i+1).toLocaleString('fa-IR')}</span><span class="page-title">${esc(pg.title)}</span><small>${pg.data.matches.length.toLocaleString('fa-IR')} بازی</small></button><div class="page-actions"><button type="button" data-page-clone="${esc(pg.id)}" title="کپی کامل این صفحه" aria-label="کپی ${esc(pg.title)}">⧉</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف این صفحه" aria-label="حذف ${esc(pg.title)}" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
+ $('addPageBtn').disabled=project.pages.length>=40;
+}
+function addPage(fromId,duplicate=false){
+ if(project.pages.length>=40){message('حداکثر ۴۰ صفحه در هر پروژه قابل ایجاد است.','warning');return;}
+ const source=project.pages.find(pg=>pg.id===fromId)||activePage();
+ const copy=clone(source.data);
+ if(!duplicate){
+  const style=source.data.matches[0]||DEFAULT_MATCH;
+  copy.matches=[{...DEFAULT_MATCH,leagueColor:style.leagueColor,timeColor:style.timeColor,clockColor:style.clockColor,leagueFont:style.leagueFont,timeFont:style.timeFont,leftBg:style.leftBg,rightBg:style.rightBg,leftBgInitialized:true,rightBgInitialized:true,leftBgLocked:style.leftBgLocked,rightBgLocked:style.rightBgLocked}];
+ }
+ const pg={id:nextPageId(),title:`صفحه ${project.pages.length+1}`,data:cleanState(copy)};
+ const idx=project.pages.findIndex(p=>p.id===source.id);
+ project.pages.splice(idx+1,0,pg);project.activePageId=pg.id;displayPage();commitHistory(duplicate?'کپی کامل صفحه':'افزودن صفحه جدید');
+}
+function deletePage(id){
+ if(project.pages.length<=1)return;
+ const idx=project.pages.findIndex(pg=>pg.id===id);if(idx<0)return;
+ if(!confirm(`صفحه «${project.pages[idx].title}» حذف شود؟`))return;
+ project.pages.splice(idx,1);
+ if(project.activePageId===id)project.activePageId=project.pages[Math.min(idx,project.pages.length-1)].id;
+ displayPage();commitHistory('حذف صفحه');
+}
 let teams=[],flags=[],patterns=[],activeTab='games';
 const images=new Map(),tinted=new Map(),hueCache=new Map();
 let renderPending=false,feedbackTimer=null,saveTimer=null,pickContext=null,colorContext=null,colorAtOpen='',colorDirty=false;
@@ -69,7 +128,7 @@ async function loadTeamColors(){
   }catch{return {};}
 }
 const fallbackTeams=[{id:'barcelona',name:'بارسلونا',image:'assets/teams/barcelona.png',color:'#873d58'},{id:'real-madrid',name:'رئال مادرید',image:'assets/teams/real-madrid.png',color:'#e2b944'},{id:'bayern-munich',name:'بایرن مونیخ',image:'assets/teams/bayern-munich.png',color:'#b63a4a'},{id:'servette',name:'سروت ژنو',image:'assets/teams/servette.png',color:'#83182e'},{id:'nordsjaelland',name:'نورشلاند',image:'assets/teams/nordsjaelland.png',color:'#ecce24'}];
-const fallbackFlags=[{id:'spain',name:'اسپانیا',image:'assets/flags/spain.svg'}];
+const fallbackFlags=[{id:'liga-af-spain',name:'لیگا اف اسپانیا',image:'assets/leagues/liga-af-spain.png',type:'league'}];
 const fallbackPatterns=[{id:'woso-petals',name:'گلبرگ کلاسیک',image:'assets/patterns/woso-petals.png',tileWidth:432,tileHeight:430,mode:'mask'}];
 const fontInfo=id=>FONTS.find(f=>f[0]===id)||FONTS[0];
 const fontButton=(key,value,kind='game')=>`<button type="button" class="font-pick" data-${kind==='game'?'game':'global'}-font="${esc(key)}" aria-label="انتخاب فونت"><span class="font-pick-title" style="font-family:'${esc(validFont(value))}',Tahoma,sans-serif">${esc(fontInfo(value)[1])}</span><span class="font-pick-chevron">⌄</span></button>`;
@@ -106,16 +165,27 @@ function syncPattern(){const p=findPattern(state.patternId)||patterns[0];if(!p)r
   $('patternTintHint').textContent=p.mode==='mask'?'این پترن همیشه با رنگ انتخابی شما نمایش داده می‌شود.':p.mode==='image'?'این تصویر فقط با رنگ اصلی نمایش داده می‌شود.':enabled?'رنگ انتخابی روی پترن اعمال می‌شود.':'رنگ اصلی تصویر نمایش داده می‌شود.';
 }
 function message(text,kind='success'){$('feedback').textContent=text;$('feedback').className='feedback '+kind;clearTimeout(feedbackTimer);feedbackTimer=setTimeout(()=>{if($('feedback').textContent===text)$('feedback').textContent='';},5500);}
-function persist(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{try{localStorage.setItem(STORE,JSON.stringify(state));localStorage.setItem(HISTORY_STORE,JSON.stringify({entries:history,index:historyIndex}));$('saveIndicator').textContent='✓ ذخیره شد';}catch{$('saveIndicator').textContent='ذخیره محلی در دسترس نیست';}},300);}
+function persist(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{
+ try{
+  localStorage.setItem(PROJECT_STORE,JSON.stringify(projectSnapshot()));
+  // History is bounded by count and storage size; preserve newest entries if storage fills.
+  let entries=history.slice(),index=historyIndex;
+  while(entries.length){
+   try{localStorage.setItem(MULTI_HISTORY,JSON.stringify({entries,index}));break;}
+   catch(e){if(entries.length<2)throw e;entries.shift();index=Math.max(0,index-1);}
+  }
+  $('saveIndicator').textContent='✓ ذخیره شد';
+ }catch{$('saveIndicator').textContent='ذخیره محلی در دسترس نیست';}
+},350);}
 function queueRender(){if(renderPending)return;renderPending=true;requestAnimationFrame(()=>{renderPending=false;render();});}
 function updateHistoryButtons(){const canUndo=historyIndex>0,canRedo=historyIndex<history.length-1;for(const id of ['undoBtn','historyUndo'])$(id).disabled=!canUndo;for(const id of ['redoBtn','historyRedo'])$(id).disabled=!canRedo;$('historyCount').textContent=`${history.length-1} تغییر · مرحله ${historyIndex}`;if(activeTab==='history')refreshHistoryList();}
-function commitHistory(label){history.splice(historyIndex+1);history.push({label,time:Date.now(),snapshot:clone(state)});if(history.length>HISTORY_LIMIT+1)history.shift();historyIndex=history.length-1;updateHistoryButtons();persist();queueRender();}
-function restoreHistory(index){if(index<0||index>=history.length||index===historyIndex)return;historyIndex=index;state=cleanState(clone(history[index].snapshot));syncGlobals();refreshGames();refreshPalettes();preloadCurrentImages();ensureFonts().then(queueRender).catch(()=>message("فونت انتخابی بارگذاری نشد؛ اتصال اینترنت را بررسی کنید.","warning"));updateHistoryButtons();persist();queueRender();}
+function commitHistory(label){history.splice(historyIndex+1);history.push({label,time:Date.now(),snapshot:projectSnapshot()});if(history.length>HISTORY_LIMIT+1)history.shift();historyIndex=history.length-1;updateHistoryButtons();persist();queueRender();}
+function restoreHistory(index){if(index<0||index>=history.length||index===historyIndex)return;historyIndex=index;project=normalizeProject(clone(history[index].snapshot));displayPage();updateHistoryButtons();persist();queueRender();}
 function undo(){restoreHistory(historyIndex-1);}function redo(){restoreHistory(historyIndex+1);}
 function refreshHistoryList(){$('historyList').innerHTML=history.map((h,i)=>`<button type="button" class="history-item ${i===historyIndex?'selected':''} ${i>historyIndex?'future':''}" data-revision="${i}"><span class="history-num">${i}</span><span class="history-label">${esc(h.label)}</span><time>${new Date(h.time).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})}</time></button>`).reverse().join('');}
 function switchTab(name){activeTab=name;document.querySelectorAll('.tab').forEach(t=>{const chosen=t.dataset.tab===name;t.classList.toggle('active',chosen);t.setAttribute('aria-selected',String(chosen));});for(const n of ['games','header','design','history'])$(n+'Tab').classList.toggle('hidden',name!==n);if(name==='history')refreshHistoryList();}
-function refreshPalettes(){$('paletteList').innerHTML=PALETTES.map(p=>`<button type="button" data-palette="${p.id}" class="palette-option ${state.paletteId===p.id?'selected':''}"><span class="palette-dots">${p.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span><span>${p.name}</span>${state.paletteId===p.id?'<b>✓</b>':''}</button>`).join('');}
-function selectPalette(id){const palette=PALETTES.find(x=>x.id===id);if(!palette)return;Object.assign(state,palette.settings);state.matches.forEach(m=>{Object.assign(m,palette.match);m.leftBgInitialized=true;m.rightBgInitialized=true;m.leftBgLocked=true;m.rightBgLocked=true;});state.paletteId=id;syncGlobals();refreshGames();refreshPalettes();commitHistory(`ترکیب رنگی «${palette.name}»`);}
+function refreshPalettes(){const recommended=findPattern(state.patternId)?.suggestedPalette;const chosenPalette=recommended?{...recommended,id:'suggested-'+state.patternId,recommended:true}:null;const options=chosenPalette?[chosenPalette,...PALETTES]:PALETTES;$('paletteList').innerHTML=options.map(p=>`<button type="button" data-palette="${p.id}" class="palette-option ${state.paletteId===p.id?'selected':''} ${p.recommended?'palette-recommended':''}"><span class="palette-dots">${p.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span><span>${esc(p.name)}</span>${p.recommended?'<em class="palette-tag">پالت پیشنهادی این پترن</em>':''}${state.paletteId===p.id?'<b>✓</b>':''}</button>`).join('');}
+function selectPalette(id){const p=findPattern(state.patternId);const suggested=p?.suggestedPalette?{...p.suggestedPalette,id:'suggested-'+p.id}:null;const palette=(suggested?.id===id?suggested:null)||PALETTES.find(x=>x.id===id);if(!palette)return;Object.assign(state,palette.settings);state.matches.forEach(m=>{Object.assign(m,palette.match);m.leftBgInitialized=true;m.rightBgInitialized=true;m.leftBgLocked=true;m.rightBgLocked=true;});state.paletteId=id;syncGlobals();refreshGames();refreshPalettes();commitHistory(`ترکیب رنگی «${palette.name}»`);}
 function setTheme(isLight){document.documentElement.dataset.theme=isLight?'light':'dark';$('themeToggle').textContent=isLight?'☾':'☀';$('themeToggle').title=isLight?'حالت تاریک':'حالت روشن';try{localStorage.setItem('wosocenter-ui-theme',isLight?'light':'dark');}catch{}}
 function openAsset(kind,index){pickContext={kind,index};const group=kind==='flag'?flags:kind==='patternId'?patterns:teams;$('assetDialogTitle').textContent=kind==='flag'?'انتخاب پرچم یا لوگوی لیگ':kind==='patternId'?'انتخاب پترن پس‌زمینه':'انتخاب تیم و لوگو';$('assetSearch').value='';renderAssetResults(group,'');$('assetDialog').showModal();
   // Do not auto-focus the input: on phones the keyboard must stay closed until a deliberate tap.
@@ -124,9 +194,9 @@ function openAsset(kind,index){pickContext={kind,index};const group=kind==='flag
 function normalizeTeamQuery(value){return String(value??'').normalize('NFKC').toLocaleLowerCase('fa-IR').replace(/[آأإٱ]/g,'ا').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[ةۀ]/g,'ه').replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[\u064b-\u065f\u0670\u200c\u200d]/g,'').replace(/[_\-]+/g,' ').replace(/\s+/g,' ').trim();}
 const SUGGESTED_TEAM_IDS=['barcelona','real-madrid','bayern-munich'];
 function renderAssetResults(group,search){const q=normalizeTeamQuery(search);const isTeam=pickContext?.kind==='leftTeam'||pickContext?.kind==='rightTeam';let filtered=group.filter(x=>normalizeTeamQuery(x.name).includes(q)||normalizeTeamQuery(x.id).includes(q));if(isTeam){filtered.sort((a,b)=>{if(!q){const ai=SUGGESTED_TEAM_IDS.indexOf(a.id),bi=SUGGESTED_TEAM_IDS.indexOf(b.id);if(ai!==bi)return ai===-1?1:bi===-1?-1:ai-bi;return a.name.localeCompare(b.name,'fa');}const an=normalizeTeamQuery(a.name),bn=normalizeTeamQuery(b.name);const ar=an.startsWith(q)?0:an.split(' ').some(w=>w.startsWith(q))?1:2,br=bn.startsWith(q)?0:bn.split(' ').some(w=>w.startsWith(q))?1:2;return ar-br||a.name.localeCompare(b.name,'fa');});}
-const visible=filtered.slice(0,250);$('assetCount').textContent=`${filtered.length.toLocaleString('fa-IR')} مورد ${filtered.length>250?'· برای نتایج بیشتر جست‌وجو کنید':''}`;$('assetResults').innerHTML=visible.map(x=>`<button class="asset-result" type="button" data-asset-id="${esc(x.id)}"><span class="result-thumb"><img loading="lazy" src="${esc(x.image)}" alt="" /></span><span class="result-name">${esc(x.name)}</span><span class="result-meta">${esc(x.type==='league'?'لوگوی لیگ':isTeam&&!q&&SUGGESTED_TEAM_IDS.includes(x.id)?'پیشنهادی':'')}</span></button>`).join('')||'<p class="empty-results">موردی یافت نشد.</p>';}
+const visible=filtered.slice(0,250);$('assetResults').classList.toggle('pattern-grid',pickContext?.kind==='patternId');$('assetDialog').classList.toggle('pattern-dialog',pickContext?.kind==='patternId');$('assetCount').textContent=`${filtered.length.toLocaleString('fa-IR')} مورد ${filtered.length>250?'· برای نتایج بیشتر جست‌وجو کنید':''}`;$('assetResults').innerHTML=visible.map(x=>pickContext?.kind==='patternId'?`<button class="asset-result pattern-item" type="button" data-asset-id="${esc(x.id)}"><span class="pattern-thumb"><img loading="lazy" src="${esc(x.image)}" alt="" /></span><span class="result-name">${esc(x.name)}</span></button>`:`<button class="asset-result" type="button" data-asset-id="${esc(x.id)}"><span class="result-thumb"><img loading="lazy" src="${esc(x.image)}" alt="" /></span><span class="result-name">${esc(x.name)}</span><span class="result-meta">${esc(x.type==='league'?'لوگوی لیگ':isTeam&&!q&&SUGGESTED_TEAM_IDS.includes(x.id)?'پیشنهادی':'')}</span></button>`).join('')||'<p class="empty-results">موردی یافت نشد.</p>';}
 
-function chooseAsset(id){if(!pickContext)return;const {kind,index}=pickContext;const group=kind==='flag'?flags:kind==='patternId'?patterns:teams;const chosen=group.find(x=>x.id===id);if(!chosen)return;if(kind==='patternId'){state.patternId=id;state.patternTintEnabled=chosen.mode==='mask'||chosen.recolorDefault===true;syncPattern();}else if(Number.isInteger(index)&&state.matches[index]){const match=state.matches[index];if(kind==='leftTeam'||kind==='rightTeam'){const side=kind==='leftTeam'?'left':'right',initKey=side+'BgInitialized',bgKey=side+'Bg';if(!match[side+'BgLocked']){match[bgKey]=safeHex(chosen.color,match[bgKey]);}match[initKey]=true;}match[kind]=id;refreshGames();}preload(chosen.image);$('assetDialog').close();commitHistory(`${kind==='patternId'?'پترن':kind==='flag'?'پرچم یا لیگ':'تیم'}: ${chosen.name}`);}
+function chooseAsset(id){if(!pickContext)return;const {kind,index}=pickContext;const group=kind==='flag'?flags:kind==='patternId'?patterns:teams;const chosen=group.find(x=>x.id===id);if(!chosen)return;if(kind==='patternId'){state.patternId=id;state.patternTintEnabled=chosen.mode==='mask'||chosen.recolorDefault===true;syncPattern();refreshPalettes();}else if(Number.isInteger(index)&&state.matches[index]){const match=state.matches[index];if(kind==='leftTeam'||kind==='rightTeam'){const side=kind==='leftTeam'?'left':'right',initKey=side+'BgInitialized',bgKey=side+'Bg';if(!match[side+'BgLocked']){match[bgKey]=safeHex(chosen.color,match[bgKey]);}match[initKey]=true;}match[kind]=id;if(kind==='flag')match.league=chosen.name;refreshGames();}preload(chosen.image);$('assetDialog').close();commitHistory(`${kind==='patternId'?'پترن':kind==='flag'?'پرچم یا لیگ':'تیم'}: ${chosen.name}`);}
 
 // Font picker is a custom dialog; the preview is painted in the same family as the output.
 let fontContext=null;
@@ -204,9 +274,9 @@ function drawDate(c){
   drawRtl(c,state.weekDay,anchorX,115,194,state.dayFont,state.dayColor,28,800);
   drawRtl(c,state.monthDay,anchorX,162,194,state.dateFont,state.dateColor,29,800);
 }
-function drawBrand(c){drawTint(c,ASSETS.logo,87,87,105,91,state.brandLogoColor);drawTint(c,ASSETS.titleWhite,311,87,459,79,state.titleWhite);drawTint(c,ASSETS.titlePurple,311,87,459,79,state.titlePurple);}
+function drawBrand(c){drawTint(c,ASSETS.logo,85,70,146,122,state.brandLogoColor);drawTint(c,ASSETS.titleWhite,311,87,459,79,state.titleWhite);drawTint(c,ASSETS.titlePurple,311,87,459,79,state.titlePurple);}
 function drawGame(c,m,index){const x=87,y=215+index*171,w=899,h=157;c.save();roundPath(c,x,y,w,h,24);c.clip();c.fillStyle=state.cardColor;c.fillRect(x,y,w,h);c.fillStyle=m.leftBg;c.fillRect(x,y,211,h);c.fillStyle=m.rightBg;c.fillRect(x+211,y,211,h);const t1=findTeam(m.leftTeam),t2=findTeam(m.rightTeam);contain(c,image(t1?.image),x+10,y+5,191,146);contain(c,image(t2?.image),x+221,y+5,191,146);c.restore();const iconCX=x+866, textAnchorX=x+833;
-  const flag=findFlag(m.flag);if(flag){const flagImg=image(flag.image);if(flagImg)contain(c,flagImg,iconCX-18,y+28,36,27);}
+  const flag=findFlag(m.flag);if(flag){const flagImg=image(flag.image);if(flagImg)contain(c,flagImg,iconCX-21,y+26,42,42);}
   drawRtl(c,m.league,textAnchorX,y+57,365,m.leagueFont,m.leagueColor,28,800);
   drawClock(c,iconCX,y+105,m.clockColor);
   drawRtl(c,'ساعت '+m.time,textAnchorX,y+113,365,m.timeFont,m.timeColor,27,800);}
@@ -221,14 +291,50 @@ function render(){const canvas=$('poster');if(!canvas)return;const c=canvas.getC
 async function ensureFonts(){if(!document.fonts)return;const fonts=new Set([state.dayFont,state.dateFont,state.footerFont,...state.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);const res=await Promise.allSettled([...fonts].map(f=>document.fonts.load(`800 28px "${validFont(f)}"`,'بارسلونا')));if(res.some(x=>x.status==='rejected'))throw Error('Font loading failed');}
 
 function preloadCurrentImages(){const paths=[...Object.values(ASSETS),(findPattern(state.patternId)||patterns[0])?.image,...state.matches.flatMap(m=>[findTeam(m.leftTeam)?.image,findTeam(m.rightTeam)?.image,findFlag(m.flag)?.image])];return Promise.all(paths.filter(Boolean).map(preload));}
-async function downloadPNG(){const btn=$('downloadBtn');btn.disabled=true;btn.textContent='آماده‌سازی…';try{await Promise.all([ensureFonts(),preloadCurrentImages()]);render();const blob=await new Promise(resolve=>$('poster').toBlob(resolve,'image/png'));if(!blob)throw Error('Failed to encode canvas');downloadBlob(blob,`WoSoCenter-${state.matches.length}-games.png`);message('تصویر ۱۰۸۰×۱۳۵۰ با موفقیت دانلود شد.');}catch(e){console.error(e);message('در ساخت تصویر مشکلی پیش آمد؛ صفحه را تازه‌سازی کنید.','error');}finally{btn.disabled=false;btn.textContent='↓ دریافت PNG';}}
+async function downloadPNG(){const btn=$('downloadBtn');btn.disabled=true;btn.textContent='آماده‌سازی…';try{await Promise.all([ensureFonts(),preloadCurrentImages()]);render();const blob=await new Promise(resolve=>$('poster').toBlob(resolve,'image/png'));if(!blob)throw Error('Failed to encode canvas');downloadBlob(blob,`WoSoCenter-${project.pages.findIndex(p=>p.id===project.activePageId)+1}-${state.matches.length}-games.png`);message('تصویر ۱۰۸۰×۱۳۵۰ با موفقیت دانلود شد.');}catch(e){console.error(e);message('در ساخت تصویر مشکلی پیش آمد؛ صفحه را تازه‌سازی کنید.','error');}finally{btn.disabled=false;btn.textContent='↓ دریافت PNG';}}
 function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);}
-function downloadJSON(){downloadBlob(new Blob([JSON.stringify(state,null,2)],{type:'application/json;charset=utf-8'}),'WoSoCenter-settings.json');message('فایل تنظیمات دانلود شد.');}
+// Export all designed pages as a single ZIP containing one full-resolution PNG per page.
+const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let x=n;for(let k=0;k<8;k++)x=x&1?(0xedb88320^(x>>>1)):(x>>>1);t[n]=x>>>0;}return t;})();
+function crc32(bytes){let c=0xffffffff;for(const b of bytes)c=CRC_TABLE[(c^b)&255]^(c>>>8);return(c^0xffffffff)>>>0;}
+function zipPngFiles(files){
+ const local=[],central=[];let offset=0;
+ const u16=(view,at,v)=>view.setUint16(at,v,true),u32=(view,at,v)=>view.setUint32(at,v>>>0,true);
+ for(const f of files){
+  const name=new TextEncoder().encode(f.name),data=f.bytes,crc=crc32(data);
+  const l=new Uint8Array(30+name.length),lv=new DataView(l.buffer);
+  u32(lv,0,0x04034b50);u16(lv,4,20);u16(lv,6,0x800);u16(lv,8,0);u32(lv,14,crc);u32(lv,18,data.length);u32(lv,22,data.length);u16(lv,26,name.length);l.set(name,30);
+  const c=new Uint8Array(46+name.length),cv=new DataView(c.buffer);
+  u32(cv,0,0x02014b50);u16(cv,4,20);u16(cv,6,20);u16(cv,8,0x800);u16(cv,10,0);u32(cv,16,crc);u32(cv,20,data.length);u32(cv,24,data.length);u16(cv,28,name.length);u32(cv,42,offset);c.set(name,46);
+  local.push(l,data);central.push(c);offset+=l.length+data.length;
+ }
+ const centralSize=central.reduce((n,x)=>n+x.length,0),end=new Uint8Array(22),ev=new DataView(end.buffer);
+ u32(ev,0,0x06054b50);u16(ev,8,files.length);u16(ev,10,files.length);u32(ev,12,centralSize);u32(ev,16,offset);
+ return new Blob([...local,...central,end],{type:'application/zip'});
+}
+async function downloadAllPages(){
+ const btn=$('downloadAllPagesBtn'),previousState=state;btn.disabled=true;btn.textContent='در حال ساخت…';
+ try{
+  const files=[];
+  for(let i=0;i<project.pages.length;i++){
+   state=project.pages[i].data;
+   await Promise.all([preloadCurrentImages(),ensureFonts()]);
+   render();
+   const blob=await new Promise(resolve=>$('poster').toBlob(resolve,'image/png'));
+   if(!blob)throw new Error('Failed PNG page '+(i+1));
+   files.push({name:`WoSoCenter-page-${String(i+1).padStart(2,'0')}.png`,bytes:new Uint8Array(await blob.arrayBuffer())});
+  }
+  downloadBlob(zipPngFiles(files),'WoSoCenter-all-pages.zip');message(`${files.length.toLocaleString('fa-IR')} صفحه به‌صورت ZIP دانلود شد.`);
+ }catch(e){console.error(e);message('ساخت فایل همه صفحات انجام نشد. هر صفحه را جدا دانلود کنید.','error');}
+ finally{state=previousState;queueRender();btn.disabled=false;btn.textContent='↓ همه صفحات';}
+}
+function downloadJSON(){downloadBlob(new Blob([JSON.stringify(projectSnapshot(),null,2)],{type:'application/json;charset=utf-8'}),'WoSoCenter-project-pages.json');message('فایل تنظیمات دانلود شد.');}
 function handleGameField(e){const input=e.target,art=input.closest('.game-editor');if(!art||!input.dataset.field)return;if(input.tagName!=='INPUT'||e.type!=='input')return;const i=Number(art.dataset.index),key=input.dataset.field;if(!state.matches[i]||!(key in DEFAULT_MATCH))return;if(state.matches[i][key]===input.value)return;state.matches[i][key]=input.value;commitHistory(`بازی ${i+1} · ${key==='league'?'نام لیگ':key==='time'?'ساعت بازی':'فونت'}`);if(key.endsWith('Font'))ensureFonts().then(queueRender).catch(()=>message("فونت انتخابی بارگذاری نشد؛ اتصال اینترنت را بررسی کنید.","warning"));}
 function attachEvents(){
   document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
   $('themeToggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme!=='light'));
-  $('undoBtn').addEventListener('click',undo);$('redoBtn').addEventListener('click',redo);$('historyUndo').addEventListener('click',undo);$('historyRedo').addEventListener('click',redo);$('showHistoryBtn').addEventListener('click',()=>switchTab('history'));
+  $('undoBtn').addEventListener('click',undo);$('redoBtn').addEventListener('click',redo);$('historyUndo').addEventListener('click',undo);$('historyRedo').addEventListener('click',redo);$('showHistoryBtn').addEventListener('click',()=>{switchTab('history');requestAnimationFrame(()=>$('historyTab').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));});
+  $('addPageBtn').addEventListener('click',()=>addPage(project.activePageId,false));
+  $('pageTabs').addEventListener('click',e=>{const del=e.target.closest('[data-page-delete]'),dup=e.target.closest('[data-page-clone]'),pick=e.target.closest('[data-page-select]');if(del)deletePage(del.dataset.pageDelete);else if(dup)addPage(dup.dataset.pageClone,true);else if(pick&&project.activePageId!==pick.dataset.pageSelect){project.activePageId=pick.dataset.pageSelect;displayPage();commitHistory('رفتن به صفحه '+activePage().title);}});
   $('historyList').addEventListener('click',e=>{const b=e.target.closest('[data-revision]');if(b)restoreHistory(Number(b.dataset.revision));});
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}else if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='y'){e.preventDefault();redo();}});
   $('addGameBtn').addEventListener('click',()=>{if(state.matches.length>=MAX_GAMES)return;const last=state.matches.at(-1);state.matches.push({...last,league:'',time:'',leftTeam:'',rightTeam:'',leftBgInitialized:false,rightBgInitialized:false,leftBgLocked:state.paletteId!==''&&state.paletteId!=='classic',rightBgLocked:state.paletteId!==''&&state.paletteId!=='classic'});refreshGames();commitHistory(`افزودن بازی ${state.matches.length}`);});
@@ -247,10 +353,10 @@ function attachEvents(){
   $('patternTintToggle').addEventListener('change',e=>{state.patternTintEnabled=e.target.checked;syncPattern();commitHistory(state.patternTintEnabled?'فعال‌سازی تغییر رنگ پترن':'بازگشت به رنگ اصلی پترن');});
   $('paletteList').addEventListener('click',e=>{const b=e.target.closest('[data-palette]');if(b)selectPalette(b.dataset.palette);});
   $('applyAllFonts').addEventListener('click',()=>{state.dayFont=state.dateFont=state.footerFont=state.globalFont;state.matches.forEach(m=>{m.leagueFont=state.globalFont;m.timeFont=state.globalFont;});syncGlobals();refreshGames();commitHistory('اعمال گروهی فونت');ensureFonts().then(queueRender).catch(()=>message("فونت انتخابی بارگذاری نشد؛ اتصال اینترنت را بررسی کنید.","warning"));message('فونت جدید روی متن‌های قابل ویرایش اعمال شد.');});
-  $('resetBtn').addEventListener('click',()=>{if(!confirm('تمام تنظیمات تصویر به حالت اولیه برگردند؟'))return;state=cleanState(null);syncGlobals();refreshGames();refreshPalettes();preloadCurrentImages();commitHistory('بازگردانی طرح اولیه');});
+  $('resetBtn').addEventListener('click',()=>{if(!confirm('تمام تنظیمات تصویر به حالت اولیه برگردند؟'))return;activePage().data=cleanState(null);displayPage();commitHistory('بازگردانی طرح اولیه');});
   $('exportProject').addEventListener('click',downloadJSON);$('importProjectBtn').addEventListener('click',()=>$('projectFile').click());
-  $('projectFile').addEventListener('change',async e=>{try{const f=e.target.files?.[0];if(!f)return;if(f.size>1000000)throw Error('size');state=cleanState(JSON.parse(await f.text()));syncGlobals();refreshGames();refreshPalettes();await preloadCurrentImages();await ensureFonts();commitHistory('بازیابی فایل تنظیمات');message('تنظیمات بازیابی شد.');}catch(err){console.error(err);message('فایل JSON معتبر نیست.','error');}finally{e.target.value='';}});
-  $('downloadBtn').addEventListener('click',downloadPNG);$('downloadBtnBottom').addEventListener('click',downloadPNG);
+  $('projectFile').addEventListener('change',async e=>{try{const f=e.target.files?.[0];if(!f)return;if(f.size>1000000)throw Error('size');project=normalizeProject(JSON.parse(await f.text()));displayPage();await preloadCurrentImages();await ensureFonts();commitHistory('بازیابی فایل تنظیمات');message('تنظیمات بازیابی شد.');}catch(err){console.error(err);message('فایل JSON معتبر نیست.','error');}finally{e.target.value='';}});
+  $('downloadBtn').addEventListener('click',downloadPNG);$('downloadBtnBottom').addEventListener('click',downloadPNG);$('downloadAllPagesBtn').addEventListener('click',downloadAllPages);
   document.querySelectorAll('[data-close-dialog]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.closeDialog).close()));
   for(const id of ['assetDialog','colorDialog','fontDialog'])$(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
   $('assetSearch').addEventListener('input',e=>{const kind=pickContext?.kind;const group=kind==='flag'?flags:kind==='patternId'?patterns:teams;renderAssetResults(group,e.target.value);});
@@ -265,7 +371,7 @@ function attachEvents(){
   $('colorDone').addEventListener('click',()=>$('colorDialog').close());
   $('colorDialog').addEventListener('close',finishColor);
 }
-async function main(){let uiLight=false;try{uiLight=localStorage.getItem('wosocenter-ui-theme')==='light';}catch{}setTheme(uiLight);populateColorSwatches();attachEvents();[teams,flags,patterns]=await Promise.all([loadList('data/teams.json',fallbackTeams),loadList('data/flags.json',fallbackFlags),loadList('data/patterns.json',fallbackPatterns)]);const suggestedTeamColors=await loadTeamColors();teams=teams.map(t=>({...t,color:safeHex(suggestedTeamColors[t.id],safeHex(t.color,'#38445b'))}));// Resolve v3.3 projects without a lock flag. Colors unlike current suggestions are
+async function main(){let uiLight=true;try{uiLight=localStorage.getItem('wosocenter-ui-theme')!=='dark';}catch{}setTheme(uiLight);populateColorSwatches();attachEvents();[teams,flags,patterns]=await Promise.all([loadList('data/teams.json',fallbackTeams),loadList('data/flags.json',fallbackFlags),loadList('data/patterns.json',fallbackPatterns)]);const suggestedTeamColors=await loadTeamColors();teams=teams.map(t=>({...t,color:safeHex(suggestedTeamColors[t.id],safeHex(t.color,'#38445b'))}));// Resolve v3.3 projects without a lock flag. Colors unlike current suggestions are
  // treated as user chosen and protected. Existing explicit locks take priority.
  function migrateLocks(project){
   if(!project?.matches)return;
@@ -279,8 +385,16 @@ async function main(){let uiLight=false;try{uiLight=localStorage.getItem('wosoce
    }
   }
  }
- migrateLocks(state);history.forEach(h=>migrateLocks(h.snapshot));
- for(const s of [state,...history.map(h=>h.snapshot)])for(const m of s.matches||[]){if(m.leftTeam==='servette')m.leftTeam='srwt';if(m.rightTeam==='servette')m.rightTeam='srwt';}
+ for(const snapshot of [project,...history.map(h=>h.snapshot)]){
+  for(const pg of snapshot.pages||[]){
+   migrateLocks(pg.data);
+   for(const m of pg.data.matches||[]){
+    if(m.leftTeam==='servette')m.leftTeam='srwt';if(m.rightTeam==='servette')m.rightTeam='srwt';
+    if(!flags.some(f=>f.id===m.flag))m.flag=flags[0]?.id||'liga-af-spain';
+   }
+  }
+ }
+ activatePageState();
  
- if(!patterns.length)patterns=fallbackPatterns;const available=new Set(patterns.map(p=>p.id));let migrated=false;for(const item of history){if(!available.has(item.snapshot.patternId)){item.snapshot.patternId=patterns[0].id;migrated=true;}}if(!available.has(state.patternId)){state.patternId=patterns[0].id;migrated=true;}persist();syncGlobals();refreshGames();refreshPalettes();updateHistoryButtons();await preloadCurrentImages();queueRender();ensureFonts().then(queueRender).catch(()=>message("فونت انتخابی بارگذاری نشد؛ اتصال اینترنت را بررسی کنید.","warning"));if(!teams.length||!flags.length)message('بانک لوگو یا پرچم خالی است.','warning');}
+ if(!patterns.length)patterns=fallbackPatterns;const available=new Set(patterns.map(p=>p.id));let migrated=false;for(const snapshot of [project,...history.map(h=>h.snapshot)])for(const pg of snapshot.pages||[]){if(!available.has(pg.data.patternId)){pg.data.patternId=patterns[0].id;migrated=true;}}persist();syncGlobals();refreshGames();refreshPalettes();refreshPages();updateHistoryButtons();await preloadCurrentImages();queueRender();ensureFonts().then(queueRender).catch(()=>message("فونت انتخابی بارگذاری نشد؛ اتصال اینترنت را بررسی کنید.","warning"));if(!teams.length||!flags.length)message('بانک لوگو یا پرچم خالی است.','warning');}
 main().catch(e=>{console.error(e);message('بارگذاری اطلاعات انجام نشد؛ صفحه را دوباره باز کنید.','error');});

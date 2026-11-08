@@ -7,7 +7,37 @@
     "tileHeight": 430,
     "mode": "mask",
     "layout": "tile",
-    "recolorDefault": true
+    "recolorDefault": true,
+    "suggestedPalette": {
+      "name": "پالت بنفش کلاسیک",
+      "colors": [
+        "#050207",
+        "#320a3e",
+        "#ae5acf",
+        "#19101d"
+      ],
+      "settings": {
+        "background": "#050207",
+        "patternColor": "#320a3e",
+        "frameColor": "#050207",
+        "cardColor": "#19101d",
+        "brandLogoColor": "#ae5acf",
+        "titlePurple": "#ae5acf",
+        "titleWhite": "#fff4ff",
+        "dayColor": "#ae5acf",
+        "dateColor": "#fff4ff",
+        "dateLineColor": "#ae5acf",
+        "footerColor": "#ae5acf",
+        "telegramColor": "#ae5acf"
+      },
+      "match": {
+        "leftBg": "#783695",
+        "rightBg": "#dfb6e7",
+        "leagueColor": "#fff4ff",
+        "timeColor": "#fff4ff",
+        "clockColor": "#ae5acf"
+      }
+    }
   },
   {
     "id": "champions-neon-ball",
@@ -17,7 +47,37 @@
     "layout": "cover",
     "referenceHue": 224,
     "focusX": 0.64,
-    "recolorDefault": false
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت توپ نئونی",
+      "colors": [
+        "#040f36",
+        "#1855b7",
+        "#00d6ff",
+        "#0b2346"
+      ],
+      "settings": {
+        "background": "#040f36",
+        "patternColor": "#1855b7",
+        "frameColor": "#040f36",
+        "cardColor": "#0b2346",
+        "brandLogoColor": "#00d6ff",
+        "titlePurple": "#00d6ff",
+        "titleWhite": "#f0fbff",
+        "dayColor": "#00d6ff",
+        "dateColor": "#f0fbff",
+        "dateLineColor": "#00d6ff",
+        "footerColor": "#00d6ff",
+        "telegramColor": "#00d6ff"
+      },
+      "match": {
+        "leftBg": "#1458c9",
+        "rightBg": "#425aa4",
+        "leagueColor": "#f0fbff",
+        "timeColor": "#f0fbff",
+        "clockColor": "#00d6ff"
+      }
+    }
   },
   {
     "id": "champions-blue-lines",
@@ -26,6 +86,348 @@
     "mode": "hue",
     "layout": "cover",
     "referenceHue": 229,
-    "recolorDefault": false
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت آبی قهرمانان",
+      "colors": [
+        "#091645",
+        "#234fdb",
+        "#77baff",
+        "#14234f"
+      ],
+      "settings": {
+        "background": "#091645",
+        "patternColor": "#234fdb",
+        "frameColor": "#091645",
+        "cardColor": "#14234f",
+        "brandLogoColor": "#77baff",
+        "titlePurple": "#77baff",
+        "titleWhite": "#edf7ff",
+        "dayColor": "#77baff",
+        "dateColor": "#edf7ff",
+        "dateLineColor": "#77baff",
+        "footerColor": "#77baff",
+        "telegramColor": "#77baff"
+      },
+      "match": {
+        "leftBg": "#3566c2",
+        "rightBg": "#63c3ff",
+        "leagueColor": "#edf7ff",
+        "timeColor": "#edf7ff",
+        "clockColor": "#77baff"
+      }
+    }
+  },
+  {
+    "id": "sport-yellow-violet",
+    "name": "انرژی بنفش و زرد",
+    "image": "assets/patterns/sport-yellow-violet.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با انرژی بنفش و زرد",
+      "colors": [
+        "#1b0b3a",
+        "#40309e",
+        "#ffde25",
+        "#211631"
+      ],
+      "settings": {
+        "background": "#1b0b3a",
+        "patternColor": "#40309e",
+        "frameColor": "#1b0b3a",
+        "cardColor": "#211631",
+        "brandLogoColor": "#ffde25",
+        "titlePurple": "#ffde25",
+        "titleWhite": "#fdf7dc",
+        "dayColor": "#ffde25",
+        "dateColor": "#fdf7dc",
+        "dateLineColor": "#ffde25",
+        "footerColor": "#ffde25",
+        "telegramColor": "#ffde25"
+      },
+      "match": {
+        "leftBg": "#703ce3",
+        "rightBg": "#f4c72d",
+        "leagueColor": "#fdf7dc",
+        "timeColor": "#fdf7dc",
+        "clockColor": "#ffde25"
+      }
+    }
+  },
+  {
+    "id": "sport-neon-green",
+    "name": "نئون سبز و مشکی",
+    "image": "assets/patterns/sport-neon-green.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با نئون سبز و مشکی",
+      "colors": [
+        "#080d0c",
+        "#123b26",
+        "#5aff2d",
+        "#161e17"
+      ],
+      "settings": {
+        "background": "#080d0c",
+        "patternColor": "#123b26",
+        "frameColor": "#080d0c",
+        "cardColor": "#161e17",
+        "brandLogoColor": "#5aff2d",
+        "titlePurple": "#5aff2d",
+        "titleWhite": "#f0ffe8",
+        "dayColor": "#5aff2d",
+        "dateColor": "#f0ffe8",
+        "dateLineColor": "#5aff2d",
+        "footerColor": "#5aff2d",
+        "telegramColor": "#5aff2d"
+      },
+      "match": {
+        "leftBg": "#205339",
+        "rightBg": "#9ccf41",
+        "leagueColor": "#f0ffe8",
+        "timeColor": "#f0ffe8",
+        "clockColor": "#5aff2d"
+      }
+    }
+  },
+  {
+    "id": "sport-azure-zigzag",
+    "name": "زیگزاگ آبی",
+    "image": "assets/patterns/sport-azure-zigzag.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با زیگزاگ آبی",
+      "colors": [
+        "#081c3b",
+        "#1760ca",
+        "#7de3f5",
+        "#122f5d"
+      ],
+      "settings": {
+        "background": "#081c3b",
+        "patternColor": "#1760ca",
+        "frameColor": "#081c3b",
+        "cardColor": "#122f5d",
+        "brandLogoColor": "#7de3f5",
+        "titlePurple": "#7de3f5",
+        "titleWhite": "#edfaff",
+        "dayColor": "#7de3f5",
+        "dateColor": "#edfaff",
+        "dateLineColor": "#7de3f5",
+        "footerColor": "#7de3f5",
+        "telegramColor": "#7de3f5"
+      },
+      "match": {
+        "leftBg": "#1e84ea",
+        "rightBg": "#50b3d3",
+        "leagueColor": "#edfaff",
+        "timeColor": "#edfaff",
+        "clockColor": "#7de3f5"
+      }
+    }
+  },
+  {
+    "id": "sport-purple-motion",
+    "name": "موج بنفش مشکی",
+    "image": "assets/patterns/sport-purple-motion.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با موج بنفش مشکی",
+      "colors": [
+        "#080711",
+        "#28145a",
+        "#9072f8",
+        "#16112a"
+      ],
+      "settings": {
+        "background": "#080711",
+        "patternColor": "#28145a",
+        "frameColor": "#080711",
+        "cardColor": "#16112a",
+        "brandLogoColor": "#9072f8",
+        "titlePurple": "#9072f8",
+        "titleWhite": "#fcf6ff",
+        "dayColor": "#9072f8",
+        "dateColor": "#fcf6ff",
+        "dateLineColor": "#9072f8",
+        "footerColor": "#9072f8",
+        "telegramColor": "#9072f8"
+      },
+      "match": {
+        "leftBg": "#5b39a1",
+        "rightBg": "#5442b8",
+        "leagueColor": "#fcf6ff",
+        "timeColor": "#fcf6ff",
+        "clockColor": "#9072f8"
+      }
+    }
+  },
+  {
+    "id": "sport-night-geometry",
+    "name": "هندسه بنفش",
+    "image": "assets/patterns/sport-night-geometry.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با هندسه بنفش",
+      "colors": [
+        "#0f0623",
+        "#352079",
+        "#b893ff",
+        "#1c133d"
+      ],
+      "settings": {
+        "background": "#0f0623",
+        "patternColor": "#352079",
+        "frameColor": "#0f0623",
+        "cardColor": "#1c133d",
+        "brandLogoColor": "#b893ff",
+        "titlePurple": "#b893ff",
+        "titleWhite": "#f5eeff",
+        "dayColor": "#b893ff",
+        "dateColor": "#f5eeff",
+        "dateLineColor": "#b893ff",
+        "footerColor": "#b893ff",
+        "telegramColor": "#b893ff"
+      },
+      "match": {
+        "leftBg": "#50318b",
+        "rightBg": "#734ab6",
+        "leagueColor": "#f5eeff",
+        "timeColor": "#f5eeff",
+        "clockColor": "#b893ff"
+      }
+    }
+  },
+  {
+    "id": "sport-red-flames",
+    "name": "شعله‌های قرمز",
+    "image": "assets/patterns/sport-red-flames.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با شعله‌های قرمز",
+      "colors": [
+        "#130608",
+        "#8f171e",
+        "#ff5945",
+        "#261014"
+      ],
+      "settings": {
+        "background": "#130608",
+        "patternColor": "#8f171e",
+        "frameColor": "#130608",
+        "cardColor": "#261014",
+        "brandLogoColor": "#ff5945",
+        "titlePurple": "#ff5945",
+        "titleWhite": "#fff2ea",
+        "dayColor": "#ff5945",
+        "dateColor": "#fff2ea",
+        "dateLineColor": "#ff5945",
+        "footerColor": "#ff5945",
+        "telegramColor": "#ff5945"
+      },
+      "match": {
+        "leftBg": "#aa2927",
+        "rightBg": "#db6248",
+        "leagueColor": "#fff2ea",
+        "timeColor": "#fff2ea",
+        "clockColor": "#ff5945"
+      }
+    }
+  },
+  {
+    "id": "sport-red-graffiti",
+    "name": "گرافیتی قرمز",
+    "image": "assets/patterns/sport-red-graffiti.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با گرافیتی قرمز",
+      "colors": [
+        "#0d0507",
+        "#761216",
+        "#fb3931",
+        "#210a0e"
+      ],
+      "settings": {
+        "background": "#0d0507",
+        "patternColor": "#761216",
+        "frameColor": "#0d0507",
+        "cardColor": "#210a0e",
+        "brandLogoColor": "#fb3931",
+        "titlePurple": "#fb3931",
+        "titleWhite": "#fff4ee",
+        "dayColor": "#fb3931",
+        "dateColor": "#fff4ee",
+        "dateLineColor": "#fb3931",
+        "footerColor": "#fb3931",
+        "telegramColor": "#fb3931"
+      },
+      "match": {
+        "leftBg": "#ad292d",
+        "rightBg": "#df482b",
+        "leagueColor": "#fff4ee",
+        "timeColor": "#fff4ee",
+        "clockColor": "#fb3931"
+      }
+    }
+  },
+  {
+    "id": "sport-electric-yellow",
+    "name": "برق بنفش و زرد",
+    "image": "assets/patterns/sport-electric-yellow.png",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "referenceHue": 280,
+    "suggestedPalette": {
+      "name": "هماهنگ با برق بنفش و زرد",
+      "colors": [
+        "#160b38",
+        "#392385",
+        "#ffdb21",
+        "#241842"
+      ],
+      "settings": {
+        "background": "#160b38",
+        "patternColor": "#392385",
+        "frameColor": "#160b38",
+        "cardColor": "#241842",
+        "brandLogoColor": "#ffdb21",
+        "titlePurple": "#ffdb21",
+        "titleWhite": "#fff9da",
+        "dayColor": "#ffdb21",
+        "dateColor": "#fff9da",
+        "dateLineColor": "#ffdb21",
+        "footerColor": "#ffdb21",
+        "telegramColor": "#ffdb21"
+      },
+      "match": {
+        "leftBg": "#7646c9",
+        "rightBg": "#e5bc32",
+        "leagueColor": "#fff9da",
+        "timeColor": "#fff9da",
+        "clockColor": "#ffdb21"
+      }
+    }
   }
 ]
