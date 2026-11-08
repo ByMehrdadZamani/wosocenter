@@ -2,7 +2,7 @@
   {
     "id": "woso-petals",
     "name": "گلبرگ کلاسیک",
-    "image": "assets/patterns/woso-petals.png",
+    "image": "assets/patterns/woso-petals.webp",
     "tileWidth": 432,
     "tileHeight": 430,
     "mode": "mask",
@@ -43,7 +43,7 @@
   {
     "id": "champions-neon-ball",
     "name": "لیگ قهرمانان · توپ نئونی",
-    "image": "assets/patterns/champions-neon-ball.png",
+    "image": "assets/patterns/champions-neon-ball.webp",
     "mode": "hue",
     "layout": "cover",
     "referenceHue": 224,
@@ -84,7 +84,7 @@
   {
     "id": "champions-blue-lines",
     "name": "لیگ قهرمانان · خطوط آبی",
-    "image": "assets/patterns/champions-blue-lines.png",
+    "image": "assets/patterns/champions-blue-lines.webp",
     "mode": "hue",
     "layout": "cover",
     "referenceHue": 229,
@@ -124,7 +124,7 @@
   {
     "id": "sport-yellow-violet",
     "name": "انرژی بنفش و زرد",
-    "image": "assets/patterns/sport-yellow-violet.png",
+    "image": "assets/patterns/sport-yellow-violet.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,
@@ -164,7 +164,7 @@
   {
     "id": "sport-neon-green",
     "name": "نئون سبز و مشکی",
-    "image": "assets/patterns/sport-neon-green.png",
+    "image": "assets/patterns/sport-neon-green.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,
@@ -204,7 +204,7 @@
   {
     "id": "sport-azure-zigzag",
     "name": "زیگزاگ آبی",
-    "image": "assets/patterns/sport-azure-zigzag.png",
+    "image": "assets/patterns/sport-azure-zigzag.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,
@@ -244,7 +244,7 @@
   {
     "id": "sport-purple-motion",
     "name": "موج بنفش مشکی",
-    "image": "assets/patterns/sport-purple-motion.png",
+    "image": "assets/patterns/sport-purple-motion.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,
@@ -284,7 +284,7 @@
   {
     "id": "sport-red-flames",
     "name": "شعله‌های قرمز",
-    "image": "assets/patterns/sport-red-flames.png",
+    "image": "assets/patterns/sport-red-flames.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,
@@ -324,7 +324,7 @@
   {
     "id": "sport-red-graffiti",
     "name": "گرافیتی قرمز",
-    "image": "assets/patterns/sport-red-graffiti.png",
+    "image": "assets/patterns/sport-red-graffiti.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,
@@ -364,7 +364,7 @@
   {
     "id": "sport-electric-yellow",
     "name": "برق بنفش و زرد",
-    "image": "assets/patterns/sport-electric-yellow.png",
+    "image": "assets/patterns/sport-electric-yellow.webp",
     "mode": "hue",
     "layout": "cover",
     "recolorDefault": false,

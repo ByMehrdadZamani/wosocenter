@@ -1,0 +1,720 @@
+{
+  "version": "4.3",
+  "source": "4.2",
+  "png_checked": 101,
+  "png_converted": 101,
+  "png_original_bytes": 20385974,
+  "png_optimized_bytes": 14482482,
+  "png_saved_bytes": 5903492,
+  "jpeg_untouched": 26,
+  "all_converted_pixel_identical": true,
+  "files": [
+    {
+      "from": "assets/brand/logo-alpha.png",
+      "to": "assets/brand/logo-alpha.webp",
+      "bytes_before": 5005,
+      "bytes_after": 2748,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/brand/title-purple-hq.png",
+      "to": "assets/brand/title-purple-hq.webp",
+      "bytes_before": 2151,
+      "bytes_after": 996,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/brand/title-white-alpha.png",
+      "to": "assets/brand/title-white-alpha.webp",
+      "bytes_before": 7118,
+      "bytes_after": 3646,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/leagues/bundesliga-germany.png",
+      "to": "assets/leagues/bundesliga-germany.webp",
+      "bytes_before": 16591,
+      "bytes_after": 7590,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/leagues/champions-league-europe.png",
+      "to": "assets/leagues/champions-league-europe.webp",
+      "bytes_before": 23843,
+      "bytes_after": 16096,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/leagues/liga-af-spain.png",
+      "to": "assets/leagues/liga-af-spain.webp",
+      "bytes_before": 13929,
+      "bytes_after": 11530,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/leagues/premiere-league-france.png",
+      "to": "assets/leagues/premiere-league-france.webp",
+      "bytes_before": 12068,
+      "bytes_after": 6632,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/leagues/serie-a-italy.png",
+      "to": "assets/leagues/serie-a-italy.webp",
+      "bytes_before": 20690,
+      "bytes_after": 16124,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/leagues/wsl-england.png",
+      "to": "assets/leagues/wsl-england.webp",
+      "bytes_before": 39776,
+      "bytes_after": 26804,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/champions-blue-lines.png",
+      "to": "assets/patterns/champions-blue-lines.webp",
+      "bytes_before": 142786,
+      "bytes_after": 88688,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/champions-neon-ball.png",
+      "to": "assets/patterns/champions-neon-ball.webp",
+      "bytes_before": 551773,
+      "bytes_after": 374424,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-azure-zigzag.png",
+      "to": "assets/patterns/sport-azure-zigzag.webp",
+      "bytes_before": 1760968,
+      "bytes_after": 1475694,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-electric-yellow.png",
+      "to": "assets/patterns/sport-electric-yellow.webp",
+      "bytes_before": 2225940,
+      "bytes_after": 1783574,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-neon-green.png",
+      "to": "assets/patterns/sport-neon-green.webp",
+      "bytes_before": 1379570,
+      "bytes_after": 1097962,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-purple-motion.png",
+      "to": "assets/patterns/sport-purple-motion.webp",
+      "bytes_before": 912952,
+      "bytes_after": 612270,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-red-flames.png",
+      "to": "assets/patterns/sport-red-flames.webp",
+      "bytes_before": 1389310,
+      "bytes_after": 1075086,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-red-graffiti.png",
+      "to": "assets/patterns/sport-red-graffiti.webp",
+      "bytes_before": 1370176,
+      "bytes_after": 1149384,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/sport-yellow-violet.png",
+      "to": "assets/patterns/sport-yellow-violet.webp",
+      "bytes_before": 2815768,
+      "bytes_after": 2277756,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/patterns/woso-petals.png",
+      "to": "assets/patterns/woso-petals.webp",
+      "bytes_before": 39170,
+      "bytes_after": 19788,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/a-s-rm.png",
+      "to": "assets/teams/a-s-rm.webp",
+      "bytes_before": 94885,
+      "bytes_after": 61946,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/arsnl.png",
+      "to": "assets/teams/arsnl.webp",
+      "bytes_before": 108545,
+      "bytes_after": 66854,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/astry-wyn-2.png",
+      "to": "assets/teams/astry-wyn-2.webp",
+      "bytes_before": 132504,
+      "bytes_after": 57108,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/astry-wyn.png",
+      "to": "assets/teams/astry-wyn.webp",
+      "bytes_before": 113893,
+      "bytes_after": 51006,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ath-myln.png",
+      "to": "assets/teams/ath-myln.webp",
+      "bytes_before": 78724,
+      "bytes_after": 39734,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ayntrkht-frnkhfwrt.png",
+      "to": "assets/teams/ayntrkht-frnkhfwrt.webp",
+      "bytes_before": 100359,
+      "bytes_after": 49628,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/barcelona.png",
+      "to": "assets/teams/barcelona.webp",
+      "bytes_before": 62784,
+      "bytes_after": 40688,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/bayern-munich.png",
+      "to": "assets/teams/bayern-munich.webp",
+      "bytes_before": 115906,
+      "bytes_after": 62650,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/bnfykh.png",
+      "to": "assets/teams/bnfykh.webp",
+      "bytes_before": 177190,
+      "bytes_after": 123000,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/brytwn.png",
+      "to": "assets/teams/brytwn.webp",
+      "bytes_before": 97470,
+      "bytes_after": 49728,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/byr-lwrkhwzn.png",
+      "to": "assets/teams/byr-lwrkhwzn.webp",
+      "bytes_before": 135596,
+      "bytes_after": 84514,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/byrmngm.png",
+      "to": "assets/teams/byrmngm.webp",
+      "bytes_before": 127053,
+      "bytes_after": 65160,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/chlsy.png",
+      "to": "assets/teams/chlsy.webp",
+      "bytes_before": 135324,
+      "bytes_after": 80178,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/dpwrtyww-alwz.png",
+      "to": "assets/teams/dpwrtyww-alwz.webp",
+      "bytes_before": 136445,
+      "bytes_after": 68868,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/dpwrtyww-lkhrwny.png",
+      "to": "assets/teams/dpwrtyww-lkhrwny.webp",
+      "bytes_before": 146742,
+      "bytes_after": 78372,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/f-sy-khwmw.png",
+      "to": "assets/teams/f-sy-khwmw.webp",
+      "bytes_before": 123911,
+      "bytes_after": 57378,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/flwry.png",
+      "to": "assets/teams/flwry.webp",
+      "bytes_before": 153035,
+      "bytes_after": 96404,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/frybwrg.png",
+      "to": "assets/teams/frybwrg.webp",
+      "bytes_before": 88560,
+      "bytes_after": 38076,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/fywrntyn.png",
+      "to": "assets/teams/fywrntyn.webp",
+      "bytes_before": 35251,
+      "bytes_after": 13648,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/grnd.png",
+      "to": "assets/teams/grnd.webp",
+      "bytes_before": 41655,
+      "bytes_after": 20402,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/hkhn.png",
+      "to": "assets/teams/hkhn.webp",
+      "bytes_before": 86855,
+      "bytes_after": 54292,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/hmbwrg.png",
+      "to": "assets/teams/hmbwrg.webp",
+      "bytes_before": 12922,
+      "bytes_after": 5584,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/hwfnhym.png",
+      "to": "assets/teams/hwfnhym.webp",
+      "bytes_before": 80626,
+      "bytes_after": 38150,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/khln.png",
+      "to": "assets/teams/khln.webp",
+      "bytes_before": 111487,
+      "bytes_after": 54132,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/khrystl-pls.png",
+      "to": "assets/teams/khrystl-pls.webp",
+      "bytes_before": 127042,
+      "bytes_after": 71926,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/khwgh.png",
+      "to": "assets/teams/khwgh.webp",
+      "bytes_before": 69319,
+      "bytes_after": 32576,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/khwmw.png",
+      "to": "assets/teams/khwmw.webp",
+      "bytes_before": 46055,
+      "bytes_after": 25056,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/liverpool-fc.png",
+      "to": "assets/teams/liverpool-fc.webp",
+      "bytes_before": 177777,
+      "bytes_after": 126462,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lndn-syty-lywnsz.png",
+      "to": "assets/teams/lndn-syty-lywnsz.webp",
+      "bytes_before": 64242,
+      "bytes_after": 27870,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lns.png",
+      "to": "assets/teams/lns.webp",
+      "bytes_before": 67382,
+      "bytes_after": 36796,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ltzyw-2.png",
+      "to": "assets/teams/ltzyw-2.webp",
+      "bytes_before": 49250,
+      "bytes_after": 25058,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ltzyw.png",
+      "to": "assets/teams/ltzyw.webp",
+      "bytes_before": 79540,
+      "bytes_after": 60004,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lw-awr.png",
+      "to": "assets/teams/lw-awr.webp",
+      "bytes_before": 73170,
+      "bytes_after": 44010,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lwgrwnyw.png",
+      "to": "assets/teams/lwgrwnyw.webp",
+      "bytes_before": 165782,
+      "bytes_after": 116986,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lwnth-bdlwn.png",
+      "to": "assets/teams/lwnth-bdlwn.webp",
+      "bytes_before": 87867,
+      "bytes_after": 46878,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lwwn-2.png",
+      "to": "assets/teams/lwwn-2.webp",
+      "bytes_before": 67454,
+      "bytes_after": 36378,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lwwn.png",
+      "to": "assets/teams/lwwn.webp",
+      "bytes_before": 28081,
+      "bytes_after": 20416,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lypzysh.png",
+      "to": "assets/teams/lypzysh.webp",
+      "bytes_before": 77025,
+      "bytes_after": 44072,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lywn-2.png",
+      "to": "assets/teams/lywn-2.webp",
+      "bytes_before": 63894,
+      "bytes_after": 38304,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lywn.png",
+      "to": "assets/teams/lywn.webp",
+      "bytes_before": 72152,
+      "bytes_after": 43440,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/lywrpwl.png",
+      "to": "assets/teams/lywrpwl.webp",
+      "bytes_before": 101617,
+      "bytes_after": 69936,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mdryd-2.png",
+      "to": "assets/teams/mdryd-2.webp",
+      "bytes_before": 45082,
+      "bytes_after": 29870,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mdryd.png",
+      "to": "assets/teams/mdryd.webp",
+      "bytes_before": 102003,
+      "bytes_after": 58122,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mnchstr-syty.png",
+      "to": "assets/teams/mnchstr-syty.webp",
+      "bytes_before": 161010,
+      "bytes_after": 103844,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mnchstr-ywnytd.png",
+      "to": "assets/teams/mnchstr-ywnytd.webp",
+      "bytes_before": 141729,
+      "bytes_after": 97892,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/montpellier-fc-logo.png",
+      "to": "assets/teams/montpellier-fc-logo.webp",
+      "bytes_before": 121121,
+      "bytes_after": 72178,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mrsy-2.png",
+      "to": "assets/teams/mrsy-2.webp",
+      "bytes_before": 59712,
+      "bytes_after": 29422,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mwn-plyh.png",
+      "to": "assets/teams/mwn-plyh.webp",
+      "bytes_before": 144875,
+      "bytes_after": 88582,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/mynz.png",
+      "to": "assets/teams/mynz.webp",
+      "bytes_before": 79347,
+      "bytes_after": 37434,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/nnts.png",
+      "to": "assets/teams/nnts.webp",
+      "bytes_before": 36541,
+      "bytes_after": 18806,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/nordsjaelland.png",
+      "to": "assets/teams/nordsjaelland.webp",
+      "bytes_before": 142099,
+      "bytes_after": 94714,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/npwly.png",
+      "to": "assets/teams/npwly.webp",
+      "bytes_before": 48558,
+      "bytes_after": 22420,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/nwrnbrg.png",
+      "to": "assets/teams/nwrnbrg.webp",
+      "bytes_before": 62666,
+      "bytes_after": 30234,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/prm.png",
+      "to": "assets/teams/prm.webp",
+      "bytes_before": 35493,
+      "bytes_after": 21088,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/prys.png",
+      "to": "assets/teams/prys.webp",
+      "bytes_before": 94163,
+      "bytes_after": 51226,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/prysn-jrmn.png",
+      "to": "assets/teams/prysn-jrmn.webp",
+      "bytes_before": 113845,
+      "bytes_after": 56942,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/real-madrid.png",
+      "to": "assets/teams/real-madrid.webp",
+      "bytes_before": 145567,
+      "bytes_after": 104382,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ryl-swsydd.png",
+      "to": "assets/teams/ryl-swsydd.webp",
+      "bytes_before": 121549,
+      "bytes_after": 77472,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/shtwtgrt.png",
+      "to": "assets/teams/shtwtgrt.webp",
+      "bytes_before": 99329,
+      "bytes_after": 53524,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/spnywl.png",
+      "to": "assets/teams/spnywl.webp",
+      "bytes_before": 70611,
+      "bytes_after": 46652,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/srwt.png",
+      "to": "assets/teams/srwt.webp",
+      "bytes_before": 142758,
+      "bytes_after": 63902,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/sswlw-2.png",
+      "to": "assets/teams/sswlw-2.webp",
+      "bytes_before": 83109,
+      "bytes_after": 42632,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/sswlw.png",
+      "to": "assets/teams/sswlw.webp",
+      "bytes_before": 86400,
+      "bytes_after": 43636,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/strsbwrg.png",
+      "to": "assets/teams/strsbwrg.webp",
+      "bytes_before": 126550,
+      "bytes_after": 68428,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/stwn-wyl-2.png",
+      "to": "assets/teams/stwn-wyl-2.webp",
+      "bytes_before": 152637,
+      "bytes_after": 101736,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/stwn-wyl.png",
+      "to": "assets/teams/stwn-wyl.webp",
+      "bytes_before": 92488,
+      "bytes_after": 62844,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/swy.png",
+      "to": "assets/teams/swy.webp",
+      "bytes_before": 103286,
+      "bytes_after": 72874,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/synt-mlw.png",
+      "to": "assets/teams/synt-mlw.webp",
+      "bytes_before": 52101,
+      "bytes_after": 31580,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/tltykh-bylbyw.png",
+      "to": "assets/teams/tltykh-bylbyw.webp",
+      "bytes_before": 66292,
+      "bytes_after": 29130,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/tltykhw-mdryd.png",
+      "to": "assets/teams/tltykhw-mdryd.webp",
+      "bytes_before": 42716,
+      "bytes_after": 21868,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/tnryfh.png",
+      "to": "assets/teams/tnryfh.webp",
+      "bytes_before": 111191,
+      "bytes_after": 73688,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/trnn.png",
+      "to": "assets/teams/trnn.webp",
+      "bytes_before": 156379,
+      "bytes_after": 117000,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ttnhm-2.png",
+      "to": "assets/teams/ttnhm-2.webp",
+      "bytes_before": 75832,
+      "bytes_after": 50268,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ttnhm.png",
+      "to": "assets/teams/ttnhm.webp",
+      "bytes_before": 51587,
+      "bytes_after": 22520,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/twlwz.png",
+      "to": "assets/teams/twlwz.webp",
+      "bytes_before": 154880,
+      "bytes_after": 94832,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/wlnsy.png",
+      "to": "assets/teams/wlnsy.webp",
+      "bytes_before": 57770,
+      "bytes_after": 34684,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/wrdrbrmn.png",
+      "to": "assets/teams/wrdrbrmn.webp",
+      "bytes_before": 53186,
+      "bytes_after": 22180,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/wrtwn.png",
+      "to": "assets/teams/wrtwn.webp",
+      "bytes_before": 156205,
+      "bytes_after": 81938,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/wst-hm.png",
+      "to": "assets/teams/wst-hm.webp",
+      "bytes_before": 77551,
+      "bytes_after": 42582,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/yntr-myln.png",
+      "to": "assets/teams/yntr-myln.webp",
+      "bytes_before": 54151,
+      "bytes_after": 29748,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ywntws-2.png",
+      "to": "assets/teams/ywntws-2.webp",
+      "bytes_before": 10397,
+      "bytes_after": 4436,
+      "full_RGBA_and_ICC_equal": true
+    },
+    {
+      "from": "assets/teams/ywwntws.png",
+      "to": "assets/teams/ywwntws.webp",
+      "bytes_before": 8253,
+      "bytes_after": 4712,
+      "full_RGBA_and_ICC_equal": true
+    }
+  ]
+}

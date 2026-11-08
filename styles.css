@@ -143,7 +143,7 @@ label.pattern-toggle input[type="checkbox"]{position:absolute;opacity:0;top:50%;
 .asset-results.pattern-grid{grid-auto-rows:max-content;align-content:start;align-items:start}
 
 /* v3.8: matching WoSoCenter branding in the application header. */
-.woso-appmark .appmark-icon{display:block;width:35px;height:32px;background:var(--violet);-webkit-mask:url("assets/brand/logo-alpha.png") center/contain no-repeat;mask:url("assets/brand/logo-alpha.png") center/contain no-repeat}
+.woso-appmark .appmark-icon{display:block;width:35px;height:32px;background:var(--violet);-webkit-mask:url("assets/brand/logo-alpha.webp") center/contain no-repeat;mask:url("assets/brand/logo-alpha.webp") center/contain no-repeat}
 @media (max-width:510px){.woso-appmark .appmark-icon{width:27px;height:25px}}
 /* Full artwork is visible in each 4:5 pattern thumbnail; previews are preframed for this ratio. */
 .pattern-grid .pattern-thumb img{object-fit:contain}

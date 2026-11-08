@@ -2,37 +2,37 @@
   {
     "id": "liga-af-spain",
     "name": "لیگا اف اسپانیا",
-    "image": "assets/leagues/liga-af-spain.png",
+    "image": "assets/leagues/liga-af-spain.webp",
     "type": "league"
   },
   {
     "id": "wsl-england",
     "name": "WSL انگلستان",
-    "image": "assets/leagues/wsl-england.png",
+    "image": "assets/leagues/wsl-england.webp",
     "type": "league"
   },
   {
     "id": "premiere-league-france",
     "name": "پریمیر لیگ فرانسه",
-    "image": "assets/leagues/premiere-league-france.png",
+    "image": "assets/leagues/premiere-league-france.webp",
     "type": "league"
   },
   {
     "id": "bundesliga-germany",
     "name": "بوندسلیگا آلمان",
-    "image": "assets/leagues/bundesliga-germany.png",
+    "image": "assets/leagues/bundesliga-germany.webp",
     "type": "league"
   },
   {
     "id": "serie-a-italy",
     "name": "سری آ ایتالیا",
-    "image": "assets/leagues/serie-a-italy.png",
+    "image": "assets/leagues/serie-a-italy.webp",
     "type": "league"
   },
   {
     "id": "champions-league-europe",
     "name": "لیگ قهرمانان اروپا",
-    "image": "assets/leagues/champions-league-europe.png",
+    "image": "assets/leagues/champions-league-europe.webp",
     "type": "league"
   }
 ]

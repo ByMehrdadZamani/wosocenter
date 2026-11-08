@@ -2,493 +2,493 @@
   {
     "id": "barcelona",
     "name": "بارسلونا",
-    "image": "assets/teams/barcelona.png",
+    "image": "assets/teams/barcelona.webp",
     "color": "#1b3268"
   },
   {
     "id": "real-madrid",
     "name": "رئال مادرید",
-    "image": "assets/teams/real-madrid.png",
+    "image": "assets/teams/real-madrid.webp",
     "color": "#314b89"
   },
   {
     "id": "bayern-munich",
     "name": "بایرن مونیخ",
-    "image": "assets/teams/bayern-munich.png",
+    "image": "assets/teams/bayern-munich.webp",
     "color": "#d7e8f9"
   },
   {
     "id": "liverpool-fc",
     "name": "لیورپول ۲",
-    "image": "assets/teams/liverpool-fc.png",
+    "image": "assets/teams/liverpool-fc.webp",
     "color": "#18544a"
   },
   {
     "id": "montpellier-fc-logo",
     "name": "مون پلیه",
-    "image": "assets/teams/montpellier-fc-logo.png",
+    "image": "assets/teams/montpellier-fc-logo.webp",
     "color": "#e3eaf7"
   },
   {
     "id": "a-s-rm",
     "name": "آ اس رم",
-    "image": "assets/teams/a-s-rm.png",
+    "image": "assets/teams/a-s-rm.webp",
     "color": "#edf7e3"
   },
   {
     "id": "ath-myln",
     "name": "آث میلان",
-    "image": "assets/teams/ath-myln.png",
+    "image": "assets/teams/ath-myln.webp",
     "color": "#f2dbdb"
   },
   {
     "id": "arsnl",
     "name": "آرسنال",
-    "image": "assets/teams/arsnl.png",
+    "image": "assets/teams/arsnl.webp",
     "color": "#e9f7e3"
   },
   {
     "id": "astry-wyn",
     "name": "آستریا وین",
-    "image": "assets/teams/astry-wyn.png",
+    "image": "assets/teams/astry-wyn.webp",
     "color": "#f7e7e3"
   },
   {
     "id": "astry-wyn-2",
     "name": "آستریا وین ۲",
-    "image": "assets/teams/astry-wyn-2.png",
+    "image": "assets/teams/astry-wyn-2.webp",
     "color": "#a59ce3"
   },
   {
     "id": "ayntrkht-frnkhfwrt",
     "name": "آینتراخت فرانکفورت",
-    "image": "assets/teams/ayntrkht-frnkhfwrt.png",
+    "image": "assets/teams/ayntrkht-frnkhfwrt.webp",
     "color": "#295418"
   },
   {
     "id": "tltykh-bylbyw",
     "name": "اتلتیک بیلبائو",
-    "image": "assets/teams/tltykh-bylbyw.png",
+    "image": "assets/teams/tltykh-bylbyw.webp",
     "color": "#541818"
   },
   {
     "id": "tltykhw-mdryd",
     "name": "اتلتیکو مادرید",
-    "image": "assets/teams/tltykhw-mdryd.png",
+    "image": "assets/teams/tltykhw-mdryd.webp",
     "color": "#d1eec3"
   },
   {
     "id": "strsbwrg",
     "name": "استراسبورگ",
-    "image": "assets/teams/strsbwrg.png",
+    "image": "assets/teams/strsbwrg.webp",
     "color": "#184254"
   },
   {
     "id": "stwn-wyl",
     "name": "استون ویلا",
-    "image": "assets/teams/stwn-wyl.png",
+    "image": "assets/teams/stwn-wyl.webp",
     "color": "#183854"
   },
   {
     "id": "stwn-wyl-2",
     "name": "استون ویلا ۲",
-    "image": "assets/teams/stwn-wyl-2.png",
+    "image": "assets/teams/stwn-wyl-2.webp",
     "color": "#f3f7e3"
   },
   {
     "id": "spnywl",
     "name": "اسپانیول",
-    "image": "assets/teams/spnywl.png",
+    "image": "assets/teams/spnywl.webp",
     "color": "#e9f7e3"
   },
   {
     "id": "shtwtgrt",
     "name": "اشتوتگارت",
-    "image": "assets/teams/shtwtgrt.png",
+    "image": "assets/teams/shtwtgrt.webp",
     "color": "#305418"
   },
   {
     "id": "f-sy-khwmw",
     "name": "اف سی کومو",
-    "image": "assets/teams/f-sy-khwmw.png",
+    "image": "assets/teams/f-sy-khwmw.webp",
     "color": "#31496d"
   },
   {
     "id": "wrtwn",
     "name": "اورتون",
-    "image": "assets/teams/wrtwn.png",
+    "image": "assets/teams/wrtwn.webp",
     "color": "#e3e3f7"
   },
   {
     "id": "yntr-myln",
     "name": "اینتر میلان",
-    "image": "assets/teams/yntr-myln.png",
+    "image": "assets/teams/yntr-myln.webp",
     "color": "#9cace3"
   },
   {
     "id": "byr-lwrkhwzn",
     "name": "بایر لورکوزن",
-    "image": "assets/teams/byr-lwrkhwzn.png",
+    "image": "assets/teams/byr-lwrkhwzn.webp",
     "color": "#541818"
   },
   {
     "id": "brytwn",
     "name": "برایتون",
-    "image": "assets/teams/brytwn.png",
+    "image": "assets/teams/brytwn.webp",
     "color": "#9cbde3"
   },
   {
     "id": "bnfykh",
     "name": "بنفیکا",
-    "image": "assets/teams/bnfykh.png",
+    "image": "assets/teams/bnfykh.webp",
     "color": "#544818"
   },
   {
     "id": "byrmngm",
     "name": "بیرمنگام",
-    "image": "assets/teams/byrmngm.png",
+    "image": "assets/teams/byrmngm.webp",
     "color": "#182854"
   },
   {
     "id": "ttnhm",
     "name": "تاتنهام",
-    "image": "assets/teams/ttnhm.png",
+    "image": "assets/teams/ttnhm.webp",
     "color": "#9cace3"
   },
   {
     "id": "ttnhm-2",
     "name": "تاتنهام ۲",
-    "image": "assets/teams/ttnhm-2.png",
+    "image": "assets/teams/ttnhm-2.webp",
     "color": "#23387b"
   },
   {
     "id": "trnn",
     "name": "ترنانا",
-    "image": "assets/teams/trnn.png",
+    "image": "assets/teams/trnn.webp",
     "color": "#541818"
   },
   {
     "id": "tnryfh",
     "name": "تنریفه",
-    "image": "assets/teams/tnryfh.png",
+    "image": "assets/teams/tnryfh.webp",
     "color": "#543e18"
   },
   {
     "id": "twlwz",
     "name": "تولوز",
-    "image": "assets/teams/twlwz.png",
+    "image": "assets/teams/twlwz.webp",
     "color": "#f7e6e3"
   },
   {
     "id": "dpwrtyww-alwz",
     "name": "دپورتیوو آلاوز",
-    "image": "assets/teams/dpwrtyww-alwz.png",
+    "image": "assets/teams/dpwrtyww-alwz.webp",
     "color": "#9cb1e3"
   },
   {
     "id": "dpwrtyww-lkhrwny",
     "name": "دپورتیوو لاکرونیا",
-    "image": "assets/teams/dpwrtyww-lkhrwny.png",
+    "image": "assets/teams/dpwrtyww-lkhrwny.webp",
     "color": "#544c18"
   },
   {
     "id": "ryl-swsydd",
     "name": "رئال سوسیداد",
-    "image": "assets/teams/ryl-swsydd.png",
+    "image": "assets/teams/ryl-swsydd.webp",
     "color": "#f7f1e3"
   },
   {
     "id": "sswlw",
     "name": "ساسولو",
-    "image": "assets/teams/sswlw.png",
+    "image": "assets/teams/sswlw.webp",
     "color": "#e3f7ec"
   },
   {
     "id": "sswlw-2",
     "name": "ساسولو ۲",
-    "image": "assets/teams/sswlw-2.png",
+    "image": "assets/teams/sswlw-2.webp",
     "color": "#e3f7eb"
   },
   {
     "id": "srwt",
     "name": "سروت",
-    "image": "assets/teams/srwt.png",
+    "image": "assets/teams/srwt.webp",
     "color": "#ecf7e3"
   },
   {
     "id": "swy",
     "name": "سویا",
-    "image": "assets/teams/swy.png",
+    "image": "assets/teams/swy.webp",
     "color": "#544018"
   },
   {
     "id": "synt-mlw",
     "name": "سینت مالو",
-    "image": "assets/teams/synt-mlw.png",
+    "image": "assets/teams/synt-mlw.webp",
     "color": "#e3e9f7"
   },
   {
     "id": "frybwrg",
     "name": "فرایبورگ",
-    "image": "assets/teams/frybwrg.png",
+    "image": "assets/teams/frybwrg.webp",
     "color": "#a7bad7"
   },
   {
     "id": "flwry",
     "name": "فلوری",
-    "image": "assets/teams/flwry.png",
+    "image": "assets/teams/flwry.webp",
     "color": "#ddecc5"
   },
   {
     "id": "fywrntyn",
     "name": "فیورنتینا",
-    "image": "assets/teams/fywrntyn.png",
+    "image": "assets/teams/fywrntyn.webp",
     "color": "#542218"
   },
   {
     "id": "ltzyw",
     "name": "لاتزیو",
-    "image": "assets/teams/ltzyw.png",
+    "image": "assets/teams/ltzyw.webp",
     "color": "#544318"
   },
   {
     "id": "ltzyw-2",
     "name": "لاتزیو ۲",
-    "image": "assets/teams/ltzyw-2.png",
+    "image": "assets/teams/ltzyw-2.webp",
     "color": "#182e54"
   },
   {
     "id": "lns",
     "name": "لانس",
-    "image": "assets/teams/lns.png",
+    "image": "assets/teams/lns.webp",
     "color": "#541818"
   },
   {
     "id": "lypzysh",
     "name": "لایپزیش",
-    "image": "assets/teams/lypzysh.png",
+    "image": "assets/teams/lypzysh.webp",
     "color": "#385418"
   },
   {
     "id": "lndn-syty-lywnsz",
     "name": "لندن سیتی لایونسز",
-    "image": "assets/teams/lndn-syty-lywnsz.png",
+    "image": "assets/teams/lndn-syty-lywnsz.webp",
     "color": "#184a54"
   },
   {
     "id": "lw-awr",
     "name": "لو آور",
-    "image": "assets/teams/lw-awr.png",
+    "image": "assets/teams/lw-awr.webp",
     "color": "#e3eaf7"
   },
   {
     "id": "lwnth-bdlwn",
     "name": "لوانته بادالونا",
-    "image": "assets/teams/lwnth-bdlwn.png",
+    "image": "assets/teams/lwnth-bdlwn.webp",
     "color": "#a7bad7"
   },
   {
     "id": "lwwn",
     "name": "لوون",
-    "image": "assets/teams/lwwn.png",
+    "image": "assets/teams/lwwn.webp",
     "color": "#e9f7e3"
   },
   {
     "id": "lwwn-2",
     "name": "لوون ۲",
-    "image": "assets/teams/lwwn-2.png",
+    "image": "assets/teams/lwwn-2.webp",
     "color": "#541818"
   },
   {
     "id": "lwgrwnyw",
     "name": "لوگرونیو",
-    "image": "assets/teams/lwgrwnyw.png",
+    "image": "assets/teams/lwgrwnyw.webp",
     "color": "#541818"
   },
   {
     "id": "lywrpwl",
     "name": "لیورپول",
-    "image": "assets/teams/lywrpwl.png",
+    "image": "assets/teams/lywrpwl.webp",
     "color": "#f8e6e7"
   },
   {
     "id": "lywn",
     "name": "لیون",
-    "image": "assets/teams/lywn.png",
+    "image": "assets/teams/lywn.webp",
     "color": "#e5eafb"
   },
   {
     "id": "lywn-2",
     "name": "لیون ۲",
-    "image": "assets/teams/lywn-2.png",
+    "image": "assets/teams/lywn-2.webp",
     "color": "#e5eafb"
   },
   {
     "id": "mdryd",
     "name": "مادرید",
-    "image": "assets/teams/mdryd.png",
+    "image": "assets/teams/mdryd.webp",
     "color": "#647b23"
   },
   {
     "id": "mdryd-2",
     "name": "مادرید ۲",
-    "image": "assets/teams/mdryd-2.png",
+    "image": "assets/teams/mdryd-2.webp",
     "color": "#eff7e3"
   },
   {
     "id": "mrsy-2",
     "name": "مارسی ۲",
-    "image": "assets/teams/mrsy-2.png",
+    "image": "assets/teams/mrsy-2.webp",
     "color": "#184354"
   },
   {
     "id": "mynz",
     "name": "ماینز",
-    "image": "assets/teams/mynz.png",
+    "image": "assets/teams/mynz.webp",
     "color": "#541918"
   },
   {
     "id": "mnchstr-syty",
     "name": "منچستر سیتی",
-    "image": "assets/teams/mnchstr-syty.png",
+    "image": "assets/teams/mnchstr-syty.webp",
     "color": "#153f56"
   },
   {
     "id": "mnchstr-ywnytd",
     "name": "منچستر یونایتد",
-    "image": "assets/teams/mnchstr-ywnytd.png",
+    "image": "assets/teams/mnchstr-ywnytd.webp",
     "color": "#561615"
   },
   {
     "id": "mwn-plyh",
     "name": "مون پلیه",
-    "image": "assets/teams/mwn-plyh.png",
+    "image": "assets/teams/mwn-plyh.webp",
     "color": "#183554"
   },
   {
     "id": "nnts",
     "name": "نانتس",
-    "image": "assets/teams/nnts.png",
+    "image": "assets/teams/nnts.webp",
     "color": "#185437"
   },
   {
     "id": "npwly",
     "name": "ناپولی",
-    "image": "assets/teams/npwly.png",
+    "image": "assets/teams/npwly.webp",
     "color": "#184854"
   },
   {
     "id": "nwrnbrg",
     "name": "نورنبرگ",
-    "image": "assets/teams/nwrnbrg.png",
+    "image": "assets/teams/nwrnbrg.webp",
     "color": "#b8e39c"
   },
   {
     "id": "hmbwrg",
     "name": "هامبورگ",
-    "image": "assets/teams/hmbwrg.png",
+    "image": "assets/teams/hmbwrg.webp",
     "color": "#c3d5ee"
   },
   {
     "id": "hkhn",
     "name": "هاکن",
-    "image": "assets/teams/hkhn.png",
+    "image": "assets/teams/hkhn.webp",
     "color": "#7b6f23"
   },
   {
     "id": "hwfnhym",
     "name": "هوفنهایم",
-    "image": "assets/teams/hwfnhym.png",
+    "image": "assets/teams/hwfnhym.webp",
     "color": "#183354"
   },
   {
     "id": "wlnsy",
     "name": "والنسیا",
-    "image": "assets/teams/wlnsy.png",
+    "image": "assets/teams/wlnsy.webp",
     "color": "#541f18"
   },
   {
     "id": "wrdrbrmn",
     "name": "وردربرمن",
-    "image": "assets/teams/wrdrbrmn.png",
+    "image": "assets/teams/wrdrbrmn.webp",
     "color": "#18543a"
   },
   {
     "id": "wst-hm",
     "name": "وست هم",
-    "image": "assets/teams/wst-hm.png",
+    "image": "assets/teams/wst-hm.webp",
     "color": "#ecf7e3"
   },
   {
     "id": "prm",
     "name": "پارما",
-    "image": "assets/teams/prm.png",
+    "image": "assets/teams/prm.webp",
     "color": "#9ca5e3"
   },
   {
     "id": "prys",
     "name": "پاریس",
-    "image": "assets/teams/prys.png",
+    "image": "assets/teams/prys.webp",
     "color": "#e3f2f7"
   },
   {
     "id": "prysn-jrmn",
     "name": "پاریسن ژرمن",
-    "image": "assets/teams/prysn-jrmn.png",
+    "image": "assets/teams/prysn-jrmn.webp",
     "color": "#e3eef7"
   },
   {
     "id": "chlsy",
     "name": "چلسی",
-    "image": "assets/teams/chlsy.png",
+    "image": "assets/teams/chlsy.webp",
     "color": "#99b6e6"
   },
   {
     "id": "khrystl-pls",
     "name": "کریستال پالاس",
-    "image": "assets/teams/khrystl-pls.png",
+    "image": "assets/teams/khrystl-pls.webp",
     "color": "#183554"
   },
   {
     "id": "khln",
     "name": "کلن",
-    "image": "assets/teams/khln.png",
+    "image": "assets/teams/khln.webp",
     "color": "#2b5418"
   },
   {
     "id": "khwmw",
     "name": "کومو",
-    "image": "assets/teams/khwmw.png",
+    "image": "assets/teams/khwmw.webp",
     "color": "#9cc2e3"
   },
   {
     "id": "khwgh",
     "name": "کوگه",
-    "image": "assets/teams/khwgh.png",
+    "image": "assets/teams/khwgh.webp",
     "color": "#9cc6e3"
   },
   {
     "id": "grnd",
     "name": "گرانادا",
-    "image": "assets/teams/grnd.png",
+    "image": "assets/teams/grnd.webp",
     "color": "#325418"
   },
   {
     "id": "ywntws-2",
     "name": "یونتوس ۲",
-    "image": "assets/teams/ywntws-2.png",
+    "image": "assets/teams/ywntws-2.webp",
     "color": "#31496d"
   },
   {
     "id": "ywwntws",
     "name": "یوونتوس",
-    "image": "assets/teams/ywwntws.png",
+    "image": "assets/teams/ywwntws.webp",
     "color": "#a7bad7"
   },
   {
     "id": "nordsjaelland",
     "name": "نورشلاند",
-    "image": "assets/teams/nordsjaelland.png",
+    "image": "assets/teams/nordsjaelland.webp",
     "color": "#ecce24"
   }
 ]

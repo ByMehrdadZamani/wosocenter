@@ -25,7 +25,7 @@ const FONTS=[
  ["GraphikArabic","گرافیک عربیک","نمایشی"],
  ["YekanBoom","یکان بوم","نمایشی"]
 ];
-const ASSETS={titlePurple:'assets/brand/title-purple-hq.png',titleWhite:'assets/brand/title-white-alpha.png',logo:'assets/brand/logo-alpha.png'};
+const ASSETS={titlePurple:'assets/brand/title-purple-hq.webp',titleWhite:'assets/brand/title-white-alpha.webp',logo:'assets/brand/logo-alpha.webp'};
 const COLORS={background:'پس‌زمینه',patternColor:'رنگ پترن',frameColor:'کادر اصلی',cardColor:'کادر مسابقه',brandLogoColor:'لوگوی WoSoCenter',dayColor:'روز هفته',dateColor:'تاریخ',dateLineColor:'خط تاریخ',titlePurple:'عنوان برنامه',titleWhite:'عنوان بازی‌های امروز',footerColor:'آیدی کانال',telegramColor:'آیکون تلگرام',leftBg:'زمینه تیم اول',rightBg:'زمینه تیم دوم',leagueColor:'نام لیگ',timeColor:'ساعت',clockColor:'آیکون ساعت'};
 const DEFAULT_MATCH={flag:'liga-af-spain',league:'لیگا اف اسپانیا',time:'۲۲:۳۰',leftTeam:'barcelona',rightTeam:'real-madrid',leftBg:'#873d58',rightBg:'#e2b944',leftBgInitialized:true,rightBgInitialized:true,leftBgLocked:false,rightBgLocked:false,leagueColor:'#f8f8f8',timeColor:'#f8f8f8',clockColor:'#a94ac2',leagueFont:'Ario',timeFont:'Ario'};
 const DEFAULTS={weekDay:'شنبه',monthDay:'۱۶ آبان',dayColor:'#aa55bc',dateColor:'#ffffff',dayFont:'Ario',dateFont:'Ario',dateLineColor:'#a64db6',titlePurple:'#a457bf',titleWhite:'#d9d9d9',brandLogoColor:'#9141aa',footerText:'WoSoCenter',footerColor:'#ae58c7',telegramColor:'#af58c8',footerFont:'Ario',background:'#030303',patternColor:'#320a3e',frameColor:'#09050c',cardColor:'#181818',globalFont:'Ario',patternId:'woso-petals',patternTintEnabled:true,paletteId:'classic',matches:[{...DEFAULT_MATCH}]};
@@ -200,9 +200,9 @@ async function loadTeamColors(){
     return data&&typeof data==='object'&&!Array.isArray(data)?data:{};
   }catch{return {};}
 }
-const fallbackTeams=[{id:'barcelona',name:'بارسلونا',image:'assets/teams/barcelona.png',color:'#873d58'},{id:'real-madrid',name:'رئال مادرید',image:'assets/teams/real-madrid.png',color:'#e2b944'},{id:'bayern-munich',name:'بایرن مونیخ',image:'assets/teams/bayern-munich.png',color:'#b63a4a'},{id:'servette',name:'سروت ژنو',image:'assets/teams/servette.png',color:'#83182e'},{id:'nordsjaelland',name:'نورشلاند',image:'assets/teams/nordsjaelland.png',color:'#ecce24'}];
-const fallbackFlags=[{id:'liga-af-spain',name:'لیگا اف اسپانیا',image:'assets/leagues/liga-af-spain.png',type:'league'}];
-const fallbackPatterns=[{id:'woso-petals',name:'گلبرگ کلاسیک',image:'assets/patterns/woso-petals.png',tileWidth:432,tileHeight:430,mode:'mask'}];
+const fallbackTeams=[{id:'barcelona',name:'بارسلونا',image:'assets/teams/barcelona.webp',color:'#873d58'},{id:'real-madrid',name:'رئال مادرید',image:'assets/teams/real-madrid.webp',color:'#e2b944'},{id:'bayern-munich',name:'بایرن مونیخ',image:'assets/teams/bayern-munich.webp',color:'#b63a4a'},{id:'srwt',name:'سروت',image:'assets/teams/srwt.webp',color:'#83182e'},{id:'nordsjaelland',name:'نورشلاند',image:'assets/teams/nordsjaelland.webp',color:'#ecce24'}];
+const fallbackFlags=[{id:'liga-af-spain',name:'لیگا اف اسپانیا',image:'assets/leagues/liga-af-spain.webp',type:'league'}];
+const fallbackPatterns=[{id:'woso-petals',name:'گلبرگ کلاسیک',image:'assets/patterns/woso-petals.webp',tileWidth:432,tileHeight:430,mode:'mask'}];
 const fontInfo=id=>FONTS.find(f=>f[0]===id)||FONTS[0];
 const fontButton=(key,value,kind='game')=>`<button type="button" class="font-pick" data-${kind==='game'?'game':'global'}-font="${esc(key)}" aria-label="انتخاب فونت"><span class="font-pick-title" style="font-family:'${esc(validFont(value))}',Tahoma,sans-serif">${esc(fontInfo(value)[1])}</span><span class="font-pick-chevron">⌄</span></button>`;
 function field(caption,name,value,opts={}){const {type='text',wide=false,maxlength=90}=opts;let input;if(type==='color')input=`<button type="button" class="color-trigger" data-game-color="${name}" aria-label="${esc(caption)}"></button>`;else if(type==='select')input=fontButton(name,value);else input=`<input data-field="${name}" type="text" maxlength="${maxlength}" value="${esc(value)}" />`;return `<label class="${wide?'span2':''}">${esc(caption)}${input}</label>`;}
