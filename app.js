@@ -89,11 +89,21 @@ function displayPage(){activatePageState();syncGlobals();refreshGames();refreshP
 function refreshPages(){
  const tabs=$('pageTabs');if(!tabs)return;
  $('pageTotal').textContent=`${project.pages.length.toLocaleString('fa-IR')} صفحه`;
- tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}" aria-label="انتخاب و ویرایش ${esc(pg.title)}"><canvas class="page-thumb" width="216" height="270" data-thumb-id="${esc(pg.id)}" aria-hidden="true"></canvas>${pg.id===project.activePageId?'<span class="page-active-mark">فعال ✓</span>':''}<span class="page-overlay"><span class="page-number">${(i+1).toLocaleString('fa-IR')}</span><span class="page-title-wrap"><span class="page-title">${esc(pg.title)}</span><small>${pg.data.matches.length.toLocaleString('fa-IR')} بازی · لمس برای ویرایش</small></span></span></button><div class="page-actions"><button type="button" data-page-clone="${esc(pg.id)}" title="دوپلیکیت این صفحه" aria-label="کپی ${esc(pg.title)}">⧉</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف این صفحه" aria-label="حذف ${esc(pg.title)}" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
+ tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}" aria-label="انتخاب و ویرایش ${esc(pg.title)}"><canvas class="page-thumb" width="540" height="675" data-thumb-id="${esc(pg.id)}" aria-hidden="true"></canvas>${pg.id===project.activePageId?'<span class="page-active-mark">فعال ✓</span>':''}<span class="page-overlay"><span class="page-number">${(i+1).toLocaleString('fa-IR')}</span><span class="page-title-wrap"><span class="page-title">${esc(pg.title)}</span><small>${pg.data.matches.length.toLocaleString('fa-IR')} بازی · لمس برای ویرایش</small></span></span></button><div class="page-actions"><button type="button" data-page-clone="${esc(pg.id)}" title="دوپلیکیت این صفحه" aria-label="کپی ${esc(pg.title)}">⧉</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف این صفحه" aria-label="حذف ${esc(pg.title)}" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
  $('addPageBtn').disabled=project.pages.length>=40;
  if($('pagesDialog').open)void refreshPageThumbs();
 }
 let thumbRefreshId=0;
+// Keep each gallery thumbnail sharp on both desktop and high-DPI phones.
+// The preview backing store is at least 540px wide, and scales with its
+// onscreen size, capped to avoid using full-size canvases for every page.
+function resizePageThumb(canvas){
+ const shownWidth=canvas.getBoundingClientRect().width||canvas.parentElement?.getBoundingClientRect().width||216;
+ const dpr=Math.min(2.5,Math.max(1,window.devicePixelRatio||1));
+ const width=Math.max(540,Math.min(900,Math.round(shownWidth*Math.max(2,dpr)/4)*4));
+ const height=Math.round(width*HEIGHT/WIDTH);
+ if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
+}
 function preloadForPage(data){const pattern=findPattern(data.patternId)||patterns[0];const paths=[...Object.values(ASSETS),pattern?.image,...data.matches.flatMap(m=>[findTeam(m.leftTeam)?.image,findTeam(m.rightTeam)?.image,findFlag(m.flag)?.image])];return Promise.all(paths.filter(Boolean).map(preload));}
 async function refreshPageThumbs(){
  const rid=++thumbRefreshId,dialog=$('pagesDialog');
@@ -101,6 +111,7 @@ async function refreshPageThumbs(){
   if(rid!==thumbRefreshId||!dialog.open)return;
   const canvas=[...$('pageTabs').querySelectorAll('canvas[data-thumb-id]')].find(el=>el.dataset.thumbId===pg.id);
   if(!canvas)continue;
+  resizePageThumb(canvas);
   // Immediate first paint, then a second paint when that page's images/fonts are ready.
   drawPoster(canvas,pg.data);
   try{
@@ -113,6 +124,8 @@ async function refreshPageThumbs(){
  }
 }
 function openPages(){refreshPages();$('pagesDialog').showModal();void refreshPageThumbs();try{$('pagesDialog').focus({preventScroll:true});}catch{}}
+let pagePreviewResizeTimer;
+window.addEventListener('resize',()=>{if(!$('pagesDialog')?.open)return;clearTimeout(pagePreviewResizeTimer);pagePreviewResizeTimer=setTimeout(()=>void refreshPageThumbs(),160);});
 
 function addPage(fromId,duplicate=false){
  if(project.pages.length>=40){message('حداکثر ۴۰ صفحه در هر پروژه قابل ایجاد است.','warning');return;}
