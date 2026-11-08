@@ -37,7 +37,8 @@
         "timeColor": "#fff4ff",
         "clockColor": "#ae5acf"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/woso-petals.jpg"
   },
   {
     "id": "champions-neon-ball",
@@ -77,7 +78,8 @@
         "timeColor": "#f0fbff",
         "clockColor": "#00d6ff"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/champions-neon-ball.jpg"
   },
   {
     "id": "champions-blue-lines",
@@ -116,7 +118,8 @@
         "timeColor": "#edf7ff",
         "clockColor": "#77baff"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/champions-blue-lines.jpg"
   },
   {
     "id": "sport-yellow-violet",
@@ -155,7 +158,8 @@
         "timeColor": "#fdf7dc",
         "clockColor": "#ffde25"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-yellow-violet.jpg"
   },
   {
     "id": "sport-neon-green",
@@ -194,7 +198,8 @@
         "timeColor": "#f0ffe8",
         "clockColor": "#5aff2d"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-neon-green.jpg"
   },
   {
     "id": "sport-azure-zigzag",
@@ -233,7 +238,8 @@
         "timeColor": "#edfaff",
         "clockColor": "#7de3f5"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-azure-zigzag.jpg"
   },
   {
     "id": "sport-purple-motion",
@@ -272,46 +278,8 @@
         "timeColor": "#fcf6ff",
         "clockColor": "#9072f8"
       }
-    }
-  },
-  {
-    "id": "sport-night-geometry",
-    "name": "هندسه بنفش",
-    "image": "assets/patterns/sport-night-geometry.png",
-    "mode": "hue",
-    "layout": "cover",
-    "recolorDefault": false,
-    "referenceHue": 280,
-    "suggestedPalette": {
-      "name": "هماهنگ با هندسه بنفش",
-      "colors": [
-        "#0f0623",
-        "#352079",
-        "#b893ff",
-        "#1c133d"
-      ],
-      "settings": {
-        "background": "#0f0623",
-        "patternColor": "#352079",
-        "frameColor": "#0f0623",
-        "cardColor": "#1c133d",
-        "brandLogoColor": "#b893ff",
-        "titlePurple": "#b893ff",
-        "titleWhite": "#f5eeff",
-        "dayColor": "#b893ff",
-        "dateColor": "#f5eeff",
-        "dateLineColor": "#b893ff",
-        "footerColor": "#b893ff",
-        "telegramColor": "#b893ff"
-      },
-      "match": {
-        "leftBg": "#50318b",
-        "rightBg": "#734ab6",
-        "leagueColor": "#f5eeff",
-        "timeColor": "#f5eeff",
-        "clockColor": "#b893ff"
-      }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-purple-motion.jpg"
   },
   {
     "id": "sport-red-flames",
@@ -350,7 +318,8 @@
         "timeColor": "#fff2ea",
         "clockColor": "#ff5945"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-red-flames.jpg"
   },
   {
     "id": "sport-red-graffiti",
@@ -389,7 +358,8 @@
         "timeColor": "#fff4ee",
         "clockColor": "#fb3931"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-red-graffiti.jpg"
   },
   {
     "id": "sport-electric-yellow",
@@ -428,6 +398,325 @@
         "timeColor": "#fff9da",
         "clockColor": "#ffdb21"
       }
-    }
+    },
+    "thumb": "assets/pattern-thumbnails/sport-electric-yellow.jpg"
+  },
+  {
+    "id": "neon-blue-pillars",
+    "name": "ستون‌های نئونی آبی",
+    "image": "assets/patterns/neon-blue-pillars.jpg",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی ستون‌های نئونی آبی",
+      "colors": [
+        "#09132d",
+        "#243ac4",
+        "#32d9ff",
+        "#10172f"
+      ],
+      "settings": {
+        "background": "#09132d",
+        "patternColor": "#243ac4",
+        "frameColor": "#09132d",
+        "cardColor": "#10172f",
+        "brandLogoColor": "#32d9ff",
+        "titlePurple": "#32d9ff",
+        "titleWhite": "#edf8ff",
+        "dayColor": "#32d9ff",
+        "dateColor": "#edf8ff",
+        "dateLineColor": "#32d9ff",
+        "footerColor": "#32d9ff",
+        "telegramColor": "#32d9ff"
+      },
+      "match": {
+        "leftBg": "#164ab6",
+        "rightBg": "#6325a3",
+        "leagueColor": "#edf8ff",
+        "timeColor": "#edf8ff",
+        "clockColor": "#32d9ff"
+      }
+    },
+    "referenceHue": 215,
+    "thumb": "assets/pattern-thumbnails/neon-blue-pillars.jpg"
+  },
+  {
+    "id": "black-silver-waves",
+    "name": "موج‌های نقره‌ای",
+    "image": "assets/patterns/black-silver-waves.jpg",
+    "mode": "image",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی موج‌های نقره‌ای",
+      "colors": [
+        "#09090c",
+        "#414149",
+        "#d3d7e1",
+        "#1d1e24"
+      ],
+      "settings": {
+        "background": "#09090c",
+        "patternColor": "#414149",
+        "frameColor": "#09090c",
+        "cardColor": "#1d1e24",
+        "brandLogoColor": "#d3d7e1",
+        "titlePurple": "#d3d7e1",
+        "titleWhite": "#ffffff",
+        "dayColor": "#d3d7e1",
+        "dateColor": "#ffffff",
+        "dateLineColor": "#d3d7e1",
+        "footerColor": "#d3d7e1",
+        "telegramColor": "#d3d7e1"
+      },
+      "match": {
+        "leftBg": "#3e4657",
+        "rightBg": "#9a9ca5",
+        "leagueColor": "#ffffff",
+        "timeColor": "#ffffff",
+        "clockColor": "#d3d7e1"
+      }
+    },
+    "thumb": "assets/pattern-thumbnails/black-silver-waves.jpg"
+  },
+  {
+    "id": "black-white-brush",
+    "name": "قلم‌موی سیاه و سفید",
+    "image": "assets/patterns/black-white-brush.jpg",
+    "mode": "image",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی قلم‌موی سیاه و سفید",
+      "colors": [
+        "#09090a",
+        "#343438",
+        "#f4f4f4",
+        "#202024"
+      ],
+      "settings": {
+        "background": "#09090a",
+        "patternColor": "#343438",
+        "frameColor": "#09090a",
+        "cardColor": "#202024",
+        "brandLogoColor": "#f4f4f4",
+        "titlePurple": "#f4f4f4",
+        "titleWhite": "#ffffff",
+        "dayColor": "#f4f4f4",
+        "dateColor": "#ffffff",
+        "dateLineColor": "#f4f4f4",
+        "footerColor": "#f4f4f4",
+        "telegramColor": "#f4f4f4"
+      },
+      "match": {
+        "leftBg": "#303035",
+        "rightBg": "#adadb3",
+        "leagueColor": "#ffffff",
+        "timeColor": "#ffffff",
+        "clockColor": "#f4f4f4"
+      }
+    },
+    "thumb": "assets/pattern-thumbnails/black-white-brush.jpg"
+  },
+  {
+    "id": "orange-art-geometry",
+    "name": "هندسه نارنجی",
+    "image": "assets/patterns/orange-art-geometry.jpg",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی هندسه نارنجی",
+      "colors": [
+        "#190c07",
+        "#e85121",
+        "#ffb34c",
+        "#241614"
+      ],
+      "settings": {
+        "background": "#190c07",
+        "patternColor": "#e85121",
+        "frameColor": "#190c07",
+        "cardColor": "#241614",
+        "brandLogoColor": "#ffb34c",
+        "titlePurple": "#ffb34c",
+        "titleWhite": "#fff5e8",
+        "dayColor": "#ffb34c",
+        "dateColor": "#fff5e8",
+        "dateLineColor": "#ffb34c",
+        "footerColor": "#ffb34c",
+        "telegramColor": "#ffb34c"
+      },
+      "match": {
+        "leftBg": "#f35b22",
+        "rightBg": "#f0b04b",
+        "leagueColor": "#fff5e8",
+        "timeColor": "#fff5e8",
+        "clockColor": "#ffb34c"
+      }
+    },
+    "referenceHue": 22,
+    "thumb": "assets/pattern-thumbnails/orange-art-geometry.jpg"
+  },
+  {
+    "id": "teal-grunge",
+    "name": "بافت زمردی",
+    "image": "assets/patterns/teal-grunge.jpg",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی بافت زمردی",
+      "colors": [
+        "#051e1c",
+        "#0e766d",
+        "#35e5ba",
+        "#102b29"
+      ],
+      "settings": {
+        "background": "#051e1c",
+        "patternColor": "#0e766d",
+        "frameColor": "#051e1c",
+        "cardColor": "#102b29",
+        "brandLogoColor": "#35e5ba",
+        "titlePurple": "#35e5ba",
+        "titleWhite": "#eafff8",
+        "dayColor": "#35e5ba",
+        "dateColor": "#eafff8",
+        "dateLineColor": "#35e5ba",
+        "footerColor": "#35e5ba",
+        "telegramColor": "#35e5ba"
+      },
+      "match": {
+        "leftBg": "#176e69",
+        "rightBg": "#34b9a0",
+        "leagueColor": "#eafff8",
+        "timeColor": "#eafff8",
+        "clockColor": "#35e5ba"
+      }
+    },
+    "referenceHue": 168,
+    "thumb": "assets/pattern-thumbnails/teal-grunge.jpg"
+  },
+  {
+    "id": "cyan-magenta-ribbons",
+    "name": "روبان‌های نئونی",
+    "image": "assets/patterns/cyan-magenta-ribbons.jpg",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی روبان‌های نئونی",
+      "colors": [
+        "#0b0920",
+        "#7033ce",
+        "#31dcf0",
+        "#1c1534"
+      ],
+      "settings": {
+        "background": "#0b0920",
+        "patternColor": "#7033ce",
+        "frameColor": "#0b0920",
+        "cardColor": "#1c1534",
+        "brandLogoColor": "#31dcf0",
+        "titlePurple": "#31dcf0",
+        "titleWhite": "#f8f2ff",
+        "dayColor": "#31dcf0",
+        "dateColor": "#f8f2ff",
+        "dateLineColor": "#31dcf0",
+        "footerColor": "#31dcf0",
+        "telegramColor": "#31dcf0"
+      },
+      "match": {
+        "leftBg": "#4624aa",
+        "rightBg": "#c51de2",
+        "leagueColor": "#f8f2ff",
+        "timeColor": "#f8f2ff",
+        "clockColor": "#31dcf0"
+      }
+    },
+    "referenceHue": 275,
+    "thumb": "assets/pattern-thumbnails/cyan-magenta-ribbons.jpg"
+  },
+  {
+    "id": "rainbow-liquid-flow",
+    "name": "جریان رنگین‌کمانی",
+    "image": "assets/patterns/rainbow-liquid-flow.jpg",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی جریان رنگین‌کمانی",
+      "colors": [
+        "#0b0b10",
+        "#10776d",
+        "#f9a231",
+        "#14252b"
+      ],
+      "settings": {
+        "background": "#0b0b10",
+        "patternColor": "#10776d",
+        "frameColor": "#0b0b10",
+        "cardColor": "#14252b",
+        "brandLogoColor": "#f9a231",
+        "titlePurple": "#f9a231",
+        "titleWhite": "#f7fff9",
+        "dayColor": "#f9a231",
+        "dateColor": "#f7fff9",
+        "dateLineColor": "#f9a231",
+        "footerColor": "#f9a231",
+        "telegramColor": "#f9a231"
+      },
+      "match": {
+        "leftBg": "#188d87",
+        "rightBg": "#f06d3c",
+        "leagueColor": "#f7fff9",
+        "timeColor": "#f7fff9",
+        "clockColor": "#f9a231"
+      }
+    },
+    "referenceHue": 174,
+    "thumb": "assets/pattern-thumbnails/rainbow-liquid-flow.jpg"
+  },
+  {
+    "id": "pink-electric-burst",
+    "name": "انفجار صورتی",
+    "image": "assets/patterns/pink-electric-burst.jpg",
+    "mode": "hue",
+    "layout": "cover",
+    "recolorDefault": false,
+    "suggestedPalette": {
+      "name": "پالت پیشنهادی انفجار صورتی",
+      "colors": [
+        "#0c0626",
+        "#5c19a5",
+        "#ff3aa8",
+        "#1c103b"
+      ],
+      "settings": {
+        "background": "#0c0626",
+        "patternColor": "#5c19a5",
+        "frameColor": "#0c0626",
+        "cardColor": "#1c103b",
+        "brandLogoColor": "#ff3aa8",
+        "titlePurple": "#ff3aa8",
+        "titleWhite": "#fff0fc",
+        "dayColor": "#ff3aa8",
+        "dateColor": "#fff0fc",
+        "dateLineColor": "#ff3aa8",
+        "footerColor": "#ff3aa8",
+        "telegramColor": "#ff3aa8"
+      },
+      "match": {
+        "leftBg": "#4537b7",
+        "rightBg": "#de258d",
+        "leagueColor": "#fff0fc",
+        "timeColor": "#fff0fc",
+        "clockColor": "#ff3aa8"
+      }
+    },
+    "referenceHue": 305,
+    "thumb": "assets/pattern-thumbnails/pink-electric-burst.jpg"
   }
 ]
