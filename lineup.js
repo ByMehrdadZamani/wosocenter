@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v5.5 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v5.6 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1',LPAGES_STORE='wosocenter-lineup-pages-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -429,29 +429,43 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
  // Draw the frame underneath the transparent player cutout: no line across the forehead.
  c.save();c.beginPath();c.roundRect(x,y,w,h,13*spot.scale);c.strokeStyle=col.cardBorder;c.lineWidth=3.8*spot.scale;c.stroke();c.restore();
  const src=slot.image;if(src){const img=lReady(src)||lImage(src);if(img?.complete&&img.naturalWidth){
-  // Each original 1920px transparent PNG remains untouched in the players database.
-  // Only the Canvas source rectangle is changed: ignore its transparent margins
-  // so faces are large on the lineup card, but show the full file in the picker.
+  // v5.6: Align EACH portrait using its own source-image face coordinates.
+  // The original transparent PNG remains whole and is never resampled on disk.
+  // The reference card face occupies ~52% of the 180px card width, while the
+  // top of the head rises about 50px above the card frame.
   const player=lFindPlayer(slot.playerId);
-  const bounds=player?.image===src&&Array.isArray(player.viewBox)&&player.viewBox.length===4?player.viewBox:null;
-  let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
-  if(bounds){
-   const padX=Math.max(3,Math.round((bounds[2]-bounds[0])*.015));
-   const padY=Math.max(2,Math.round((bounds[3]-bounds[1])*.01));
-   sx=Math.max(0,bounds[0]-padX);sy=Math.max(0,bounds[1]-padY);
-   sw=Math.min(img.naturalWidth-sx,bounds[2]+padX-sx);
-   sh=Math.min(img.naturalHeight-sy,bounds[3]+padY-sy);
+  const face=player?.image===src&&Array.isArray(player.portraitFace)&&player.portraitFace.length===4?player.portraitFace:null;
+  const factor=slot.photoScale||1;
+  let dx,dy,dw,dh;
+  if(face){
+   const [, ,faceW]=face;
+   const scale=(96*spot.scale/faceW)*factor;
+   dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
+   // Center the face, not the entire uncropped PNG: works for asymmetrical hair.
+   dx=spot.x-(face[0]+face[2]/2)*scale;
+   // Use each transparent source's actual topmost nontransparent pixel.
+   const headTop=Array.isArray(player.viewBox)?player.viewBox[1]:0;
+   const headRise=Number(player.portraitHeadRise)||50;
+   dy=y-headRise*spot.scale-headTop*scale;
+  }else{
+   // Backward-compatible fallback for future clubs without portraitFace.
+   const bounds=player?.image===src&&Array.isArray(player.viewBox)&&player.viewBox.length===4?player.viewBox:null;
+   const sx=bounds?bounds[0]:0,sy=bounds?bounds[1]:0;
+   const sw=bounds?Math.max(1,bounds[2]-bounds[0]):img.naturalWidth;
+   const sh=bounds?Math.max(1,bounds[3]-bounds[1]):img.naturalHeight;
+   const scale=Math.min((w*.98)/sw,(h+50*spot.scale)/sh)*factor;
+   dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
+   dx=spot.x-(sx+sw*.5)*scale;
+   dy=y-50*spot.scale-sy*scale;
   }
-  // The taller original image of goalkeeper Cata's teammate Khma Font is
-  // normalized to the other subjects by the same visible-area calculation.
-  const factor=(slot.photoScale||1)*(Number(player?.portraitFit)||1);
-  const targetH=(h+72*spot.scale)*factor;
-  const maxW=w*1.28*factor;
-  const dw=Math.min(maxW,targetH*(sw/sh)),dh=dw*sh/sw;
-  const bottom=y+h-30*spot.scale,dx=x+(w-dw)/2,dy=bottom-dh;
-  c.save();c.beginPath();c.rect(x-3*spot.scale,y-118*spot.scale,w+6*spot.scale,h+118*spot.scale);c.clip();
+  // Crop ONLY the display area: clothes stay INSIDE side borders and above
+  // the name band; the player's hair can extend outside the top edge.
+  // This resolves the oversized upper body and border-overlap problem.
+  const borderInset=4*spot.scale;
+  const bandY=y+h-31*spot.scale;
+  c.save();c.beginPath();c.rect(x+borderInset,y-100*spot.scale,w-2*borderInset,bandY-(y-100*spot.scale));c.clip();
   c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
-  c.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);c.restore();
+  c.drawImage(img,dx,dy,dw,dh);c.restore();
  }}else{
   // Unfilled cards have a subdued generic placeholder; no third-party player artwork.
   c.save();c.globalAlpha=.22;c.fillStyle=col.text;c.beginPath();c.arc(spot.x,y+70*spot.scale,31*spot.scale,0,Math.PI*2);c.fill();lFillRounded(c,spot.x-55*spot.scale,y+100*spot.scale,110*spot.scale,61*spot.scale,[38*spot.scale,38*spot.scale,0,0],col.text);c.restore();

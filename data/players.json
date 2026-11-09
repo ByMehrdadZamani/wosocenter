@@ -17,7 +17,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      778,
+      134,
+      368,
+      368
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-04",
@@ -37,7 +43,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1916,
     "sourceFormat": "PNG",
-    "portraitFit": 0.94
+    "portraitFace": [
+      662,
+      239,
+      623,
+      623
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-05",
@@ -57,7 +69,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      768,
+      124,
+      398,
+      398
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-07",
@@ -77,7 +95,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      790,
+      155,
+      335,
+      340
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-08",
@@ -97,7 +121,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      781,
+      136,
+      351,
+      351
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-09",
@@ -117,7 +147,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      830,
+      156,
+      374,
+      374
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-10",
@@ -137,7 +173,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      769,
+      87,
+      372,
+      372
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-11",
@@ -157,7 +199,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      789,
+      147,
+      352,
+      352
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-12",
@@ -177,7 +225,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      783,
+      174,
+      355,
+      355
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-13",
@@ -197,7 +251,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      787,
+      112,
+      368,
+      368
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-14",
@@ -217,7 +277,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      779,
+      130,
+      352,
+      352
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-16",
@@ -237,7 +303,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      762,
+      141,
+      348,
+      348
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-17",
@@ -257,7 +329,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      767,
+      79,
+      364,
+      364
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-18",
@@ -277,7 +355,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      699,
+      73,
+      427,
+      427
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-19",
@@ -297,7 +381,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      784,
+      119,
+      380,
+      380
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-21",
@@ -317,7 +407,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      781,
+      140,
+      325,
+      325
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-22",
@@ -337,7 +433,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      817,
+      148,
+      359,
+      359
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-23",
@@ -357,7 +459,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      785,
+      182,
+      331,
+      331
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-24",
@@ -377,7 +485,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      791,
+      84,
+      366,
+      366
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-25",
@@ -397,7 +511,13 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      749,
+      115,
+      363,
+      363
+    ],
+    "portraitHeadRise": 50
   },
   {
     "id": "barca-26",
@@ -417,6 +537,12 @@
     "sourceWidth": 1920,
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
-    "portraitFit": 1.0
+    "portraitFace": [
+      763,
+      145,
+      338,
+      338
+    ],
+    "portraitHeadRise": 50
   }
 ]
