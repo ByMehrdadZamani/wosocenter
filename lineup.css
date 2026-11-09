@@ -85,3 +85,14 @@
 #lineupColorDialog{width:min(485px,calc(100vw - 24px))}
 #lineupColorSV{touch-action:none}
 @media(max-width:510px){.lineup-tabs .tab{font-size:9.4px;padding:10px 2px}.lineup-popup-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.lineup-popup-fields label:last-child{grid-column:1/-1}.lineup-color-code{font-size:10px}.lineup-page .top-actions #lineupDownloadHQ{font-size:9px;padding:7px}}
+
+/* v5.3: palette discovery and independent section editors. */
+.lineup-show-all-palettes{margin-top:13px;background:var(--violet)!important;color:#fff!important;border-color:var(--violet)!important;justify-content:center}
+.lineup-palette-search-label{display:block;margin:12px 0 11px!important}
+.lineup-palette-search-label input{margin-top:7px}
+.lineup-suggested-palette{margin-top:9px}
+.lineup-suggested-hint{margin:0 0 7px;font-size:11px;color:var(--muted)}
+.lineup-suggested-palette .palette-option{border-color:var(--violet);background:color-mix(in srgb,var(--violet) 8%,var(--input))}
+.lineup-auto-match{margin-top:12px;width:100%;font-size:11px}
+.lineup-page .lineup-preview-foot{line-height:1.7}
+@media(max-width:510px){.lineup-page .top-actions #lineupDownload{font-size:10px;padding:8px 10px}.lineup-page .lineup-preview-foot{flex-wrap:wrap}}
