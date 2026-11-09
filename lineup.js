@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v5.4 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v5.5 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1',LPAGES_STORE='wosocenter-lineup-pages-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -145,7 +145,7 @@ function lPageDialogRender(){
  if(lPages[lPageIndex])lPages[lPageIndex].data=lClone(lState);
  L('lineupPageCount').textContent=lPages.length.toLocaleString('fa-IR')+' صفحه';
  // 432px-wide previews preserve readable lettering in desktop modal.
- L('lineupPagesGrid').innerHTML=lPages.map((p,i)=>`<div class="lineup-page-item ${i===lPageIndex?'selected':''}"><button class="lineup-page-open" type="button" data-lpage="${i}"><canvas width="540" height="675" data-lthumb="${i}" aria-label="پیش‌نمایش ${lEscape(p.name)}"></canvas><strong>${lEscape(p.name)}</strong></button><div class="lineup-page-tools"><button type="button" data-lmove="${i}" data-ldir="-1" title="صفحه قبلی" ${i===0?'disabled':''}>↑</button><button type="button" data-lmove="${i}" data-ldir="1" title="صفحه بعدی" ${i===lPages.length-1?'disabled':''}>↓</button><button type="button" data-lrename="${i}" title="تغییر نام">✎</button><button type="button" data-lduplicate="${i}" title="تکثیر">⧉</button><button type="button" data-ldelete="${i}" title="حذف" ${lPages.length===1?'disabled':''}>×</button></div></div>`).join('');
+ L('lineupPagesGrid').innerHTML=lPages.map((p,i)=>`<div class="lineup-page-item ${i===lPageIndex?'selected':''}"><button class="lineup-page-open" type="button" data-lpage="${i}"><canvas width="540" height="675" data-lthumb="${i}" aria-label="پیش‌نمایش ${lEscape(p.name)}"></canvas><strong>${lEscape(p.name)}</strong></button><div class="lineup-page-tools"><button type="button" data-lmove="${i}" data-ldir="-1" title="صفحه قبلی" ${i===0?'disabled':''}>↑</button><button type="button" data-lmove="${i}" data-ldir="1" title="صفحه بعدی" ${i===lPages.length-1?'disabled':''}>↓</button><button type="button" data-lrename="${i}" title="تغییر نام">✎</button><button type="button" data-lduplicate="${i}" title="تکثیر">⧉</button><button type="button" data-lpage-download="${i}" title="دانلود این صفحه" aria-label="دانلود صفحه ${i+1}">↓</button><button type="button" data-ldelete="${i}" title="حذف" ${lPages.length===1?'disabled':''}>×</button></div></div>`).join('');
  const savedState=lState,savedCtx=lCtx;
  try{document.querySelectorAll('[data-lthumb]').forEach(canvas=>{const i=Number(canvas.dataset.lthumb);lState=lPages[i].data;lCtx=canvas.getContext('2d');lCtx.scale(.5,.5);lPrepareImages();lDraw(false)});}finally{lCtx=savedCtx;lState=savedState}
 }
@@ -221,6 +221,7 @@ function lPatternDialogRender(){
 function lUsePlayer(id){const p=lFindPlayer(id);if(!p)return;lPendingPlayerId=p.id;L('lineupPopupName').value=p.name;L('lineupPopupPosition').value=lSpotList()[lSelected]?.position||'GK';lPlayersDialogRender();}
 function lDialogEvents(){
  document.addEventListener('click',e=>{
+  const single=e.target.closest('[data-lpage-download]');if(single){void lDownloadOnePage(+single.dataset.lpageDownload);return;}
   const page=e.target.closest('[data-lpage]');if(page){lPageSwitch(+page.dataset.lpage);return;}
   const move=e.target.closest('[data-lmove]');if(move){lPageMove(+move.dataset.lmove,+move.dataset.ldir);return;}
   const rename=e.target.closest('[data-lrename]');if(rename){lPageRename(+rename.dataset.lrename);return;}
@@ -428,11 +429,29 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
  // Draw the frame underneath the transparent player cutout: no line across the forehead.
  c.save();c.beginPath();c.roundRect(x,y,w,h,13*spot.scale);c.strokeStyle=col.cardBorder;c.lineWidth=3.8*spot.scale;c.stroke();c.restore();
  const src=slot.image;if(src){const img=lReady(src)||lImage(src);if(img?.complete&&img.naturalWidth){
-  const factor=(slot.photoScale||1),targetH=(h+19*spot.scale)*factor;
-  const maxW=w*1.03*factor;let dw=Math.min(maxW,targetH*(img.width/img.height)),dh=dw*img.height/img.width;
-  // Portraits are bottom-aligned to the name strip and can extend outside the top of the card.
-  const bottom=y+h-29*spot.scale,dx=x+(w-dw)/2,dy=bottom-dh;
-  c.save();c.beginPath();c.rect(x-3*spot.scale,y-75*spot.scale,w+6*spot.scale,h+75*spot.scale);c.clip();c.drawImage(img,dx,dy,dw,dh);c.restore();
+  // Each original 1920px transparent PNG remains untouched in the players database.
+  // Only the Canvas source rectangle is changed: ignore its transparent margins
+  // so faces are large on the lineup card, but show the full file in the picker.
+  const player=lFindPlayer(slot.playerId);
+  const bounds=player?.image===src&&Array.isArray(player.viewBox)&&player.viewBox.length===4?player.viewBox:null;
+  let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
+  if(bounds){
+   const padX=Math.max(3,Math.round((bounds[2]-bounds[0])*.015));
+   const padY=Math.max(2,Math.round((bounds[3]-bounds[1])*.01));
+   sx=Math.max(0,bounds[0]-padX);sy=Math.max(0,bounds[1]-padY);
+   sw=Math.min(img.naturalWidth-sx,bounds[2]+padX-sx);
+   sh=Math.min(img.naturalHeight-sy,bounds[3]+padY-sy);
+  }
+  // The taller original image of goalkeeper Cata's teammate Khma Font is
+  // normalized to the other subjects by the same visible-area calculation.
+  const factor=(slot.photoScale||1)*(Number(player?.portraitFit)||1);
+  const targetH=(h+72*spot.scale)*factor;
+  const maxW=w*1.28*factor;
+  const dw=Math.min(maxW,targetH*(sw/sh)),dh=dw*sh/sw;
+  const bottom=y+h-30*spot.scale,dx=x+(w-dw)/2,dy=bottom-dh;
+  c.save();c.beginPath();c.rect(x-3*spot.scale,y-118*spot.scale,w+6*spot.scale,h+118*spot.scale);c.clip();
+  c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
+  c.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);c.restore();
  }}else{
   // Unfilled cards have a subdued generic placeholder; no third-party player artwork.
   c.save();c.globalAlpha=.22;c.fillStyle=col.text;c.beginPath();c.arc(spot.x,y+70*spot.scale,31*spot.scale,0,Math.PI*2);c.fill();lFillRounded(c,spot.x-55*spot.scale,y+100*spot.scale,110*spot.scale,61*spot.scale,[38*spot.scale,38*spot.scale,0,0],col.text);c.restore();
@@ -449,8 +468,17 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
   else{c.fillStyle='#ffffff';c.fillRect(fx,fy,fw,fh);lText(LFLAG_EMOJI[slot.flag]||slot.flag,fx+fw/2,fy+fh/2,18*spot.scale,{align:'center',dir:'ltr',color:'#121212',font:'Ario',maxWidth:fw,minSize:12*spot.scale})}
   c.restore();
  }
+ // The bottom name band must be part of the SAME rounded card, not a
+ // separate rectangle painted over its border.
  c.save();c.beginPath();c.roundRect(x,y,w,h,13*spot.scale);c.clip();c.fillStyle=col.cardName;c.fillRect(x,y+h-31*spot.scale,w,31*spot.scale);c.restore();
  if(slot.name.trim())lText(slot.name,spot.x,y+h-16.5*spot.scale,18*spot.scale,{color:s.cardText,dir:'rtl',font:s.fonts.player,maxWidth:w-10*spot.scale,minSize:10*spot.scale});
+ // Repaint just the lower sides and rounded bottom outline over the name band.
+ // The upper outline stays underneath the cutout, so no border crosses the face.
+ const radius=13*spot.scale,bandTop=y+h-31*spot.scale;
+ c.save();c.strokeStyle=col.cardBorder;c.lineWidth=3.8*spot.scale;c.lineJoin='round';
+ c.beginPath();c.moveTo(x,bandTop);c.lineTo(x,y+h-radius);
+ c.quadraticCurveTo(x,y+h,x+radius,y+h);c.lineTo(x+w-radius,y+h);
+ c.quadraticCurveTo(x+w,y+h,x+w,y+h-radius);c.lineTo(x+w,bandTop);c.stroke();c.restore();
  if(highlight&&!slot.image){const cy=y+91*spot.scale,r=22*spot.scale;c.save();c.beginPath();c.arc(spot.x,cy,r,0,Math.PI*2);c.fillStyle='rgba(255,255,255,.95)';c.fill();c.lineWidth=3*spot.scale;c.strokeStyle=col.cardBorder;c.stroke();c.strokeStyle=col.cardBorder;c.lineWidth=3.2*spot.scale;c.lineCap='round';c.beginPath();c.moveTo(spot.x-9*spot.scale,cy);c.lineTo(spot.x+9*spot.scale,cy);c.moveTo(spot.x,cy-9*spot.scale);c.lineTo(spot.x,cy+9*spot.scale);c.stroke();c.restore()}
 }
 function lFooter(){const c=lCtx,s=lState,col=s.colors;
@@ -472,7 +500,7 @@ function lDraw(highlight=true){if(!lState)return;lCtx.clearRect(0,0,LW,LH);lDraw
 function lRender(){if(lRAF)return;lRAF=requestAnimationFrame(()=>{lRAF=0;lPrepareImages();lDraw(true)});}
 function lSetupPointer(){
  let start=null,origin=null;const locate=e=>{const r=lCanvas.getBoundingClientRect();return{x:(e.clientX-r.left)*LW/r.width,y:(e.clientY-r.top)*LH/r.height}};
- const hit=e=>{const p=locate(e);return lSpotList().find(s=>{const w=180*s.scale,h=189*s.scale;return p.x>=s.x-w/2-8&&p.x<=s.x+w/2+8&&p.y>=s.y-57*s.scale&&p.y<=s.y+h+5})?.i??null};
+ const hit=e=>{const p=locate(e);return lSpotList().find(s=>{const w=180*s.scale,h=189*s.scale;return p.x>=s.x-w/2-8&&p.x<=s.x+w/2+8&&p.y>=s.y-118*s.scale&&p.y<=s.y+h+5})?.i??null};
  lCanvas.addEventListener('pointerdown',e=>{start=hit(e);origin=locate(e);if(start!==null){lCanvas.setPointerCapture?.(e.pointerId);lSetSelected(start)}});
  lCanvas.addEventListener('pointerup',e=>{const end=hit(e),at=locate(e),distance=origin?Math.hypot(at.x-origin.x,at.y-origin.y):0;
   if(start!==null&&end!==null&&start!==end&&distance>12){const from=start;lChange(()=>{const a=lState.slots[from],b=lState.slots[end];lState.slots[from]=b;lState.slots[end]=a});lSetSelected(end);lNotify('بازیکنان جابه‌جا شدند؛ جایگاه‌ها ثابت ماندند.');}
@@ -490,6 +518,23 @@ async function lDownload(scale=1){const buttons=[L('lineupDownload')];buttons.fo
  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='WoSoCenter-Lineup-'+lState.formation+'-'+(scale>1?'HQ-':'')+Date.now()+'.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
  lNotify('خروجی PNG با ابعاد '+out.width+'×'+out.height+' پیکسل ساخته شد.');
  }catch(e){lNotify('دریافت PNG انجام نشد: '+e.message,'error')}finally{buttons.forEach(b=>b.disabled=false);lRender();}}
+async function lDownloadOnePage(i){
+ if(!Number.isInteger(i)||i<0||i>=lPages.length)return;
+ lPages[lPageIndex].data=lClone(lState);
+ const oldState=lState,oldCtx=lCtx;
+ try{
+  lState=lValidate(lClone(lPages[i].data));await lWaitResources();
+  const out=document.createElement('canvas');out.width=2160;out.height=2700;
+  lCtx=out.getContext('2d',{alpha:false});lCtx.imageSmoothingEnabled=true;lCtx.imageSmoothingQuality='high';lCtx.scale(2,2);
+  lDraw(false);
+  const blob=await new Promise(resolve=>out.toBlob(resolve,'image/png'));
+  if(!blob)throw Error('تصویر ساخته نشد');
+  const uri=URL.createObjectURL(blob),a=document.createElement('a');a.href=uri;
+  a.download='WoSoCenter-Lineup-Page-'+String(i+1).padStart(2,'0')+'.png';document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(uri),45000);lNotify('فایل صفحه '+(i+1).toLocaleString('fa-IR')+' دانلود شد.');
+ }catch(e){lNotify('خطا در دریافت صفحه: '+e.message,'error')}
+ finally{lState=oldState;lCtx=oldCtx;lRender()}
+}
 async function lDownloadAllPages(){
  if(lPages.length===1){await lDownload(2);return;}
  const button=L('lineupPageDownloadAll');button.disabled=true;
@@ -503,7 +548,11 @@ async function lDownloadAllPages(){
    lDraw(false);
    const blob=await new Promise(resolve=>out.toBlob(resolve,'image/png'));
    if(!blob)throw Error('خطا در ساخت تصویر صفحه '+(i+1));
-   const uri=URL.createObjectURL(blob),a=document.createElement('a');a.href=uri;a.download='WoSoCenter-Lineup-Page-'+String(i+1).padStart(2,'0')+'.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(uri),45000);
+   const uri=URL.createObjectURL(blob),a=document.createElement('a');a.href=uri;
+   a.download='WoSoCenter-Lineup-Page-'+String(i+1).padStart(2,'0')+'.png';
+   document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(uri),45000);
+   // Each page is a separate PNG; a brief gap helps browsers register each download.
+   if(i<count-1)await new Promise(resolve=>setTimeout(resolve,280));
   }
   lNotify(count.toLocaleString('fa-IR')+' تصویر PNG جداگانه آماده دانلود شد.');
  }catch(e){lNotify('دانلود همه صفحات کامل نشد: '+e.message,'error')}
@@ -513,7 +562,7 @@ function lBlobToData(blob){return new Promise((resolve,reject)=>{const reader=ne
 async function lExport(){try{if(lPages[lPageIndex])lPages[lPageIndex].data=lClone(lState);const snapshot=lClone(lState),media={};for(const slot of snapshot.slots)for(const k of ['imageKey','flagKey'])if(slot[k]&&!media[slot[k]]){const blob=(await lGetMedia(slot[k]))||await fetch(slot[k]==='imageKey'?slot.image:slot.flagImage).then(r=>r.blob()).catch(()=>null);if(blob)media[slot[k]]=await lBlobToData(blob)}
  // Remove ephemeral blob: URLs from exported state; importer rehydrates from media dictionary.
  snapshot.slots.forEach(slot=>{if(slot.imageKey)slot.image='';if(slot.flagKey)slot.flagImage=''});
- const json=JSON.stringify({format:'wosocenter-lineup-v1',version:5.4,state:snapshot,pages:lPages,activePage:lPageIndex,media},null,2),url=URL.createObjectURL(new Blob([json],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='wosocenter-lineup-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);lNotify('پروژه با عکس‌های آپلودشده صادر شد.')}catch(e){lNotify('خطا در تهیه نسخه پشتیبان: '+e.message,'error')}}
+ const json=JSON.stringify({format:'wosocenter-lineup-v1',version:5.5,state:snapshot,pages:lPages,activePage:lPageIndex,media},null,2),url=URL.createObjectURL(new Blob([json],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='wosocenter-lineup-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);lNotify('پروژه با عکس‌های آپلودشده صادر شد.')}catch(e){lNotify('خطا در تهیه نسخه پشتیبان: '+e.message,'error')}}
 async function lImport(e){const file=e.target.files?.[0];if(!file)return;try{if(file.size>80*1024*1024)throw Error('فایل بسیار بزرگ است.');const obj=JSON.parse(await file.text());if(obj.format!=='wosocenter-lineup-v1'||!obj.state)throw Error('قالب فایل پروژه معتبر نیست.');const next=lValidate(obj.state),remap=new Map();for(const [old,data] of Object.entries(obj.media||{})){if(!/^data:image\/(png|jpeg|webp);base64,/.test(data))continue;const blob=await(await fetch(data)).blob(),stored=await lPutMedia(blob);remap.set(old,stored)}for(const slot of next.slots){if(slot.imageKey){const media=remap.get(slot.imageKey);if(media){slot.imageKey=media.key;slot.image=media.url}else{slot.imageKey='';slot.image=''}}if(slot.flagKey){const media=remap.get(slot.flagKey);if(media){slot.flagKey=media.key;slot.flagImage=media.url}else{slot.flagKey='';slot.flagImage=''}}}lPast.push(lClone(lState));if(Array.isArray(obj.pages)&&obj.pages.length){lPages=obj.pages.slice(0,40).map((p,i)=>({id:String(p.id||'p'+i),name:String(p.name||'صفحه '+(i+1)),data:lValidate(p.data||next)}));lPageIndex=Math.max(0,Math.min(lPages.length-1,Number(obj.activePage)||0));lState=lClone(lPages[lPageIndex].data);}else{lPages=[{id:'p1',name:'صفحه ۱',data:next}];lPageIndex=0;lState=next;}lSelected=0;lSave();lSync();lRender();lNotify('پروژه با موفقیت وارد شد.')}catch(err){lNotify('فایل پروژه قابل بازیابی نیست: '+err.message,'error')}e.target.value='';}
 async function lInit(){
  const themesafe=(()=>{try{return localStorage.getItem('wosocenter-ui-theme')==='light'}catch{return false}})();document.documentElement.dataset.theme=themesafe?'light':'dark';

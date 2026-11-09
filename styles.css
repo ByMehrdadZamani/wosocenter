@@ -169,3 +169,22 @@ label.pattern-toggle input[type="checkbox"]{position:absolute;opacity:0;top:50%;
  .pages-dialog .page-gallery .page-overlay{padding:22px 9px 9px}
  .pattern-dialog .asset-results.pattern-grid .pattern-item{aspect-ratio:4/5}
 }
+
+/* v5.5: fixture pages match the lineup manager's six-button gallery. */
+.page-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.page-gallery .page-tile{position:relative;padding:8px;border-radius:13px;background:var(--input);border:1px solid var(--edge);box-shadow:none}
+.page-gallery .page-tile.current{border:2px solid var(--violet);box-shadow:none}
+.page-gallery .page-select{display:flex;flex-direction:column;align-items:center;gap:5px;background:transparent;border:0;border-radius:9px;color:var(--text);text-align:center;padding:0}
+.page-gallery .page-select:hover .page-thumb{transform:none}
+.page-gallery .page-thumb{width:min(100%,190px);height:auto;aspect-ratio:4/5;border-radius:8px;object-fit:contain}
+.page-gallery .page-name{font-size:12px;line-height:1.5;max-width:100%;overflow-wrap:anywhere}
+.page-gallery .page-sub{font-size:10px;color:var(--muted);line-height:1.5}
+.page-gallery .page-actions{position:static;display:flex;gap:4px;justify-content:center;margin-top:7px;flex-wrap:nowrap;border:0;background:transparent}
+.page-gallery .page-actions button{flex:1 1 0;min-width:0;width:auto;height:auto;padding:5px 0;font-size:14px;line-height:1.2;border:1px solid var(--edge);border-radius:8px;background:var(--input);color:var(--text);backdrop-filter:none}
+.page-gallery .page-actions button:hover{background:var(--violet);color:#fff}
+@media(max-width:550px){
+ .page-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .page-gallery .page-actions{gap:2px}
+ .page-gallery .page-actions button{width:auto;height:auto;font-size:12px;padding:4px 0}
+ .page-gallery .page-name{font-size:11px}
+}

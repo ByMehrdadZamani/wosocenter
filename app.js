@@ -105,7 +105,7 @@ function displayPage(){activatePageState();syncGlobals();refreshGames();refreshP
 function refreshPages(){
  const tabs=$('pageTabs');if(!tabs)return;
  $('pageTotal').textContent=`${project.pages.length.toLocaleString('fa-IR')} صفحه`;
- tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}" aria-label="انتخاب و ویرایش ${esc(pg.title)}"><canvas class="page-thumb" width="540" height="675" data-thumb-id="${esc(pg.id)}" aria-hidden="true"></canvas>${pg.id===project.activePageId?'<span class="page-active-mark">فعال ✓</span>':''}<span class="page-overlay"><span class="page-number">${(i+1).toLocaleString('fa-IR')}</span><span class="page-title-wrap"><span class="page-title">${esc(pg.title)}</span><small>${pg.data.matches.length.toLocaleString('fa-IR')} بازی · لمس برای ویرایش</small></span></span></button><div class="page-actions"><button type="button" data-page-clone="${esc(pg.id)}" title="دوپلیکیت این صفحه" aria-label="کپی ${esc(pg.title)}">⧉</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف این صفحه" aria-label="حذف ${esc(pg.title)}" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
+ tabs.innerHTML=project.pages.map((pg,i)=>`<div class="page-tile ${pg.id===project.activePageId?'current':''}"><button type="button" class="page-select" data-page-select="${esc(pg.id)}" aria-label="انتخاب صفحه ${esc(pg.title)}"><canvas class="page-thumb" width="540" height="675" data-thumb-id="${esc(pg.id)}" aria-hidden="true"></canvas><strong class="page-name">${esc(pg.title)}</strong><small class="page-sub">${pg.data.matches.length.toLocaleString('fa-IR')} بازی ${pg.id===project.activePageId?'· صفحه فعال':''}</small></button><div class="page-actions"><button type="button" data-page-move="${esc(pg.id)}" data-page-dir="-1" title="صفحه قبلی" ${i===0?'disabled':''}>↑</button><button type="button" data-page-move="${esc(pg.id)}" data-page-dir="1" title="صفحه بعدی" ${i===project.pages.length-1?'disabled':''}>↓</button><button type="button" data-page-rename="${esc(pg.id)}" title="تغییر نام">✎</button><button type="button" data-page-clone="${esc(pg.id)}" title="تکثیر">⧉</button><button type="button" data-page-download="${esc(pg.id)}" title="دانلود این صفحه" aria-label="دانلود صفحه ${i+1}">⇩</button><button type="button" data-page-delete="${esc(pg.id)}" title="حذف" ${project.pages.length===1?'disabled':''}>×</button></div></div>`).join('');
  $('addPageBtn').disabled=project.pages.length>=40;
  if($('pagesDialog').open)void refreshPageThumbs();
 }
@@ -154,6 +154,32 @@ function addPage(fromId,duplicate=false){
  const pg={id:nextPageId(),title:`صفحه ${project.pages.length+1}`,data:cleanState(copy)};
  const idx=project.pages.findIndex(p=>p.id===source.id);
  project.pages.splice(idx+1,0,pg);project.activePageId=pg.id;displayPage();commitHistory(duplicate?'کپی کامل صفحه':'افزودن صفحه جدید');
+}
+function moveConductorPage(id,delta){
+ const index=project.pages.findIndex(p=>p.id===id),target=index+delta;
+ if(index<0||target<0||target>=project.pages.length)return;
+ const [page]=project.pages.splice(index,1);project.pages.splice(target,0,page);
+ displayPage();commitHistory('تغییر ترتیب صفحات');
+}
+function renameConductorPage(id){
+ const pg=project.pages.find(p=>p.id===id);if(!pg)return;
+ const title=prompt('نام صفحه:',pg.title);
+ if(!title?.trim())return;
+ pg.title=title.trim().slice(0,50);displayPage();commitHistory('تغییر نام صفحه');
+}
+async function downloadConductorPage(id){
+ const page=project.pages.find(p=>p.id===id);if(!page)return;
+ try{
+  await preloadForPage(page.data);
+  const families=new Set([page.data.dayFont,page.data.dateFont,page.data.footerFont,...page.data.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);
+  await loadFontFamilies([...families]);
+  const output=document.createElement('canvas');output.width=WIDTH;output.height=HEIGHT;
+  drawPoster(output,page.data);
+  const blob=await new Promise(resolve=>output.toBlob(resolve,'image/png'));
+  if(!blob)throw new Error('PNG export failed');
+  downloadBlob(blob,'WoSoCenter-Fixture-Page-'+String(project.pages.indexOf(page)+1).padStart(2,'0')+'.png');
+  message('تصویر صفحه به‌صورت PNG جداگانه دانلود شد.');
+ }catch(e){console.error(e);message('خطا در دریافت تصویر این صفحه.','error')}
 }
 function deletePage(id){
  if(project.pages.length<=1)return;
@@ -452,7 +478,15 @@ function attachEvents(){
   $('undoBtn').addEventListener('click',undo);$('redoBtn').addEventListener('click',redo);$('historyUndo').addEventListener('click',undo);$('historyRedo').addEventListener('click',redo);$('showHistoryBtn').addEventListener('click',()=>{switchTab('history');requestAnimationFrame(()=>$('historyTab').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));});
   $('openPagesBtn').addEventListener('click',openPages);
   $('addPageBtn').addEventListener('click',()=>{addPage(project.activePageId,false);$('pagesDialog').close();document.querySelector('.preview-area').scrollIntoView({behavior:'smooth',block:'start'});});
-  $('pageTabs').addEventListener('click',e=>{const del=e.target.closest('[data-page-delete]'),dup=e.target.closest('[data-page-clone]'),pick=e.target.closest('[data-page-select]');if(del)deletePage(del.dataset.pageDelete);else if(dup)addPage(dup.dataset.pageClone,true);else if(pick){if(project.activePageId!==pick.dataset.pageSelect){project.activePageId=pick.dataset.pageSelect;displayPage();commitHistory('رفتن به صفحه '+activePage().title);} $('pagesDialog').close();document.querySelector('.preview-area').scrollIntoView({behavior:'smooth',block:'start'});}});
+  $('pageTabs').addEventListener('click',e=>{
+   const dl=e.target.closest('[data-page-download]'),mv=e.target.closest('[data-page-move]'),rename=e.target.closest('[data-page-rename]'),del=e.target.closest('[data-page-delete]'),dup=e.target.closest('[data-page-clone]'),pick=e.target.closest('[data-page-select]');
+   if(dl){void downloadConductorPage(dl.dataset.pageDownload)}
+   else if(mv){moveConductorPage(mv.dataset.pageMove,Number(mv.dataset.pageDir))}
+   else if(rename){renameConductorPage(rename.dataset.pageRename)}
+   else if(del){deletePage(del.dataset.pageDelete)}
+   else if(dup){addPage(dup.dataset.pageClone,true)}
+   else if(pick){if(project.activePageId!==pick.dataset.pageSelect){project.activePageId=pick.dataset.pageSelect;displayPage();commitHistory('رفتن به صفحه '+activePage().title);} $('pagesDialog').close();document.querySelector('.preview-area').scrollIntoView({behavior:'smooth',block:'start'});}
+ });
   $('historyList').addEventListener('click',e=>{const b=e.target.closest('[data-revision]');if(b)restoreHistory(Number(b.dataset.revision));});
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();}else if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='y'){e.preventDefault();redo();}});
   $('addGameBtn').addEventListener('click',()=>{if(state.matches.length>=MAX_GAMES)return;const last=state.matches.at(-1);state.matches.push({...last,league:'',time:'',leftTeam:'',rightTeam:'',leftBgInitialized:false,rightBgInitialized:false,leftBgLocked:state.paletteId!==''&&state.paletteId!=='classic',rightBgLocked:state.paletteId!==''&&state.paletteId!=='classic'});refreshGames();commitHistory(`افزودن بازی ${state.matches.length}`);});
