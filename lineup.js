@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v6.2 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v6.3 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1',LPAGES_STORE='wosocenter-lineup-pages-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -138,7 +138,7 @@ function lFresh(team='barcelona'){
  headerLeftId:'stwn-wyl',paletteId:team==='mixed'?'woso':team,colors:lClone(LDEFAULT_COLORS),
  backgroundPatternType:'logo',backgroundPatternId:'',formation:'4-3-3',league:'لیگ قهرمانان اروپا',week:'هفته ۲۸',matchup:'',matchupManual:false,time:'۲۲:۳۰',
  channel:'WoSoCenter',telegramTop:true,telegramBottom:true,watermarkCustom:false,title:'شماتیک ترکیب',coach:'پره رومئو',stadium:'یوهان کرایف',mixColor:'#f2bc27',
- cardSecond:team==='barcelona',cardText:'#f2bc27',fontAll:'Ario',fonts:{header:'Ario',league:'Ario',match:'Ario',player:'Ario',title:'Ario',footer:'Ario',coach:'Ario',stadium:'Ario',channel:'Ario'},slots:lNewSlots(team)};
+ cardSecond:team==='barcelona',cardText:'#f2bc27',fontAll:'Ario',portraitCalibrationVersion:3,fonts:{header:'Ario',league:'Ario',match:'Ario',player:'Ario',title:'Ario',footer:'Ario',coach:'Ario',stadium:'Ario',channel:'Ario'},slots:lNewSlots(team)};
 }
 function lValidate(raw){
  const def=lFresh(),s={...def,...raw};
@@ -147,6 +147,12 @@ function lValidate(raw){
  s.formation=LFORMATION_NAMES.includes(raw?.formation)?raw.formation:'4-3-3';
  s.teamId=String(s.teamId||'barcelona');s.backgroundPatternType=s.backgroundPatternType==='graphic'?'graphic':'logo';s.backgroundPatternId=String(s.backgroundPatternId||'');
  s.slots=Array.from({length:11},(_,i)=>{const inp=raw?.slots?.[i]||def.slots[i];const slot={...lNewSlots('mixed')[i],...inp,name:String(inp?.name||'').slice(0,65),positionOverride:String(inp?.positionOverride||'').slice(0,12),photoScale:Math.min(1.45,Math.max(.7,Number(inp?.photoScale)||1))};const p=lFindPlayer(slot.playerId);if(p&&!slot.flagCustomized){slot.flag=p.flag||'';slot.flagImage='';}return slot;});
+ // v6.3: discard only historical manual zoom values from pre-calibration
+ // snapshots; future user changes to the zoom slider remain intentional.
+ if(raw?.portraitCalibrationVersion!==3){
+  for(const slot of s.slots){const p=lFindPlayer(slot.playerId);if(p&&slot.image===p.image&&p.lineupPortrait)slot.photoScale=1;}
+ }
+ s.portraitCalibrationVersion=3;
  for(const key of ['league','week','matchup','time','channel','title','coach','stadium'])s[key]=String(s[key]??def[key]).slice(0,110);
  // One-time color refinement: migrate only untouched v5.0 Barcelona template shades.
  if(raw?.colors&&s.paletteId==='barcelona'&&s.colors.header==='#920a36'&&s.colors.upper==='#0e3562'&&s.colors.lower==='#970d39'&&s.colors.accent==='#e6aa22'&&s.colors.side==='#edb824'){
@@ -179,12 +185,17 @@ function lReady(src){const o=lImgCache.get(src);return o?.loaded?o.image:null;}
 function lPrepareImages(){
  const urls=[...(lState.backgroundPatternType==='graphic'?[lPatterns.find(p=>p.id===lState.backgroundPatternId)?.image]:[]),'assets/lineup/combined-title.png','assets/lineup/woso-emblem-full.png','assets/brand/logo-alpha.webp'];
  for(const id of [...(lState.backgroundPatternType==='graphic'?[]:[lState.backgroundLogoId]),lState.headerRightId,lState.headerLeftId]){const t=lFindTeam(id);if(t)urls.push(t.image)}
- for(const slot of lState.slots){if(slot.image)urls.push(slot.image);if(slot.flagImage)urls.push(slot.flagImage);const f=lNationalFlags.find(x=>x.id===slot.flag);if(f?.image)urls.push(f.image)}
+ for(const slot of lState.slots){
+  if(slot.image)urls.push(slot.image);
+  const p=lFindPlayer(slot.playerId);
+  if(p?.lineupPortrait&&slot.image===p.image)urls.push(p.lineupPortrait);
+  if(slot.flagImage)urls.push(slot.flagImage);const f=lNationalFlags.find(x=>x.id===slot.flag);if(f?.image)urls.push(f.image)
+ }
  urls.forEach(lImage);
 }
 function lWarmPlayerImages(){
  const roster=lPlayers.filter(p=>lState?.teamId==='mixed'||p.teamId===lState?.teamId);
- const warm=()=>{for(const p of roster){if(!p.image||lImgCache.has(p.image))continue;lImage(p.image)}};
+ const warm=()=>{for(const p of roster){if(p.image&&!lImgCache.has(p.image))lImage(p.image);if(p.lineupPortrait&&!lImgCache.has(p.lineupPortrait))lImage(p.lineupPortrait)}};
  if('requestIdleCallback' in window)requestIdleCallback(warm,{timeout:1800});else setTimeout(warm,350);
 }
 async function lMediaDB(){
@@ -580,26 +591,26 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
  c.restore();
  // Draw the frame underneath the transparent player cutout: no line across the forehead.
  c.save();c.beginPath();c.roundRect(x,y,w,h,13*spot.scale);c.strokeStyle=col.cardBorder;c.lineWidth=3.8*spot.scale;c.stroke();c.restore();
- const src=slot.image;if(src){const img=lReady(src)||lImage(src);if(img?.complete&&img.naturalWidth){
-  // v6.2: Per-player landmarks, calibrated on all 21 transparent PNG sources.
-  // Equal interpupillary spacing (36 poster pixels) and aligned BROWS for
-  // every official player. Compact cards shrink, faces do not.
-  // Custom user zoom remains a deliberate, independent override.
+ const src=slot.image;if(src){
   const player=lFindPlayer(slot.playerId);
-  const face=player?.image===src&&Array.isArray(player.portraitFace)&&player.portraitFace.length===4?player.portraitFace:null;
+  const standardized=player?.image===src&&player?.lineupPortrait?player.lineupPortrait:null;
+  const calibratedImg=standardized?lReady(standardized)||lImage(standardized):null;
+  const useCalibrated=!!(calibratedImg?.complete&&calibratedImg.naturalWidth);
+  // Keep older projects usable even if the new PNGs were not uploaded yet.
+  const img=useCalibrated?calibratedImg:(lReady(src)||lImage(src));
+  if(img?.complete&&img.naturalWidth){
+  // v6.3: 21 actual transparent portrait cutouts, pre-calibrated to Patri's
+  // 4-3-3 head. The image scale NEVER depends on formation/card size.
+  // The crown deliberately breaks above the card in EVERY formation.
   const factor=slot.photoScale||1;
   let dx,dy,dw,dh;
-  if(face){
-   const eyeDistance=Number(player.portraitEyeDistance)||face[2]*.375;
-   const scale=(36/eyeDistance)*factor;
-   dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
-   const browY=Number.isFinite(player.portraitBrowY)?player.portraitBrowY:face[1]+face[3]*.275;
-   dx=spot.x-(face[0]+face[2]/2)*scale;
-   // Eyebrows sit a few pixels below the card's upper edge, regardless of
-   // each player's original crop, posture, or transparent margins.
-   dy=y+3-browY*scale;
+  const crownRise=spot.scale<=.71?37:42;
+  if(useCalibrated){
+   dw=300*factor;dh=310*factor;
+   dx=spot.x-150*factor;
+   dy=y-crownRise-64*factor;
   }else{
-   // Backward-compatible behavior for custom pictures / other future teams.
+   // Nonofficial/custom portraits keep their original fallback renderer.
    const bounds=player?.image===src&&Array.isArray(player.viewBox)&&player.viewBox.length===4?player.viewBox:null;
    const sx=bounds?bounds[0]:0,sy=bounds?bounds[1]:0;
    const sw=bounds?Math.max(1,bounds[2]-bounds[0]):img.naturalWidth;
@@ -609,22 +620,16 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
    dx=spot.x-(sx+sw*.5)*scale;
    dy=y-(Number(player?.portraitHeadRise)||50)*spot.scale-sy*scale;
   }
-  // In dense 4/5-line formations, keep the top of hair from painting across
-  // another card above it. This never alters face or eyebrow scale/position.
-  const horizontallyOverlappingAbove=lSpotList().filter(other=>
-   other.i!==spot.i&&other.y<y&&
-   Math.min(spot.x+w/2,other.x+90*other.scale)-Math.max(spot.x-w/2,other.x-90*other.scale)>8
-  );
-  const safeTop=horizontallyOverlappingAbove.length
-   ?Math.max(...horizontallyOverlappingAbove.map(other=>other.y+189*other.scale+3))
-   :y-100*spot.scale;
-  // Crop ONLY the display area: clothes stay INSIDE side borders and above
-  // the name band; the player's hair can extend outside the top edge.
-  // This resolves the oversized upper body and border-overlap problem.
-  const borderInset=4*spot.scale;
+  // Do NOT clip the crown to another row; geometry keeps a positive gap
+  // between each previous card's bottom and the next portrait's hair.
+  const borderInset=3.2*spot.scale;
   const bandY=y+h-31*spot.scale;
-  const cropTop=Math.min(bandY-1,Math.max(y-100*spot.scale,safeTop));
-  c.save();c.beginPath();c.rect(x+borderInset,cropTop,w-2*borderInset,bandY-cropTop);c.clip();
+  const cropTop=useCalibrated?y-crownRise-3:y-100*spot.scale;
+  c.save();c.beginPath();c.rect(x+borderInset,cropTop,w-2*borderInset,bandY-cropTop);
+  // Give hair and the full head a slight horizontal overflow above the
+  // shoulders; sleeves and jersey remain confined to the card frame.
+  if(useCalibrated)c.rect(x-14,cropTop,w+28,Math.min(bandY,y+65)-cropTop);
+  c.clip();
   c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
   c.drawImage(img,dx,dy,dw,dh);c.restore();
  }}else{
@@ -686,7 +691,7 @@ function lSetupPointer(){
  lCanvas.setAttribute('tabindex','0');lCanvas.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();lPlayerDialogShow(lSelected)}});
 }
 async function lLoadFont(id){if(!document.fonts)return;try{await Promise.race([document.fonts.load(`700 24px "${lFont(id)}"`),new Promise(resolve=>setTimeout(resolve,3500))]);lRender()}catch{}}
-async function lWaitResources(){const fonts=Object.values(lState.fonts).map(lLoadFont);const paths=[lFindTeam(lState.headerRightId)?.image,lFindTeam(lState.headerLeftId)?.image,...(lState.backgroundPatternType==='graphic'?[]:[lFindTeam(lState.backgroundLogoId)?.image]),lState.backgroundPatternType==='graphic'?lPatterns.find(p=>p.id===lState.backgroundPatternId)?.image:null,...lState.slots.flatMap(x=>[x.image,x.flagImage,lNationalFlags.find(f=>f.id===x.flag)?.image]),'assets/lineup/woso-emblem-full.png','assets/lineup/combined-title.png'].filter(Boolean);await Promise.race([Promise.all([Promise.all(fonts),...paths.map(path=>new Promise(resolve=>{const img=lImage(path);if(img.complete){resolve();return}img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))]),new Promise(resolve=>setTimeout(resolve,5000))]);}
+async function lWaitResources(){const fonts=Object.values(lState.fonts).map(lLoadFont);const paths=[lFindTeam(lState.headerRightId)?.image,lFindTeam(lState.headerLeftId)?.image,...(lState.backgroundPatternType==='graphic'?[]:[lFindTeam(lState.backgroundLogoId)?.image]),lState.backgroundPatternType==='graphic'?lPatterns.find(p=>p.id===lState.backgroundPatternId)?.image:null,...lState.slots.flatMap(x=>{const p=lFindPlayer(x.playerId);return[x.image,p?.image===x.image?p?.lineupPortrait:null,x.flagImage,lNationalFlags.find(f=>f.id===x.flag)?.image]}),'assets/lineup/woso-emblem-full.png','assets/lineup/combined-title.png'].filter(Boolean);await Promise.race([Promise.all([Promise.all(fonts),...paths.map(path=>new Promise(resolve=>{const img=lImage(path);if(img.complete){resolve();return}img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))]),new Promise(resolve=>setTimeout(resolve,5000))]);}
 async function lDownload(scale=1){const buttons=[L('lineupDownload')];buttons.forEach(b=>b.disabled=true);
  try{await lWaitResources();const out=document.createElement('canvas');out.width=LW*scale;out.height=LH*scale;const old=lCtx;lCtx=out.getContext('2d',{alpha:false});lCtx.imageSmoothingEnabled=true;lCtx.imageSmoothingQuality='high';lCtx.scale(scale,scale);
  try{lDraw(false)}finally{lCtx=old}

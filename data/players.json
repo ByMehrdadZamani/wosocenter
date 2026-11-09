@@ -26,7 +26,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-03.webp",
     "portraitBrowY": 242.0,
-    "portraitEyeDistance": 127
+    "portraitEyeDistance": 127,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-03.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 97.1,
+      "headHeight": 114.5,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-04",
@@ -55,7 +62,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-04.webp",
     "portraitBrowY": 418.8,
-    "portraitEyeDistance": 212
+    "portraitEyeDistance": 212,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-04.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 96.2,
+      "headHeight": 115.6,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-05",
@@ -84,7 +98,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-05.webp",
     "portraitBrowY": 245.6,
-    "portraitEyeDistance": 125
+    "portraitEyeDistance": 125,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-05.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 101.1,
+      "headHeight": 109.9,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-07",
@@ -113,7 +134,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-07.webp",
     "portraitBrowY": 248.5,
-    "portraitEyeDistance": 125.6
+    "portraitEyeDistance": 125.6,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-07.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 96.0,
+      "headHeight": 115.8,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-08",
@@ -142,7 +170,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-08.webp",
     "portraitBrowY": 242.8,
-    "portraitEyeDistance": 126
+    "portraitEyeDistance": 126,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-08.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 97.3,
+      "headHeight": 114.3,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-09",
@@ -171,7 +206,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-09.webp",
     "portraitBrowY": 267.5,
-    "portraitEyeDistance": 127
+    "portraitEyeDistance": 127,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-09.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 95.5,
+      "headHeight": 116.5,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-10",
@@ -200,7 +242,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-10.webp",
     "portraitBrowY": 198.2,
-    "portraitEyeDistance": 125
+    "portraitEyeDistance": 125,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-10.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 99.2,
+      "headHeight": 112.1,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-11",
@@ -229,7 +278,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-11.webp",
     "portraitBrowY": 258.5,
-    "portraitEyeDistance": 118
+    "portraitEyeDistance": 118,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-11.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 99.0,
+      "headHeight": 112.3,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-12",
@@ -258,7 +314,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-12.webp",
     "portraitBrowY": 284.1,
-    "portraitEyeDistance": 110
+    "portraitEyeDistance": 110,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-12.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 98.2,
+      "headHeight": 131.0,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-13",
@@ -287,7 +350,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-13.webp",
     "portraitBrowY": 218.5,
-    "portraitEyeDistance": 123
+    "portraitEyeDistance": 123,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-13.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 99.7,
+      "headHeight": 111.5,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-14",
@@ -316,7 +386,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-14.webp",
     "portraitBrowY": 229.0,
-    "portraitEyeDistance": 126
+    "portraitEyeDistance": 126,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-14.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 98.2,
+      "headHeight": 113.2,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-16",
@@ -345,7 +422,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-16.webp",
     "portraitBrowY": 248.3,
-    "portraitEyeDistance": 116
+    "portraitEyeDistance": 116,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-16.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 98.0,
+      "headHeight": 113.4,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-17",
@@ -374,7 +458,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-17.webp",
     "portraitBrowY": 191.8,
-    "portraitEyeDistance": 115.1
+    "portraitEyeDistance": 115.1,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-17.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 97.8,
+      "headHeight": 113.6,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-18",
@@ -403,7 +494,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-18.webp",
     "portraitBrowY": 199.7,
-    "portraitEyeDistance": 132
+    "portraitEyeDistance": 132,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-18.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 102.6,
+      "headHeight": 108.4,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-19",
@@ -432,7 +530,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-19.webp",
     "portraitBrowY": 233.2,
-    "portraitEyeDistance": 115
+    "portraitEyeDistance": 115,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-19.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 101.5,
+      "headHeight": 109.6,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-21",
@@ -461,7 +566,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-21.webp",
     "portraitBrowY": 233.4,
-    "portraitEyeDistance": 133
+    "portraitEyeDistance": 133,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-21.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 97.6,
+      "headHeight": 113.9,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-22",
@@ -490,7 +602,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-22.webp",
     "portraitBrowY": 253.8,
-    "portraitEyeDistance": 122.2
+    "portraitEyeDistance": 122.2,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-22.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 98.2,
+      "headHeight": 113.3,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-23",
@@ -519,7 +638,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-23.webp",
     "portraitBrowY": 280.8,
-    "portraitEyeDistance": 129
+    "portraitEyeDistance": 129,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-23.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 97.4,
+      "headHeight": 130.7,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-24",
@@ -548,7 +674,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-24.webp",
     "portraitBrowY": 198.6,
-    "portraitEyeDistance": 119
+    "portraitEyeDistance": 119,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-24.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 102.1,
+      "headHeight": 108.9,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-25",
@@ -577,7 +710,14 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-25.webp",
     "portraitBrowY": 219.5,
-    "portraitEyeDistance": 118
+    "portraitEyeDistance": 118,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-25.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 100.3,
+      "headHeight": 110.8,
+      "crownY": 64
+    }
   },
   {
     "id": "barca-26",
@@ -606,6 +746,13 @@
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-26.webp",
     "portraitBrowY": 242.8,
-    "portraitEyeDistance": 117
+    "portraitEyeDistance": 117,
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-26.png",
+    "lineupCalibration": {
+      "reference": "barca-24 / 4-3-3",
+      "headWidth": 96.3,
+      "headHeight": 115.5,
+      "crownY": 64
+    }
   }
 ]
