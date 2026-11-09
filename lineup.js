@@ -194,9 +194,10 @@ function lPrepareImages(){
  urls.forEach(lImage);
 }
 function lWarmPlayerImages(){
- const roster=lPlayers.filter(p=>lState?.teamId==='mixed'||p.teamId===lState?.teamId);
- const warm=()=>{for(const p of roster){if(p.image&&!lImgCache.has(p.image))lImage(p.image);if(p.lineupPortrait&&!lImgCache.has(p.lineupPortrait))lImage(p.lineupPortrait)}};
- if('requestIdleCallback' in window)requestIdleCallback(warm,{timeout:1800});else setTimeout(warm,350);
+ // Performance-only change: on-demand loading replaces eager downloads of
+ // the entire 21-player roster. The drawing/calibration system is unchanged.
+ // Visible cards still load through lPrepareImages/lCard; player picker uses
+ // existing lazy-loaded thumbnail elements.
 }
 async function lMediaDB(){
  if(!('indexedDB'in window))return null;
