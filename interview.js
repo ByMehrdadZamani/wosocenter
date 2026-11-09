@@ -129,7 +129,7 @@ function paintPoster(c,which){
   drawTelegram(c,xx,fy-14,state.telegramColor);c.fillStyle=state.footerColor;c.fillText(ft,xx+iconW+gap,fy);c.restore();
  }
 }
-function draw(){scheduled=false;if(!photo.complete||!photo.naturalWidth)return;paginate();paintPoster(ctx,pageIndex);$('#pageCounter').textContent=`صفحه ${pageIndex+1} از ${pages.length}`;$('#pageTotal').textContent=`${pages.length} صفحه`;if($('#pagesDialog').open)refreshPageGallery();$('#previousPage').disabled=pageIndex<=0;$('#nextPage').disabled=pageIndex>=pages.length-1;
+function draw(){scheduled=false;if(!photo.complete||!photo.naturalWidth)return;paginate();paintPoster(ctx,pageIndex);$('#pageCounter').textContent=`صفحه ${pageIndex+1} از ${pages.length}`;$('#pageTotal').textContent=`${pages.length} صفحه`;syncManualEditing();if($('#pagesDialog').open)refreshPageGallery();$('#previousPage').disabled=pageIndex<=0;$('#nextPage').disabled=pageIndex>=pages.length-1;
  const dots=$('#pageDots');dots.replaceChildren();pages.forEach((_,i)=>{const b=document.createElement('button');b.className='page-dot'+(i===pageIndex?' active':'');b.type='button';b.title=`صفحه ${i+1}`;b.setAttribute('aria-label',b.title);b.onclick=()=>{pageIndex=i;scheduleRender();};dots.append(b);});
 }
 function scheduleRender(){if(historyReady&&!restoring)queueHistory();if(scheduled)return;scheduled=true;requestAnimationFrame(draw);}
@@ -196,7 +196,7 @@ const stripeHolder=$('#stripeColors');for(let i=0;i<6;i++){const wrap=document.c
 function paletteMap(p){return{questionColor:p.accent||'#f5d44e',answerColor:p.text||'#ffffff',footerColor:p.text||'#ffffff',telegramColor:p.accent||'#e4bd54',panelColor:p.lower||'#000000',stripes:[p.header,p.upper,p.accent,p.card1,p.card2,p.lower].map(x=>hexOK(x)?x:'#000000')};}
 const ORIGINAL_PALETTE={id:'ready:interview-original',name:'اصلی مصاحبه (پیش‌فرض)',header:'#123f6b',upper:'#d3a54a',accent:'#ff4a0a',card1:'#ec50af',card2:'#06bd65',lower:'#f33345',text:'#ffffff',interviewOriginal:true};
 function drawPalettes(){const holder=$('#paletteList');holder.replaceChildren();palettes.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='palette-choice'+(state.palette===p.id?' selected':'');const colors=[p.header,p.upper,p.accent,p.card1,p.card2,p.lower];const swatches=document.createElement('span');swatches.className='swatches';colors.forEach(x=>{const i=document.createElement('i');i.style.background=x;swatches.append(i);});const name=document.createElement('strong');name.textContent=p.name;b.append(swatches,name);b.onclick=()=>{Object.assign(state,p.interviewOriginal?{questionColor:DEFAULT.questionColor,answerColor:DEFAULT.answerColor,footerColor:DEFAULT.footerColor,telegramColor:DEFAULT.telegramColor,panelColor:DEFAULT.panelColor,panelOpacity:DEFAULT.panelOpacity,panelRadius:DEFAULT.panelRadius,stripes:[...DEFAULT_STRIPES]}:paletteMap(p));state.palette=p.id;updateColorButtons();drawPalettes();updateAlignButtons();$$('[data-number-input]').forEach(input=>input.value=state[input.dataset.numberInput]);scheduleRender();};holder.append(b);});}
-fetch('data/lineup-ready-palettes.json').then(x=>x.ok?x.json():Promise.reject()).then(data=>{palettes=[ORIGINAL_PALETTE,...data];fetch('data/lineup-palettes.json').then(r=>r.ok?r.json():[]).then(all=>{const barca=all.find(x=>x.id==='barcelona');if(barca)palettes.splice(1,0,{...barca,id:'lineup:barcelona',name:'بارسلونا (پالت شماتیک‌ساز)'});drawPalettes();}).catch(drawPalettes);drawPalettes();}).catch(()=>{palettes=[ORIGINAL_PALETTE,{id:'ready:woso',name:'ووسو سنتر',header:'#050207',upper:'#320a3e',accent:'#ae5acf',card1:'#783695',card2:'#dfb6e7',lower:'#050207',text:'#fff4ff'}];drawPalettes();});
+fetch('data/lineup-ready-palettes.json').then(x=>x.ok?x.json():Promise.reject()).then(data=>{palettes=[ORIGINAL_PALETTE,...data];drawPalettes();}).catch(()=>{palettes=[ORIGINAL_PALETTE,{id:'ready:woso',name:'ووسو سنتر',header:'#050207',upper:'#320a3e',accent:'#ae5acf',card1:'#783695',card2:'#dfb6e7',lower:'#050207',text:'#fff4ff'}];drawPalettes();});
 // Photo crop, pixel-perfect coordinate system (1080 x 1350) shared by preview and export.
 const cropC=$('#cropCanvas'),cropCtx=cropC.getContext('2d');
 function drawCrop(){if(!cropDraft||!cropImage)return;cropCtx.clearRect(0,0,540,675);paintImage(cropCtx,cropImage,540,675,cropDraft);}
@@ -238,7 +238,7 @@ $('#importProject').onclick=()=>$('#projectUpload').click();$('#projectUpload').
  state=next;$('#questionEditor').innerHTML=cleanRich(data.question);$('#answerEditor').innerHTML=cleanRich(data.answer);refreshControls();loadPhoto(typeof state.photoSrc==='string'&& (state.photoSrc.startsWith('data:image/')||state.photoSrc.startsWith('assets/interview/'))?state.photoSrc:DEFAULT.photoSrc);pageIndex=0;changed('فایل پروژه با موفقیت بازیابی شد.');
  }catch(err){changed('فایل پروژه معتبر نیست یا بسیار بزرگ است.');}};
 function refreshControls(){for(const el of $$('[data-number]')){const key=el.dataset.number;el.value=state[key];const lbl=$('#'+key+'Label');if(lbl)lbl.textContent=state[key]+unitLabel(key);}$('#footerText').value=state.footerText;$('#currentLogo').src=LOGOS.find(l=>l.id===state.logo).src;for(const kind of ['question','answer','footer'])$('#font'+kind[0].toUpperCase()+kind.slice(1)).textContent=state[kind+'Font']+' ▾';updateColorButtons();drawPalettes();updateAlignButtons();$$('[data-number-input]').forEach(input=>input.value=state[input.dataset.numberInput]);scheduleRender();}
-$('#resetProject').onclick=()=>{if(!confirm('متن و تنظیمات مصاحبه به حالت اولیه برگردند؟'))return;state={...DEFAULT,photo:{...DEFAULT.photo},stripes:[...DEFAULT.stripes]};$('#questionEditor').textContent='نینا پاتالون، سرمربی تیم ملی لهستان، گفته بود که تو در این فصل شایسته عنوان بهترین بازیکن جهان بوده‌ای. هم‌تیمی‌هایت نیز حمایت زیادی از تو نشان داده‌اند. این حمایت برایت چه معنایی دارد؟';$('#answerEditor').textContent='حالا که دوباره این حرف‌ها را می‌شنوم، واقعاً احساس گرمای خاصی در قلبم دارم. از این کلمات و پیام‌هایی که از دخترها دریافت کردم، عمیقاً تحت تأثیر قرار گرفتم و بسیار سپاسگزارم. خوشحالم که عضوی از چنین تیم فوق‌العاده‌ای هستم؛ تیمی که هرکدام از ما تمام توانمان را به کار می‌گیریم تا در کنار یکدیگر به دستاوردی ویژه برسیم. اینکه کاپیتان چنین تیمی هستم، برایم افتخار بزرگی است. حمایت هم‌تیمی‌هایم واقعاً اهمیت زیادی برایم دارد و از آن‌ها بسیار ممنونم.';loadPhoto(DEFAULT.photoSrc);refreshControls();pageIndex=0;changed('طرح پیش‌فرض بازیابی شد.');};
+
 
 // Shared WoSoCenter editor chrome: theme, undo/redo timeline and page gallery.
 let historyReady=false,restoring=false,historyTimer=null,history=[],historyPosition=-1,historyLabel='ویرایش طرح';
@@ -287,36 +287,37 @@ document.addEventListener('keydown',e=>{if(!e.ctrlKey&&!e.metaKey)return;const k
 document.addEventListener('input',e=>{historyLabel=e.target.closest('label')?.firstChild?.textContent?.trim()?.slice(0,45)|| (e.target.classList.contains('rich-editor')?'ویرایش متن مصاحبه':'تنظیم ظاهر');});
 document.addEventListener('click',e=>{if(e.target.closest('[data-font],[data-color],.palette-choice,.logo-option,[data-reset-font],#cropSave'))historyLabel='تغییر تنظیمات طراحی';},true);
 
+function openInterviewTextTab(){const tab=$$('.tab').find(b=>b.dataset.tab==='content');if(tab&&!tab.classList.contains('active'))tab.click();}
 function manualTextFromLines(page,kind){return page.lines.filter(l=>l.kind===kind).map(l=>l.words.map(w=>w.text).join(' ')).join('\n');}
-function syncManualEditing(){const current=pages[pageIndex];const edit=$('#manualPageEditing');if(!current||current.isAuto){edit.classList.add('hidden');return;}const manual=state.manualPages.find(m=>`manual:${m.id}`===current.key);if(!manual)return;
- edit.classList.remove('hidden');const q=manual.question??manualTextFromLines(current,'question'),a=manual.answer??manualTextFromLines(current,'answer');
+function syncManualEditing(){const current=pages[pageIndex];const edit=$('#manualPageEditing');const isManual=!!current&&!current.isAuto;$$('[data-auto-content]').forEach(el=>el.classList.toggle('hidden',isManual));edit.classList.toggle('hidden',!isManual);if(!isManual)return;const manual=state.manualPages.find(m=>`manual:${m.id}`===current.key);if(!manual)return;
+ $('#manualEditTitle').textContent=`ویرایش صفحهٔ دستی ${pageIndex+1}`;const q=manual.question??manualTextFromLines(current,'question'),a=manual.answer??manualTextFromLines(current,'answer');
  if($('#manualQuestion').value!==q)$('#manualQuestion').value=q;
  if($('#manualAnswer').value!==a)$('#manualAnswer').value=a;
  const total=(manual.lines||[]).reduce((n,l)=>n+l.height+(l.breakBefore||0),0);
  $('#manualPageWarning').textContent=total>865?'⚠ متن این صفحه از فضای پوستر بیشتر است؛ متن را کوتاه‌تر کنید.':'متن صفحهٔ دستی مستقل و قابل ویرایش است؛ صفحات خودکار دست‌نخورده می‌مانند.';}
 function updateManualText(){const current=pages[pageIndex];if(!current||current.isAuto)return;const manual=state.manualPages.find(m=>`manual:${m.id}`===current.key);if(!manual)return;
- manual.question=$('#manualQuestion').value;manual.answer=$('#manualAnswer').value;const q=document.createElement('div'),a=document.createElement('div');q.textContent=manual.question;a.textContent=manual.answer;
+ historyLabel='ویرایش متن صفحهٔ دستی';manual.question=$('#manualQuestion').value;manual.answer=$('#manualAnswer').value;const q=document.createElement('div'),a=document.createElement('div');q.textContent=manual.question;a.textContent=manual.answer;
  const qlines=wrapRuns(q,'question'),alines=wrapRuns(a,'answer');const arr=[...qlines.filter(l=>l.words.length),...alines.filter(l=>l.words.length).map((l,i)=>({...l,breakBefore:i===0&&qlines.some(x=>x.words.length)?22:0}))];
  const used=arr.reduce((n,l)=>n+l.height+(l.breakBefore||0),0);manual.lines=arr;manual.height=Math.max(370,used+76);
  $('#manualPageWarning').textContent=used>865?'⚠ متن این صفحه بیش از فضای پوستر است؛ لطفاً متن را کوتاه‌تر کنید یا در متن اصلی مصاحبه قرار دهید.':'متن صفحهٔ دستی ثبت شد.';
  scheduleRender();}
 ['manualQuestion','manualAnswer'].forEach(id=>$('#'+id).addEventListener('input',updateManualText));
-function refreshPageGallery(){if(!$('#pagesDialog').open)return;const gallery=$('#pageGallery');gallery.replaceChildren();syncManualEditing();
+function refreshPageGallery(){if(!$('#pagesDialog').open)return;const gallery=$('#pageGallery');gallery.replaceChildren();
  pages.forEach((page,i)=>{const item=document.createElement('div');item.className='page-tile'+(i===pageIndex?' current':'');
  const pick=document.createElement('button');pick.type='button';pick.className='page-select';const thumb=document.createElement('canvas');thumb.width=162;thumb.height=202;
  try{const mini=thumb.getContext('2d');mini.scale(162/W,202/H);paintPoster(mini,i);}catch(e){console.warn(e)}
  const label=document.createElement('span');label.textContent=`صفحه ${i+1} · ${page.isAuto?'خودکار':'دستی'}`;
- pick.append(thumb,label);pick.onclick=()=>{pageIndex=i;scheduleRender();refreshPageGallery();};item.append(pick);
+ pick.append(thumb,label);pick.onclick=()=>{pageIndex=i;closeDialog('pagesDialog');if(!page.isAuto)openInterviewTextTab();scheduleRender();};item.append(pick);
  const actions=document.createElement('div');actions.className='page-actions';
  function action(text,title,fn,disabled=false){const b=document.createElement('button');b.type='button';b.textContent=text;b.title=title;b.setAttribute('aria-label',title);b.disabled=disabled;b.onclick=fn;actions.append(b);}
  action('↓','دانلود همین صفحه',async()=>{await document.fonts.ready;downloadBlob(await toPNG(i),`WoSo-Interview-${String(i+1).padStart(2,'0')}.png`);});
- action('⧉','تکثیر صفحه',()=>{const id=String(Date.now())+Math.random().toString(36).slice(2,5);state.manualPages.push({id,lines:JSON.parse(JSON.stringify(page.lines)),height:page.height,question:manualTextFromLines(page,'question'),answer:manualTextFromLines(page,'answer')});state.pagePlan.splice(i+1,0,`manual:${id}`);pageIndex=i+1;scheduleRender();});
+ action('⧉','تکثیر صفحه',()=>{const id=String(Date.now())+Math.random().toString(36).slice(2,5);state.manualPages.push({id,lines:JSON.parse(JSON.stringify(page.lines)),height:page.height,question:manualTextFromLines(page,'question'),answer:manualTextFromLines(page,'answer')});state.pagePlan.splice(i+1,0,`manual:${id}`);pageIndex=i+1;closeDialog('pagesDialog');openInterviewTextTab();scheduleRender();document.querySelector('.sidebar').scrollIntoView({behavior:'smooth',block:'start'});});
  action('→','جابجایی به راست',()=>{[state.pagePlan[i-1],state.pagePlan[i]]=[state.pagePlan[i],state.pagePlan[i-1]];pageIndex=i-1;scheduleRender();},i===0);
  action('←','جابجایی به چپ',()=>{[state.pagePlan[i],state.pagePlan[i+1]]=[state.pagePlan[i+1],state.pagePlan[i]];pageIndex=i+1;scheduleRender();},i===pages.length-1);
  action('×',page.isAuto?'برای حفظ متن اصلی، صفحهٔ خودکار حذف نمی‌شود':'حذف صفحهٔ دستی',()=>{state.manualPages=state.manualPages.filter(m=>`manual:${m.id}`!==page.key);state.pagePlan=state.pagePlan.filter(k=>k!==page.key);pageIndex=clamp(i-1,0,pages.length-2);scheduleRender();},page.isAuto);
  item.append(actions);gallery.append(item);});}
 $('#openPagesBtn').onclick=()=>{paginate();showDialog('#pagesDialog');refreshPageGallery();};
-$('#addPageBtn').onclick=()=>{const id=String(Date.now())+Math.random().toString(36).slice(2,6);state.manualPages.push({id,lines:[],height:370,question:'',answer:''});state.pagePlan.splice(pageIndex+1,0,`manual:${id}`);pageIndex++;scheduleRender();};
+$('#addPageBtn').onclick=()=>{const id=String(Date.now())+Math.random().toString(36).slice(2,6);state.manualPages.push({id,lines:[],height:370,question:'',answer:''});state.pagePlan.splice(pageIndex+1,0,`manual:${id}`);pageIndex++;closeDialog('pagesDialog');openInterviewTextTab();scheduleRender();document.querySelector('.sidebar').scrollIntoView({behavior:'smooth',block:'start'});};
 // Restore the interview editor just like other WoSoCenter tools, where storage is permitted.
 try{const saved=JSON.parse(localStorage.getItem(INTERVIEW_HISTORY_STORE)||'null');if(saved?.current?.state&&typeof saved.current.question==='string'&&typeof saved.current.answer==='string'){
  const parsed=JSON.parse(saved.current.state);if(parsed&&typeof parsed==='object'&&Array.isArray(parsed.stripes)&&parsed.stripes.length===6){

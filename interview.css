@@ -52,3 +52,75 @@ button:focus-visible,input:focus-visible,[contenteditable]:focus-visible{outline
 .woso-appmark .appmark-icon{display:block;width:35px;height:32px;border:0;border-radius:0;transform:none;background:var(--violet);-webkit-mask:url("assets/brand/logo-alpha.webp") center/contain no-repeat;mask:url("assets/brand/logo-alpha.webp") center/contain no-repeat}
 .woso-appmark .appmark-icon:after{content:none}
 @media(max-width:510px){.woso-appmark .appmark-icon{width:27px;height:25px}.woso-editor-topbar .top-actions{max-width:calc(100% - 60px);width:auto}}
+
+/* v6.7: usability-only adjustments to interview editor; poster render stays unchanged. */
+.woso-editor-topbar .top-actions{margin-inline-start:auto;justify-content:flex-start;flex-wrap:nowrap}
+.woso-editor-topbar .woso-home-link{margin-inline-start:0;flex:none}
+.footer-color-pair{display:flex;align-items:flex-start;justify-content:flex-start;gap:22px;flex-wrap:wrap;padding:4px 0}
+.footer-color-pair label{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:72px;font-size:11px}
+.footer-color-pair .color-btn{margin-top:0}
+.preview-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:nowrap;gap:10px}
+.preview-title-text{min-width:0;flex:1}
+.preview-head-tools{display:flex;align-items:center;justify-content:flex-start;flex:none;gap:12px}
+.manual-page-edit{margin:0;display:grid;gap:10px}
+.manual-page-edit h2{margin:0}
+.manual-page-edit textarea{width:100%;min-height:74px;resize:vertical;direction:rtl;line-height:1.9;font-family:Ario,Mikhak,Tahoma,sans-serif;font-size:13px;background:var(--input);color:var(--text);border:1px solid var(--input-border);border-radius:9px;padding:10px}
+.manual-page-edit textarea:focus-visible{outline:2px solid var(--violet)}
+@media(max-width:825px){
+ .preview-head{flex-wrap:nowrap!important;align-items:flex-start!important;gap:6px}
+ .preview-head-tools{margin-inline-start:auto;flex:none}
+ .preview-head-tools .resolution{display:none}
+ .preview-head-tools .page-manage-trigger{font-size:10px;padding:7px 8px;min-height:31px}
+ .preview-head-tools .page-manage-trigger span{font-size:9px;padding:2px 4px}
+ .preview-heading p{font-size:10px;line-height:1.5}
+}
+@media(max-width:510px){
+ .woso-editor-topbar .top-actions{margin-inline-start:auto;max-width:100%;width:auto;justify-content:flex-start;gap:4px}
+ .preview-heading h2{font-size:13px}
+ .preview-head-tools .page-manage-trigger{font-size:9.5px}
+}
+
+/* v6.7 final: keep photo-crop confirmation visible without scrolling.
+   Only the crop tool's inner preview/controls scroll; the action bar never scrolls away. */
+.crop-modal[open]{
+  display:flex;
+  flex-direction:column;
+  height:min(92vh,820px);
+  height:min(92dvh,820px);
+  max-height:calc(100vh - 16px);
+  max-height:calc(100dvh - 16px);
+  padding:0;
+  overflow:hidden;
+}
+.crop-modal .modal-head{
+  flex:0 0 auto;
+  margin:0;
+  padding:17px 20px 12px;
+  border-bottom:1px solid var(--edge);
+}
+.crop-modal .crop-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:16px 20px 22px;
+}
+.crop-modal .crop-actions{
+  position:sticky;
+  bottom:0;
+  z-index:2;
+  flex:0 0 auto;
+  margin:0;
+  padding:12px 20px;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+  background:var(--panel);
+  border-top:1px solid var(--edge);
+  box-shadow:0 -8px 22px var(--shadow);
+}
+.crop-modal .crop-actions .btn{min-height:43px}
+@media(max-width:510px){
+  .crop-modal .modal-head{padding:12px 13px 10px}
+  .crop-modal .crop-body{padding:12px 13px 16px}
+  .crop-modal .crop-actions{padding:10px 13px;padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));flex-wrap:nowrap}
+  .crop-modal .crop-actions .btn{flex:1 1 0;min-width:0;padding:10px 6px;font-size:11px;white-space:nowrap}
+}
