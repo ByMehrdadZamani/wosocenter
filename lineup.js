@@ -1,10 +1,10 @@
 'use strict';
-/* WoSoCenter Lineup Builder v5.1 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v5.2 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
 const LFONTS=new Set(LFONT.map(x=>x[0]));
-const LDEFAULT_COLORS={header:'#920a36',upper:'#0e3562',lower:'#970d39',accent:'#e6aa22',side:'#edb824',card1:'#a51a47',card2:'#134e87',cardName:'#0b3157',cardBorder:'#ab1b52',watermark:'#d01847',text:'#f2bc27'};
+const LDEFAULT_COLORS={header:'#920a36',upper:'#0e3562',lower:'#970d39',accent:'#e6aa22',side:'#edb824',card1:'#a51a47',card2:'#134e87',cardName:'#0b3157',cardBorder:'#ab1b52',watermark:'#d01847',text:'#f2bc27',headerText:'#f2bc27',logoBg:'#092c5d',topText:'#f2bc27',topBox:'#a51a47',footerText:'#f2bc27',footerBox:'#a51a47',logoTint:'#f2bc27',cardPosition:'#f2bc27'};
 const LDUMMY_A='assets/lineup/demo-portrait-a.png',LDUMMY_B='assets/lineup/demo-portrait-b.png';
 const LFORMATION={
  '4-3-3':[[218,305,'LW'],[540,305,'ST'],[862,305,'RW'],[218,590,'LCM'],[540,590,'CM'],[862,590,'RCM'],[125,846,'LB'],[391,846,'LCB'],[655,846,'RCB'],[925,846,'RB']],
@@ -27,6 +27,7 @@ let lTeams=[],lPlayers=[],lLeagues=[],lPalettes=[],lNationalFlags=[];
 let lState, lSelected=0,lLogoTarget='headerRightId',lFontTarget='all',lRAF=0,lLoaded=false,lDragFrom=null,lCanvas=L('lineupCanvas'),lCtx=lCanvas.getContext('2d');
 const lImgCache=new Map(),lImageKeyUrls=new Map();
 let lPast=[],lFuture=[],lDataSeq=0,lSaveTimer=0,lDbPromise=null;
+let lPendingPlayerId=null,lColorKey=null,lColorStart='',lColorBefore=null,lColorHSV={h:270,s:1,v:1};
 function lNewSlots(team){return Array.from({length:11},(_,i)=>{
  const demo=team==='barcelona'?((i<6)?{id:'demo-bonmati',name:'آیتانا بونماتی',image:LDUMMY_A}:{id:'demo-patri',name:'پاتری',image:LDUMMY_B}):null;
  return {playerId:demo?.id||'',name:demo?.name||'',image:demo?.image||'',imageKey:'',flag:demo?'tr':'',flagKey:'',positionOverride:'',photoScale:1};
@@ -35,8 +36,8 @@ function lFresh(team='barcelona'){
  return {teamId:team,backgroundLogoId:team==='mixed'?'':team,headerRightId:team==='mixed'?'barcelona':team,
  headerLeftId:'stwn-wyl',paletteId:team==='mixed'?'woso':team,colors:lClone(LDEFAULT_COLORS),
  formation:'4-3-3',league:'لیگ قهرمانان اروپا',week:'هفته ۲۸',matchup:'',matchupManual:false,time:'۲۲:۳۰',
- channel:'WoSoCenter',telegramTop:true,telegramBottom:true,title:'شماتیک ترکیب',coach:'پره رومئو',stadium:'یوهان کرایف',mixColor:'#f2bc27',
- cardSecond:true,cardText:'#f2bc27',fontAll:'Ario',fonts:{header:'Ario',player:'Ario',title:'Ario',footer:'Ario'},slots:lNewSlots(team)};
+ channel:'WoSoCenter',telegramTop:true,telegramBottom:true,watermarkCustom:false,title:'شماتیک ترکیب',coach:'پره رومئو',stadium:'یوهان کرایف',mixColor:'#f2bc27',
+ cardSecond:false,cardText:'#f2bc27',fontAll:'Ario',fonts:{header:'Ario',player:'Ario',title:'Ario',footer:'Ario'},slots:lNewSlots(team)};
 }
 function lValidate(raw){
  const def=lFresh(),s={...def,...raw};
@@ -49,6 +50,8 @@ function lValidate(raw){
  if(raw?.colors&&s.paletteId==='barcelona'&&s.colors.header==='#920a36'&&s.colors.upper==='#0e3562'&&s.colors.lower==='#970d39'&&s.colors.accent==='#e6aa22'&&s.colors.side==='#edb824'){
   Object.assign(s.colors,{header:'#940930',upper:'#073265',lower:'#940930',accent:'#d2992d',side:'#e1bd2c'});
  }
+ // Migrated projects retain their colors and fonts; new section colors default from their existing palette.
+ if(raw?.colors){for(const [k,prior] of Object.entries({headerText:'text',logoBg:'upper',topText:'text',topBox:'card1',footerText:'text',footerBox:'card1',logoTint:'accent',cardPosition:'accent'}))if(!raw.colors[k])s.colors[k]=s.colors[prior];}
  s.mixColor=lHex(s.mixColor,'#f2bc27');s.cardText=lHex(s.cardText,'#f2bc27');return s;
 }
 function lSave(){clearTimeout(lSaveTimer);lSaveTimer=setTimeout(()=>{try{localStorage.setItem(LSTORE,JSON.stringify(lState));L('lineupSave').textContent='ذخیره شد ✓';}catch(e){L('lineupSave').textContent='فضای ذخیره‌سازی محدود';console.warn(e)}},220);}
@@ -64,7 +67,7 @@ function lImage(src){
 }
 function lReady(src){const o=lImgCache.get(src);return o?.loaded?o.image:null;}
 function lPrepareImages(){
- const urls=['assets/lineup/combined-title.png','assets/lineup/woso-emblem.png','assets/brand/logo-alpha.webp'];
+ const urls=['assets/lineup/combined-title.png','assets/lineup/woso-emblem-full.png','assets/brand/logo-alpha.webp'];
  for(const id of [lState.backgroundLogoId,lState.headerRightId,lState.headerLeftId]){const t=lFindTeam(id);if(t)urls.push(t.image)}
  for(const slot of lState.slots){if(slot.image)urls.push(slot.image);if(slot.flagImage)urls.push(slot.flagImage);const f=lNationalFlags.find(x=>x.id===slot.flag);if(f?.image)urls.push(f.image)}
  urls.forEach(lImage);
@@ -76,11 +79,15 @@ async function lMediaDB(){
 async function lPutMedia(blob){const key='m-'+Date.now().toString(36)+'-'+(++lDataSeq);const db=await lMediaDB();if(db){await new Promise((resolve,reject)=>{const tr=db.transaction('files','readwrite');tr.objectStore('files').put(blob,key);tr.oncomplete=resolve;tr.onerror=reject;});}const url=URL.createObjectURL(blob);lImageKeyUrls.set(key,url);lImage(url);return {key,url};}
 async function lGetMedia(key){if(!key)return null;const db=await lMediaDB();if(!db)return null;return new Promise(resolve=>{try{const r=db.transaction('files','readonly').objectStore('files').get(key);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null)}catch{resolve(null)}})}
 async function lRestoreMedia(){const keys=new Set(lState.slots.flatMap(x=>[x.imageKey,x.flagKey]).filter(Boolean));for(const key of keys){const blob=await lGetMedia(key);if(blob){const url=URL.createObjectURL(blob);lImageKeyUrls.set(key,url);lState.slots.forEach(x=>{if(x.imageKey===key)x.image=url;if(x.flagKey===key)x.flagImage=url});lImage(url)}}lRender();}
-function lPalette(id){return lPalettes.find(x=>x.id===id)||lPalettes[0]||{...LDEFAULT_COLORS,id:'woso'};}
-function lApplyPalette(id){const p=lPalette(id);lState.paletteId=p.id;for(const key of Object.keys(LDEFAULT_COLORS))if(p[key])lState.colors[key]=p[key];lState.cardText=p.text||'#f2bc27';}
+function lPalette(id){const exact=lPalettes.find(x=>x.id===id);if(exact)return exact;
+ // Numbered alternate crests use their club's primary palette without duplicating it in the list.
+ const team=lFindTeam(id),original=team&&lName(team.name);const primary=original&&lPalettes.find(x=>lName(x.name)===original);
+ return primary||lPalettes.find(x=>x.id==='woso')||lPalettes[0]||{...LDEFAULT_COLORS,id:'woso'};}
+function lApplyPalette(id){const p=lPalette(id);lState.paletteId=p.id;for(const key of Object.keys(LDEFAULT_COLORS))if(p[key])lState.colors[key]=p[key];
+ Object.assign(lState.colors,{headerText:p.text||LDEFAULT_COLORS.headerText,logoBg:p.upper||LDEFAULT_COLORS.logoBg,topText:p.text||LDEFAULT_COLORS.topText,topBox:p.card1||LDEFAULT_COLORS.topBox,footerText:p.text||LDEFAULT_COLORS.footerText,footerBox:p.card1||LDEFAULT_COLORS.footerBox,logoTint:p.accent||LDEFAULT_COLORS.logoTint,cardPosition:p.accent||LDEFAULT_COLORS.cardPosition});
+ lState.cardText=p.text||'#f2bc27';lState.watermarkCustom=false;}
 function lAutoMatch(){const a=lName(lFindTeam(lState.headerRightId)?.name||''),b=lName(lFindTeam(lState.headerLeftId)?.name||'');return [a,b].filter(Boolean).join(' - ');}
 function lTeamChoose(id){
- if(id!=='mixed'&&!lHasTeamRoster(lFindTeam(id))){lNotify('برای این تیم هنوز بانک بازیکن موجود نیست.','warning');return;}
  if(id===lState.teamId){lClose('lineupTeamDialog');return;}
  const editing=lState.slots.some(x=>x.imageKey||x.name&&!['آیتانا بونماتی','پاتری'].includes(x.name));
  if(editing && id!==lState.teamId && !window.confirm('با تغییر تیم، کارت‌های بازیکنان فعلی با کارت‌های پیش‌فرض جایگزین می‌شوند. ادامه می‌دهید؟'))return;
@@ -97,27 +104,16 @@ function lSync(){
  if(!lLoaded)return;
  const team=lFindTeam(lState.teamId),isMix=lState.teamId==='mixed';
  L('lineupTeamLabel').textContent=isMix?'ترکیب منتخب':team?.name||'تیم جدید';
- L('lineupTeamCaption').textContent=isMix?'تمام بازیکنانِ همه تیم‌ها':'بازیکنان این تیم + آپلود دلخواه';
+ L('lineupTeamCaption').textContent=isMix?'تمام بازیکنانِ بانک':'بازیکنان ثبت‌شده همین تیم';
  L('lineupTeamIcon').innerHTML=team?`<img src="${lEscape(team.image)}" alt="">`:'⚽';
- // Formation is fixed at 4-3-3 for now; keep saved player placements and GK spot stable.
  for(const [target,id] of [['lineupHeaderRightImg',lState.headerRightId],['lineupHeaderLeftImg',lState.headerLeftId]]){const t=lFindTeam(id);L(target).innerHTML=t?`<img src="${lEscape(t.image)}" alt="${lEscape(t.name)}">`:'⚽';}
  L('lineupHeaderRight').disabled=isMix;L('lineupHeaderLeft').disabled=isMix;
- L('lineupMixedColor').value=lState.mixColor;
- for(const [id,key] of [['lineupLeague','league'],['lineupWeek','week'],['lineupMatch','matchup'],['lineupTime','time'],['lineupTelegram','channel'],['lineupTitle','title'],['lineupCoach','coach'],['lineupStadium','stadium']])if(document.activeElement!==L(id))L(id).value=lState[key];
- L('lineupTelegramTop').checked=!!lState.telegramTop;L('lineupTelegramBottom').checked=!!lState.telegramBottom;
- for(const el of document.querySelectorAll('[data-lcolor]'))el.value=lHex(lState.colors[el.dataset.lcolor]);
- L('lineupCard1').value=lState.colors.card1;L('lineupCard2').value=lState.colors.card2;L('lineupCardBorder').value=lState.colors.cardBorder;L('lineupCardNameBg').value=lState.colors.cardName;L('lineupCardText').value=lState.cardText;
- L('lineupSecondColor').checked=!!lState.cardSecond;
+ for(const [id,key] of [['lineupLeague','league'],['lineupWeek','week'],['lineupMatch','matchup'],['lineupTime','time'],['lineupTelegram','channel'],['lineupTelegramFooter','channel'],['lineupTitle','title'],['lineupCoach','coach'],['lineupStadium','stadium']])if(document.activeElement!==L(id))L(id).value=lState[key];
+ L('lineupLeaguePickName').textContent=lState.league||'انتخاب از لیگ‌های آماده';
+ for(const el of document.querySelectorAll('[data-lcolor]')){const key=el.dataset.lcolor;const val=lGetColor(key);el.innerHTML=`<span class="lineup-color-round" style="background:${val}"></span><span class="lineup-color-code">${val.toUpperCase()}</span><span class="lineup-color-chevron">⌄</span>`;}
+ L('lineupAddSecondColor').hidden=!!lState.cardSecond;
+ L('lineupSecondColorArea').hidden=!lState.cardSecond;
  for(const el of document.querySelectorAll('[data-lfont]')){const type=el.dataset.lfont;const name=type==='all'?lState.fontAll:lState.fonts[type];const face=LFONT.find(x=>x[0]===name);el.innerHTML=`<span class="font-pick-title" style="font-family:'${lEscape(name)}',Tahoma,sans-serif">${lEscape(face?.[1]||name)} · بارسلونا</span><span class="font-pick-chevron">⌄</span>`;}
- const selected=lSelectedSlot(),auto=lSpotList()[lSelected]?.position||'GK';
- L('lineupSelectedTitle').textContent=`بازیکن ${lSelected+1} · پست ${auto}`;
- L('lineupPlayerName').value=selected.name;
- L('lineupPlayerPosition').value=selected.positionOverride;
- L('lineupPlayerPosition').placeholder='خودکار: '+auto;
- L('lineupPlayerFlag').value=selected.flag||'';
- if(L('lineupPlayerFlag').value!==selected.flag)L('lineupPlayerFlag').value='';
- L('lineupPhotoScale').value=Math.round((selected.photoScale||1)*100);
- L('lineupSlotGrid').innerHTML=lSpotList().map(s=>`<button type="button" data-lslot="${s.i}" class="${s.i===lSelected?'active':''}"><b>${s.position}</b><small>${lEscape(lState.slots[s.i].name||'بازیکن '+(s.i+1))}</small></button>`).join('');
  lDrawPaletteList();lPrepareImages();
 }
 function lSetSelected(i){if(i<0||i>10)return;lSelected=i;lSync();lRender()}
@@ -126,31 +122,43 @@ function lDrawPaletteList(){
  const arr=[...ids.map(lPalette),...lPalettes].filter((p,i,list)=>p && list.findIndex(x=>x.id===p.id)===i).slice(0,10);
  const el=L('lineupPaletteTop');el.innerHTML=arr.map(lPaletteHTML).join('');
 }
-function lPaletteHTML(p){const chosen=lState.paletteId===p.id;return `<button type="button" class="palette-option ${chosen?'selected':''}" data-lpalette="${lEscape(p.id)}"><span class="palette-dots">${[p.upper,p.lower,p.accent,p.card1].map(c=>`<i style="background:${lHex(c)}"></i>`).join('')}</span><span>${lEscape(p.name)}</span>${chosen?'<b>✓</b>':''}</button>`;}
+function lPaletteHTML(p){const chosen=lState.paletteId===p.id,t=lFindTeam(p.teamId);
+ const mark=t?`<img class="lineup-palette-logo" src="${lEscape(t.image)}" loading="lazy" alt="">`:'<span class="lineup-brandmark">✦</span>';
+ return `<button type="button" class="palette-option ${chosen?'selected':''}" data-lpalette="${lEscape(p.id)}"><span class="lineup-palette-label">${mark}<strong>${lEscape(lName(p.name))}</strong></span><span class="palette-dots">${[p.upper,p.lower,p.accent,p.card1].map(c=>`<i style="background:${lHex(c)}"></i>`).join('')}</span>${chosen?'<b>✓</b>':''}</button>`;
+}
 function lFilterText(v){return String(v||'').normalize('NFKC').toLocaleLowerCase('fa-IR').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/\s+/g,' ').trim()}
 function lHasTeamRoster(t){
  if(!t||/\s+[0-9۰-۹]+\s*$/.test(t.name||''))return false;
  return lPlayers.some(p=>p&&p.teamId===t.id&&typeof p.image==='string'&&p.image.trim()&&typeof p.name==='string'&&p.name.trim());
 }
 function lTeamDialogRender(){const q=lFilterText(L('lineupTeamSearch').value);const important=['barcelona','real-madrid','bayern-munich'];
- const eligible=lTeams.filter(lHasTeamRoster);
- const ordered=[...important.map(lFindTeam).filter(t=>t&&lHasTeamRoster(t)),...eligible.filter(t=>!important.includes(t.id))].filter(x=>lFilterText(x.name).includes(q));
- let html=(!q||'ترکیب منتخب'.includes(q))?'<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>بازیکنان تمام تیم‌ها</small></button>':'';
- html+=ordered.map((t)=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${important.includes(t.id)?'promoted':''}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span>${important.includes(t.id)?'<em>پیشنهادی</em>':''}</button>`).join('');
- L('lineupTeamGrid').innerHTML=html||'<div class="lineup-empty">تیمی با بانک بازیکن پیدا نشد. با اضافه‌شدن فایل بازیکنان، تیم خودکار به این فهرست اضافه می‌شود.</div>';
+ const ordered=[...important.map(lFindTeam).filter(Boolean),...lTeams.filter(t=>!important.includes(t.id))].filter(x=>lFilterText(x.name).includes(q));
+ let html=(!q||lFilterText('ترکیب منتخب').includes(q))?'<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>همه بازیکنان بانک</small></button>':'';
+ html+=ordered.map(t=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${important.includes(t.id)?'promoted':''}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span>${important.includes(t.id)?'<em>پیشنهادی</em>':''}</button>`).join('');
+ L('lineupTeamGrid').innerHTML=html||'<div class="lineup-empty">تیمی با این نام پیدا نشد.</div>';
 }
 function lLogoDialogRender(){const q=lFilterText(L('lineupLogoSearch').value);L('lineupLogoGrid').innerHTML=lTeams.filter(t=>lFilterText(t.name).includes(q)).map(t=>`<button type="button" class="lineup-logo-option" data-llogo="${lEscape(t.id)}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span></button>`).join('')||'<div class="lineup-empty">نتیجه‌ای پیدا نشد.</div>';}
 function lPaletteDialogRender(){const q=lFilterText(L('lineupPaletteSearch').value);L('lineupPaletteGrid').innerHTML=lPalettes.filter(p=>lFilterText(p.name).includes(q)).map(lPaletteHTML).join('')||'<div class="lineup-empty">پالتی پیدا نشد.</div>';}
-function lPlayersDialogRender(){const q=lFilterText(L('lineupPlayerSearch').value);const list=lPlayers.filter(p=>(lState.teamId==='mixed'||p.teamId===lState.teamId)&&lFilterText(p.name).includes(q));L('lineupPlayerCount').textContent=lState.teamId==='mixed'?'بازیکنان تمام تیم‌ها':('بازیکنان '+(lFindTeam(lState.teamId)?.name||''));
- L('lineupPlayerGrid').innerHTML=list.map(p=>`<button type="button" data-lplayer="${lEscape(p.id)}"><img src="${lEscape(p.image||'')}" loading="lazy" alt=""><strong>${lEscape(p.name)}</strong><small>${lEscape(lFindTeam(p.teamId)?.name||'')}${p.demo?' · نمونه':''}</small></button>`).join('')||'<div class="lineup-empty">هنوز بازیکنی از این تیم در بانک قرار نگرفته است. از «آپلود تصویر بازیکن» استفاده کن؛ بانک اصلی را بعداً به سایت اضافه می‌کنیم.</div>';}
+function lPlayersDialogRender(){const q=lFilterText(L('lineupPlayerSearch').value);const list=lPlayers.filter(p=>(lState.teamId==='mixed'||p.teamId===lState.teamId)&&lFilterText(p.name).includes(q));
+ L('lineupPlayerCount').textContent=lState.teamId==='mixed'?'بازیکنان تمام تیم‌ها':('بازیکنان '+(lFindTeam(lState.teamId)?.name||''));
+ L('lineupPlayerGrid').innerHTML=list.map(p=>`<button type="button" data-lplayer="${lEscape(p.id)}" class="${p.id===lPendingPlayerId?'pending':''}"><img src="${lEscape(p.image||'')}" loading="lazy" alt=""><strong>${lEscape(p.name)}</strong><small>${lEscape(lFindTeam(p.teamId)?.name||'')}${p.demo?' · نمونه':''}</small>${p.id===lPendingPlayerId?'<span>✓ انتخاب‌شده</span>':''}</button>`).join('')||'<div class="lineup-empty">هنوز بازیکنی برای این تیم در بانک ثبت نشده است. برای افزودن بازیکنان جدید، مدیر سایت بانک داده را تکمیل می‌کند.</div>';
+}
+function lPlayerDialogShow(index){lSelected=index;const slot=lSelectedSlot();lPendingPlayerId=slot.playerId||null;
+ L('lineupPlayerDialogTitle').textContent='کارت '+(index+1)+' · '+(lSpotList()[index]?.position||'GK');
+ L('lineupPopupName').value=slot.name||'';L('lineupPopupPosition').value=slot.positionOverride||'';L('lineupPopupScale').value=Math.round((slot.photoScale||1)*100);
+ L('lineupPlayerSearch').value='';lPlayersDialogRender();lOpen('lineupPlayerDialog');}
+function lPlayerDialogConfirm(){const id=lPendingPlayerId,p=lFindPlayer(id),name=L('lineupPopupName').value.trim(),position=L('lineupPopupPosition').value.trim().toUpperCase(),scale=Number(L('lineupPopupScale').value)/100;
+ lChange(()=>{const slot=lSelectedSlot();if(p&&id!==slot.playerId)Object.assign(slot,{playerId:p.id,image:p.image||'',imageKey:'',flag:p.flag||'',flagImage:p.flagImage||'',flagKey:''});slot.name=name||p?.name||'';slot.positionOverride=position;slot.photoScale=scale;});lClose('lineupPlayerDialog');lNotify('تنظیمات کارت ثبت شد.');}
+function lPlayerDialogRemove(){lChange(()=>Object.assign(lSelectedSlot(),{playerId:'',name:'',image:'',imageKey:'',flag:'',flagImage:'',flagKey:'',positionOverride:'',photoScale:1}));lClose('lineupPlayerDialog');lNotify('بازیکن از کارت حذف شد.');}
+function lLeagueDialogRender(){const q=lFilterText(L('lineupLeagueSearch').value);L('lineupLeagueGrid').innerHTML=lLeagues.filter(x=>lFilterText(x.name).includes(q)).map(x=>`<button type="button" data-lleague="${lEscape(x.name)}">${x.image?`<img src="${lEscape(x.image)}" loading="lazy" alt="">`:'🏆'}<span>${lEscape(x.name)}</span></button>`).join('')||'<div class="lineup-empty">لیگی با این نام یافت نشد؛ می‌توانید نام دلخواه را دستی وارد کنید.</div>';}
 function lFontDialogRender(){const q=lFilterText(L('lineupFontSearch').value);L('lineupFontGrid').innerHTML=LFONT.filter(f=>lFilterText(f.join(' ')).includes(q)).map(f=>`<button type="button" class="${(lFontTarget==='all'?lState.fontAll:lState.fonts[lFontTarget])===f[0]?'selected':''}" data-lfontpick="${f[0]}"><strong>${lEscape(f[1])}</strong><span class="font-sample" style="font-family:'${f[0]}',Tahoma,sans-serif">بارسلونا</span><small>${f[0]}</small></button>`).join('');}
 function lOpen(id){const el=L(id);if(!el.open)el.showModal();}
 function lClose(id){if(L(id)?.open)L(id).close()}
-function lSelectLogo(id){
- if(lLogoTarget==='backgroundLogoId' && lState.teamId!=='mixed' && id!==lState.teamId){lTeamChoose(id);lClose('lineupLogoDialog');return;}
- lChange(()=>{lState[lLogoTarget]=id;if(['headerRightId','headerLeftId'].includes(lLogoTarget)&&!lState.matchupManual)lState.matchup=lAutoMatch()});lClose('lineupLogoDialog');
-}
-function lUsePlayer(id){const p=lFindPlayer(id);if(!p)return;lChange(()=>{Object.assign(lSelectedSlot(),{playerId:p.id,name:p.name,image:p.image,imageKey:'',flag:p.flag||'',flagKey:'',flagImage:p.flagImage||'',photoScale:1});});lClose('lineupPlayerDialog');lNotify('بازیکن انتخاب شد.');}
+function lSelectLogo(id){lChange(()=>{lState[lLogoTarget]=id;
+ if(lLogoTarget==='backgroundLogoId')lApplyPalette(id);
+ if(['headerRightId','headerLeftId'].includes(lLogoTarget)&&!lState.matchupManual)lState.matchup=lAutoMatch();
+});lClose('lineupLogoDialog');}
+function lUsePlayer(id){const p=lFindPlayer(id);if(!p)return;lPendingPlayerId=p.id;L('lineupPopupName').value=p.name;L('lineupPopupPosition').value='';lPlayersDialogRender();}
 function lDialogEvents(){
  document.addEventListener('click',e=>{
   const target=e.target.closest('[data-lclose]');if(target){lClose(target.dataset.lclose);return;}
@@ -159,53 +167,59 @@ function lDialogEvents(){
   const pal=e.target.closest('[data-lpalette]');if(pal){lChange(()=>lApplyPalette(pal.dataset.lpalette));lClose('lineupPaletteDialog');return;}
   const pl=e.target.closest('[data-lplayer]');if(pl){lUsePlayer(pl.dataset.lplayer);return;}
   const f=e.target.closest('[data-lfontpick]');if(f){const id=f.dataset.lfontpick;lChange(()=>{if(lFontTarget==='all')lState.fontAll=id;else lState.fonts[lFontTarget]=id});lLoadFont(id);lClose('lineupFontDialog');return;}
-  const slot=e.target.closest('[data-lslot]');if(slot){lSetSelected(Number(slot.dataset.lslot));return;}
+  const league=e.target.closest('[data-lleague]');if(league){lChange(()=>lState.league=league.dataset.lleague);lClose('lineupLeagueDialog');return;}
+  const slot=e.target.closest('[data-lslot]');if(slot){lPlayerDialogShow(Number(slot.dataset.lslot));return;}
  });
  L('lineupTeamSearch').addEventListener('input',lTeamDialogRender);
  L('lineupLogoSearch').addEventListener('input',lLogoDialogRender);
  L('lineupPaletteSearch').addEventListener('input',lPaletteDialogRender);
  L('lineupPlayerSearch').addEventListener('input',lPlayersDialogRender);
  L('lineupFontSearch').addEventListener('input',lFontDialogRender);
+ L('lineupLeagueSearch').addEventListener('input',lLeagueDialogRender);
  for(const el of document.querySelectorAll('dialog.lineup-modal'))el.addEventListener('click',e=>{if(e.target===el)el.close()});
 }
 function lSetInputs(){
- document.querySelectorAll('[data-ltab]').forEach(btn=>btn.addEventListener('click',()=>{
-  document.querySelectorAll('[data-ltab]').forEach(b=>b.classList.toggle('active',b===btn));
-  document.querySelectorAll('[id^="ltab-"]').forEach(n=>n.classList.add('hidden'));L('ltab-'+btn.dataset.ltab).classList.remove('hidden');
- }));
+ document.querySelectorAll('[data-ltab]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-ltab]').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('[id^="ltab-"]').forEach(n=>n.classList.add('hidden'));L('ltab-'+btn.dataset.ltab).classList.remove('hidden');}));
  L('lineupChangeTeam').onclick=()=>{L('lineupTeamSearch').value='';lTeamDialogRender();lOpen('lineupTeamDialog')};
- // Formation UI intentionally omitted in v5.1; the 4-3-3 layout is always used.
- for(const [id,target] of [['lineupHeaderRight','headerRightId'],['lineupHeaderLeft','headerLeftId'],['lineupWatermarkPick','backgroundLogoId']])L(id).onclick=()=>{lLogoTarget=target;L('lineupLogoTitle').textContent=target==='backgroundLogoId'?'لوگوی پس‌زمینه و تیم پروژه':'لوگوی هدر';L('lineupLogoSearch').value='';lLogoDialogRender();lOpen('lineupLogoDialog')};
- L('lineupMixedColor').oninput=e=>lChange(()=>lState.mixColor=e.target.value,{history:false});
+ for(const [id,target] of [['lineupHeaderRight','headerRightId'],['lineupHeaderLeft','headerLeftId'],['lineupWatermarkPick','backgroundLogoId']])L(id).onclick=()=>{lLogoTarget=target;L('lineupLogoTitle').textContent=target==='backgroundLogoId'?'انتخاب لوگوی محو پس‌زمینه':'انتخاب لوگوی هدر';L('lineupLogoSearch').value='';lLogoDialogRender();lOpen('lineupLogoDialog')};
+ L('lineupLeaguePick').onclick=()=>{L('lineupLeagueSearch').value='';lLeagueDialogRender();lOpen('lineupLeagueDialog')};
  L('lineupShowPalettes').onclick=()=>{L('lineupPaletteSearch').value='';lPaletteDialogRender();lOpen('lineupPaletteDialog')};
- for(const el of document.querySelectorAll('[data-lcolor]'))el.oninput=e=>lChange(()=>lState.colors[el.dataset.lcolor]=e.target.value,{history:false});
- for(const [id,key] of [['lineupCard1','card1'],['lineupCard2','card2'],['lineupCardBorder','cardBorder'],['lineupCardNameBg','cardName']])L(id).oninput=e=>lChange(()=>lState.colors[key]=e.target.value,{history:false});
- L('lineupCardText').oninput=e=>lChange(()=>lState.cardText=e.target.value,{history:false});
- L('lineupSecondColor').onchange=e=>lChange(()=>lState.cardSecond=e.target.checked);
- L('lineupPlayerName').oninput=e=>lChange(()=>lSelectedSlot().name=e.target.value,{history:false});
- L('lineupPlayerPosition').oninput=e=>lChange(()=>lSelectedSlot().positionOverride=e.target.value.toUpperCase(),{history:false});
- L('lineupPlayerFlag').onchange=e=>lChange(()=>{lSelectedSlot().flag=e.target.value;lSelectedSlot().flagImage='';lSelectedSlot().flagKey='';});
- L('lineupPhotoScale').oninput=e=>lChange(()=>lSelectedSlot().photoScale=Number(e.target.value)/100,{history:false});
- L('lineupResetPosition').onclick=()=>lChange(()=>{lSelectedSlot().positionOverride=''});
- L('lineupClearPlayer').onclick=()=>lChange(()=>{Object.assign(lSelectedSlot(),{playerId:'',name:'',image:'',imageKey:'',flag:'',flagImage:'',flagKey:'',positionOverride:''})});
- L('lineupPlayerLibrary').onclick=()=>{L('lineupPlayerSearch').value='';lPlayersDialogRender();lOpen('lineupPlayerDialog')};
- L('lineupPlayerUpload').onclick=()=>L('lineupPlayerFile').click();
- L('lineupPlayerFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;const index=lSelected;try{if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>15*1024*1024)throw Error('فایل باید PNG، JPG یا WebP و کمتر از ۱۵ مگابایت باشد.');const media=await lPutMedia(file);lChange(()=>{Object.assign(lState.slots[index],{imageKey:media.key,image:media.url,playerId:''});});lNotify('تصویر در حافظه محلی ذخیره شد؛ برای بهترین نتیجه، PNG با پس‌زمینه شفاف آپلود کنید.')}catch(err){lNotify('خطا در ذخیره تصویر: '+err.message,'error')}e.target.value='';};
- L('lineupCustomFlag').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const media=await lPutMedia(file);lChange(()=>{Object.assign(lSelectedSlot(),{flag:'',flagKey:media.key,flagImage:media.url})});}catch(err){lNotify(err.message,'error')}e.target.value='';};
- for(const [id,key] of [['lineupLeague','league'],['lineupWeek','week'],['lineupTime','time'],['lineupTelegram','channel'],['lineupTitle','title'],['lineupCoach','coach'],['lineupStadium','stadium']])L(id).oninput=e=>lChange(()=>lState[key]=e.target.value,{history:false});
+ for(const btn of document.querySelectorAll('[data-lcolor]'))btn.onclick=()=>lOpenColor(btn.dataset.lcolor,btn.dataset.colorLabel||'رنگ');
+ L('lineupAddSecondColor').onclick=()=>lChange(()=>{lState.cardSecond=true});
+ L('lineupRemoveSecondColor').onclick=()=>lChange(()=>{lState.cardSecond=false});
+ L('lineupOpenSelectedPlayer').onclick=()=>lPlayerDialogShow(lSelected);
+ L('lineupPlayerConfirm').onclick=lPlayerDialogConfirm;L('lineupPlayerRemove').onclick=lPlayerDialogRemove;
+ for(const id of ['lineupPopupName','lineupPopupPosition'])L(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lPlayerDialogConfirm();}});
+ for(const [id,key] of [['lineupLeague','league'],['lineupWeek','week'],['lineupTime','time'],['lineupTelegram','channel'],['lineupTelegramFooter','channel'],['lineupTitle','title'],['lineupCoach','coach'],['lineupStadium','stadium']])L(id).oninput=e=>lChange(()=>lState[key]=e.target.value,{history:false});
  L('lineupMatch').oninput=e=>lChange(()=>{lState.matchup=e.target.value;lState.matchupManual=true},{history:false});
  L('lineupAutoMatch').onclick=()=>lChange(()=>{lState.matchupManual=false;lState.matchup=lAutoMatch()});
- L('lineupLeagueSelect').onchange=e=>{if(e.target.value)lChange(()=>lState.league=e.target.value);};
- L('lineupTelegramTop').onchange=e=>lChange(()=>lState.telegramTop=e.target.checked);
- L('lineupTelegramBottom').onchange=e=>lChange(()=>lState.telegramBottom=e.target.checked);
  for(const button of document.querySelectorAll('[data-lfont]'))button.onclick=()=>{lFontTarget=button.dataset.lfont;L('lineupFontSearch').value='';lFontDialogRender();lOpen('lineupFontDialog');LFONT.forEach(f=>lLoadFont(f[0]));};
  L('lineupFontAll').onclick=()=>lChange(()=>{for(const k in lState.fonts)lState.fonts[k]=lState.fontAll;});
  L('lineupUndo').onclick=lUndo;L('lineupRedo').onclick=lRedo;
- L('lineupDownload').onclick=lDownload;L('lineupDownloadBottom').onclick=lDownload;
+ L('lineupDownload').onclick=()=>lDownload(1);L('lineupDownloadBottom').onclick=()=>lDownload(1);L('lineupDownloadHQ').onclick=()=>lDownload(2);L('lineupDownloadHQBottom').onclick=()=>lDownload(2);
  L('lineupExport').onclick=lExport;L('lineupImport').onclick=()=>L('lineupImportFile').click();L('lineupImportFile').onchange=lImport;
- L('lineupReset').onclick=()=>{if(window.confirm('پروژه فعلی از نو شروع شود؟ برای عکس‌های آپلودی، نسخه پشتیبان دریافت کنید.')){lPast.push(lClone(lState));lState=lFresh();lApplyPalette('barcelona');lState.matchup=lAutoMatch();lSelected=0;lSave();lSync();lRender();L('lineupChangeTeam').click()}};
+ L('lineupReset').onclick=()=>{if(window.confirm('پروژه فعلی از نو شروع شود؟')){lPast.push(lClone(lState));lState=lFresh();lApplyPalette('barcelona');lState.matchup=lAutoMatch();lSelected=0;lSave();lSync();lRender();L('lineupChangeTeam').click()}};
  L('lineupTheme').onclick=()=>{const root=document.documentElement,light=root.dataset.theme!=='light';root.dataset.theme=light?'light':'dark';try{localStorage.setItem('wosocenter-ui-theme',light?'light':'dark')}catch{}};
- lSetupPointer();
+ lColorDialogEvents();lSetupPointer();
+}
+// Replicates the fixture builder's custom HSV picker (no OS-native color selector).
+function lGetColor(key){return lHex(key==='mixColor'?lState.mixColor:key==='cardText'?lState.cardText:lState.colors[key],LDEFAULT_COLORS[key]||'#f2bc27');}
+function lSetColor(key,color){color=lHex(color);lChange(()=>{if(key==='mixColor')lState.mixColor=color;else if(key==='cardText')lState.cardText=color;else lState.colors[key]=color;if(key==='watermark')lState.watermarkCustom=true;lState.paletteId='';},{history:false});}
+function lToHSV(color){const a=[1,3,5].map(i=>parseInt(color.slice(i,i+2),16)/255),max=Math.max(...a),min=Math.min(...a),d=max-min;let h=0;if(d){if(max===a[0])h=((a[1]-a[2])/d)%6;else if(max===a[1])h=(a[2]-a[0])/d+2;else h=(a[0]-a[1])/d+4;h=(h*60+360)%360;}return{h,s:max?d/max:0,v:max};}
+function lFromHSV(h,s,v){const f=n=>{const k=(n+h/60)%6;return Math.round((v-v*s*Math.max(Math.min(k,4-k,1),0))*255);};return '#'+[f(5),f(3),f(1)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+function lShowColor(hex){lColorHSV=lToHSV(hex);L('lineupColorHue').value=lColorHSV.h;L('lineupColorSV').style.setProperty('--pure-hue',lFromHSV(lColorHSV.h,1,1));L('lineupColorTarget').style.left=(lColorHSV.s*100)+'%';L('lineupColorTarget').style.top=((1-lColorHSV.v)*100)+'%';L('lineupColorPreview').style.background=hex;L('lineupColorHex').value=hex.toUpperCase();}
+function lOpenColor(key,title){lColorKey=key;lColorBefore=lClone(lState);lColorStart=lGetColor(key);L('lineupColorTitle').textContent=title;lShowColor(lColorStart);lOpen('lineupColorDialog');}
+function lColorLive(hex){if(!lColorKey)return;lSetColor(lColorKey,hex);lShowColor(hex);}
+function lColorDialogEvents(){const sv=L('lineupColorSV');const point=e=>{const r=sv.getBoundingClientRect();if(!r.width||!r.height)return;lColorHSV.s=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));lColorHSV.v=Math.max(0,Math.min(1,1-(e.clientY-r.top)/r.height));lColorLive(lFromHSV(lColorHSV.h,lColorHSV.s,lColorHSV.v));};
+ sv.addEventListener('pointerdown',e=>{e.preventDefault();sv.setPointerCapture(e.pointerId);point(e)});sv.addEventListener('pointermove',e=>{if(sv.hasPointerCapture(e.pointerId))point(e)});
+ L('lineupColorHue').oninput=e=>{lColorHSV.h=Number(e.target.value);lColorLive(lFromHSV(lColorHSV.h,lColorHSV.s,lColorHSV.v))};
+ L('lineupColorHex').oninput=e=>{let val=e.target.value.trim();if(!val.startsWith('#'))val='#'+val;if(/^#[0-9a-f]{6}$/i.test(val))lColorLive(val)};
+ L('lineupColorHex').onblur=()=>{if(lColorKey)lShowColor(lGetColor(lColorKey))};
+ const swatches=['#ffffff','#030303','#181818','#a457bf','#9141aa','#85152d','#ffdb0d','#f8f8f8','#4abafa','#79e7c7','#ff6682','#e5bf65','#713b88','#f2eae9','#5c445d'];
+ L('lineupColorSwatches').innerHTML=swatches.map(c=>`<button type="button" class="quick-color" style="background:${c}" data-lquick="${c}" aria-label="رنگ ${c}"></button>`).join('');
+ L('lineupColorSwatches').onclick=e=>{const b=e.target.closest('[data-lquick]');if(b)lColorLive(b.dataset.lquick)};
+ L('lineupColorDone').onclick=()=>lClose('lineupColorDialog');
+ L('lineupColorDialog').addEventListener('close',()=>{if(lColorKey&&lColorStart!==lGetColor(lColorKey)){lPast.push(lColorBefore);if(lPast.length>100)lPast.shift();lFuture=[];lHistoryButtons()}lColorKey=null;lColorBefore=null;});
 }
 function lFillRounded(ctx,x,y,w,h,r,fill,stroke=null,lineWidth=2){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lineWidth;ctx.stroke()}}
 function lPathFill(ctx,points,fill){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fillStyle=fill;ctx.fill()}
@@ -240,13 +254,21 @@ function lLogoBounds(img){
  }catch(e){console.warn('Crest bounds:',e)}
  lCrestBounds.set(img,out);return out;
 }
+const lTintedWatermarks=new Map();
 function lDrawLargeWatermark(){
  const t=lFindTeam(lState.backgroundLogoId);if(!t)return;
  const img=lReady(t.image)||lImage(t.image);if(!img?.complete||!img.naturalWidth)return;
  const b=lLogoBounds(img),zoom=1638/Math.max(b.sw,b.sh),w=b.sw*zoom,h=b.sh*zoom;
- lCtx.save();lCtx.globalAlpha=.042;
- // Keep selected crest behind the poster contents, centered and deeply zoomed as in the user's reference.
- lCtx.drawImage(img,b.sx,b.sy,b.sw,b.sh,536-w/2,766-h/2,w,h);
+ lCtx.save();
+ if(lState.watermarkCustom){
+  // Cached recolor avoids reprocessing an entire crest whenever a card or field changes.
+  const key=t.image+'|'+lState.colors.watermark;let mask=lTintedWatermarks.get(key);
+  if(!mask){mask=document.createElement('canvas');mask.width=img.naturalWidth;mask.height=img.naturalHeight;
+   const tctx=mask.getContext('2d');tctx.drawImage(img,0,0);tctx.globalCompositeOperation='source-in';tctx.fillStyle=lState.colors.watermark;tctx.fillRect(0,0,mask.width,mask.height);
+   lTintedWatermarks.set(key,mask);if(lTintedWatermarks.size>24)lTintedWatermarks.delete(lTintedWatermarks.keys().next().value);
+  }
+  lCtx.globalAlpha=.11;lCtx.drawImage(mask,b.sx,b.sy,b.sw,b.sh,536-w/2,766-h/2,w,h);
+ }else{lCtx.globalAlpha=.042;lCtx.drawImage(img,b.sx,b.sy,b.sw,b.sh,536-w/2,766-h/2,w,h);}
  lCtx.restore();
 }
 function lDrawBackground(){const c=lCtx,col=lState.colors;
@@ -273,16 +295,16 @@ function lHeader(){const c=lCtx,s=lState,col=s.colors;
  c.save();c.textBaseline='middle';c.direction='rtl';c.fillStyle=col.text;
  const rightMax=350,sz=26;
  const rightStr=[rightValue,week].filter(Boolean);
- if(rightStr.length)lText(rightStr.join('  |  '),1047,54,sz,{align:'right',color:col.text,font:s.fonts.header,maxWidth:rightMax,minSize:16});
+ if(rightStr.length)lText(rightStr.join('  |  '),1047,54,sz,{align:'right',color:col.headerText,font:s.fonts.header,maxWidth:rightMax,minSize:16});
  // Left anchored group, only adds divider when both are filled.
- const leftVal=s.matchup.trim(),time=s.time.trim();if(leftVal||time)lText([leftVal,time].filter(Boolean).join('  |  '),32,54,25,{align:'left',color:col.text,font:s.fonts.header,maxWidth:355,minSize:16});
+ const leftVal=s.matchup.trim(),time=s.time.trim();if(leftVal||time)lText([leftVal,time].filter(Boolean).join('  |  '),32,54,25,{align:'left',color:col.headerText,font:s.fonts.header,maxWidth:355,minSize:16});
  c.restore();
  if(s.teamId==='mixed'){
   const img=lReady('assets/lineup/combined-title.png')||lImage('assets/lineup/combined-title.png');
   if(img?.complete&&img.naturalWidth){const off=document.createElement('canvas');off.width=260;off.height=77;const oc=off.getContext('2d');const sc=Math.min(250/img.width,60/img.height);const w=img.width*sc,h=img.height*sc;oc.drawImage(img,130-w/2,38.5-h/2,w,h);oc.globalCompositeOperation='source-in';oc.fillStyle=s.mixColor;oc.fillRect(0,0,260,77);c.drawImage(off,410,15)}
   else lText('ترکیب منتخب',540,56,33,{color:s.mixColor,maxWidth:246,font:s.fonts.header});
  }else{
-  for(const [id,x] of [[s.headerRightId,544],[s.headerLeftId,459]]){lFillRounded(c,x,16,77,76,15,'#092c5d');const t=lFindTeam(id);if(t)lImageBox(t.image,x+7,21,63,66)}
+  for(const [id,x] of [[s.headerRightId,544],[s.headerLeftId,459]]){lFillRounded(c,x,16,77,76,15,col.logoBg);const t=lFindTeam(id);if(t)lImageBox(t.image,x+7,21,63,66)}
  }
 }
 function lLegible(fg,bg,fallback){const rgb=x=>[1,3,5].map(k=>parseInt(x.slice(k,k+2),16)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));const lum=x=>{const v=rgb(lHex(x));return .2126*v[0]+.7152*v[1]+.0722*v[2]};const a=lum(fg),b=lum(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)>=2.8?fg:fallback;}
@@ -291,17 +313,17 @@ function lTopBar(){const c=lCtx,s=lState,col=s.colors;
  lDashes(832,183,220,55,col.accent);
  lFillRounded(c,842,191,39,40,7,col.accent);lFillRounded(c,1003,191,39,40,7,col.accent);
  lText('❮',861,212,25,{color:col.upper,dir:'ltr'});lText('❯',1022,212,25,{color:col.upper,dir:'ltr'});
- lText(s.formation.replace(/-/g,'-'),943,212,28,{color:col.accent,dir:'ltr',font:s.fonts.title,maxWidth:115});
- if(s.channel.trim()&&s.telegramTop){lPlane(479,210,.83,col.accent);lText(s.channel,579,211,24,{color:col.accent,maxWidth:161,font:s.fonts.title,dir:'ltr'});}
+ lText(s.formation.replace(/-/g,'-'),943,212,28,{color:col.topText,dir:'ltr',font:s.fonts.title,maxWidth:115});
+ if(s.channel.trim()){lPlane(479,210,.83,col.topText);lText(s.channel,579,211,24,{color:col.topText,maxWidth:161,font:s.fonts.title,dir:'ltr'});}
  if(s.title.trim()){
-  lFillRounded(c,33,183,221,51,16,col.card1);lJersey(222,207,col.accent);
-  lText(s.title,125,212,23,{color:lLegible(col.accent,col.card1,col.text),font:s.fonts.title,maxWidth:169,minSize:15});
+  lFillRounded(c,33,183,221,51,16,col.topBox);lJersey(222,207,col.topText);
+  lText(s.title,125,212,23,{color:lLegible(col.topText,col.topBox,col.topText),font:s.fonts.title,maxWidth:169,minSize:15});
  }
 }
 function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=s.slots[spot.i];const w=180*spot.scale,h=189*spot.scale;const x=spot.x-w/2,y=spot.y;spot.box={x,y,w,h};
  c.save();c.beginPath();c.roundRect(x,y,w,h,13*spot.scale);c.clip();
  c.fillStyle=col.card1;c.fillRect(x,y,w,h);
- if(s.cardSecond){c.fillStyle=col.card2;c.fillRect(x+w*.37,y,w*.63,h)}
+ if(s.cardSecond){c.fillStyle=col.card2;c.fillRect(x+w*.5,y,w*.5,h)}
  // Portrait extends above the card's top border. Draw after restoring card clipping.
  c.restore();
  // Draw the frame underneath the transparent player cutout: no line across the forehead.
@@ -318,7 +340,7 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
  }
  // Position and flag anchored at left edge, visible on top of photos.
  const position=slot.positionOverride?.trim()||spot.position;
- lText(position,x+10*spot.scale,y+17*spot.scale,17*spot.scale,{align:'left',dir:'ltr',font:s.fonts.player,color:lLegible(col.accent,col.card1,col.text),maxWidth:44*spot.scale,minSize:10*spot.scale});
+ lText(position,x+10*spot.scale,y+17*spot.scale,17*spot.scale,{align:'left',dir:'ltr',font:s.fonts.player,color:lLegible(col.cardPosition,col.card1,col.cardPosition),maxWidth:44*spot.scale,minSize:10*spot.scale});
  if(slot.flagImage){lImageBox(slot.flagImage,x+8*spot.scale,y+31*spot.scale,26*spot.scale,22*spot.scale)}
  else if(slot.flag){const f=lNationalFlags.find(x=>x.id===slot.flag);if(f?.image)lImageBox(f.image,x+7*spot.scale,y+32*spot.scale,27*spot.scale,22*spot.scale);else lText(LFLAG_EMOJI[slot.flag]||slot.flag,x+8*spot.scale,y+44*spot.scale,20*spot.scale,{align:'left',dir:'ltr',color:'#ffffff',font:'Ario',maxWidth:37*spot.scale,minSize:10*spot.scale})}
  lFillRounded(c,x+2*spot.scale,y+h-30*spot.scale,w-4*spot.scale,28*spot.scale,1,col.cardName);
@@ -327,31 +349,41 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
 }
 function lFooter(){const c=lCtx,s=lState,col=s.colors;
  // Left corner telegram label and stadium. All boxes hide when empty.
- if(s.channel.trim()&&s.telegramBottom){lPlane(70,1185,.8,col.accent);lText(s.channel,167,1186,24,{color:col.accent,dir:'ltr',font:s.fonts.footer,maxWidth:165});}
+ if(s.channel.trim()){lPlane(70,1185,.8,col.footerText);lText(s.channel,167,1186,24,{color:col.footerText,dir:'ltr',font:s.fonts.footer,maxWidth:165});}
  if(s.stadium.trim()){
-  lDashes(35,1215,219,56,col.accent);
-  lStadium(210,1237,col.accent);
-  lText(s.stadium,121,1244,21,{color:col.accent,font:s.fonts.footer,maxWidth:158,minSize:13});
+  lDashes(35,1215,219,56,col.footerText);
+  lStadium(210,1237,col.footerText);
+  lText(s.stadium,121,1244,21,{color:col.footerText,font:s.fonts.footer,maxWidth:158,minSize:13});
  }
  // Woso icon on right; use exact cropped brand emblem from the supplied layout.
- const logo='assets/lineup/woso-emblem.png';if(lReady(logo))lImageBox(logo,854,1110,171,98);else lText('WoSoCenter',942,1181,25,{color:col.accent,dir:'ltr'});
+ const logo='assets/lineup/woso-emblem-full.png';const emblem=lReady(logo);if(emblem){const mask=document.createElement('canvas');mask.width=emblem.naturalWidth;mask.height=emblem.naturalHeight;const m=mask.getContext('2d');m.drawImage(emblem,0,0);m.globalCompositeOperation='source-in';m.fillStyle=col.logoTint;m.fillRect(0,0,mask.width,mask.height);lCtx.drawImage(mask,857,1102,160,115);}else lText('WoSoCenter',942,1181,25,{color:col.logoTint,dir:'ltr'});
  if(s.coach.trim()){
-  lFillRounded(c,828,1215,220,54,14,col.card1);lPerson(1015,1239,col.accent);
-  lText(s.coach,915,1242,22,{color:lLegible(col.accent,col.card1,col.text),font:s.fonts.footer,maxWidth:139,minSize:12});
+  lFillRounded(c,828,1215,220,54,14,col.footerBox);lPerson(1015,1239,col.footerText);
+  lText(s.coach,915,1242,22,{color:lLegible(col.footerText,col.footerBox,col.footerText),font:s.fonts.footer,maxWidth:139,minSize:12});
  }
 }
 function lDraw(highlight=true){if(!lState)return;lCtx.clearRect(0,0,LW,LH);lDrawBackground();lHeader();lTopBar();const spots=lSpotList();for(const spot of spots)lCard(spot,lSelected,highlight);lFooter();}
 function lRender(){if(lRAF)return;lRAF=requestAnimationFrame(()=>{lRAF=0;lPrepareImages();lDraw(true)});}
 function lSetupPointer(){
- let start=null;const locate=e=>{const r=lCanvas.getBoundingClientRect();return{x:(e.clientX-r.left)*LW/r.width,y:(e.clientY-r.top)*LH/r.height}};
- const hit=e=>{const p=locate(e);return lSpotList().find(s=>{const w=180*s.scale,h=189*s.scale;return p.x>=s.x-w/2-8&&p.x<=s.x+w/2+8&&p.y>=s.y-57*s.scale&&p.y<=s.y+h+5})?.i??null;};
- lCanvas.addEventListener('pointerdown',e=>{start=hit(e);lDragFrom=start;if(start!==null){lCanvas.setPointerCapture?.(e.pointerId);lSetSelected(start)}});
- lCanvas.addEventListener('pointerup',e=>{const end=hit(e);if(start!==null&&end!==null&&start!==end){const from=start;lChange(()=>{const a=lState.slots[from],b=lState.slots[end];lState.slots[from]=b;lState.slots[end]=a});lSetSelected(end);lNotify('بازیکنان دو کارت جابه‌جا شدند؛ پوزیشن‌ها ثابت ماندند.')}start=null;lDragFrom=null;});
- lCanvas.addEventListener('pointercancel',()=>{start=null;lDragFrom=null});
+ let start=null,origin=null;const locate=e=>{const r=lCanvas.getBoundingClientRect();return{x:(e.clientX-r.left)*LW/r.width,y:(e.clientY-r.top)*LH/r.height}};
+ const hit=e=>{const p=locate(e);return lSpotList().find(s=>{const w=180*s.scale,h=189*s.scale;return p.x>=s.x-w/2-8&&p.x<=s.x+w/2+8&&p.y>=s.y-57*s.scale&&p.y<=s.y+h+5})?.i??null};
+ lCanvas.addEventListener('pointerdown',e=>{start=hit(e);origin=locate(e);if(start!==null){lCanvas.setPointerCapture?.(e.pointerId);lSetSelected(start)}});
+ lCanvas.addEventListener('pointerup',e=>{const end=hit(e),at=locate(e),distance=origin?Math.hypot(at.x-origin.x,at.y-origin.y):0;
+  if(start!==null&&end!==null&&start!==end&&distance>12){const from=start;lChange(()=>{const a=lState.slots[from],b=lState.slots[end];lState.slots[from]=b;lState.slots[end]=a});lSetSelected(end);lNotify('بازیکنان جابه‌جا شدند؛ جایگاه‌ها ثابت ماندند.');}
+  else if(start!==null&&distance<16)lPlayerDialogShow(start);
+  start=null;origin=null;});
+ lCanvas.addEventListener('pointercancel',()=>{start=null;origin=null});
+ lCanvas.setAttribute('tabindex','0');lCanvas.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();lPlayerDialogShow(lSelected)}});
 }
 async function lLoadFont(id){if(!document.fonts)return;try{await Promise.race([document.fonts.load(`700 24px "${lFont(id)}"`),new Promise(resolve=>setTimeout(resolve,3500))]);lRender()}catch{}}
-async function lWaitResources(){const fonts=Object.values(lState.fonts).map(lLoadFont);const paths=[lFindTeam(lState.headerRightId)?.image,lFindTeam(lState.headerLeftId)?.image,lFindTeam(lState.backgroundLogoId)?.image,...lState.slots.flatMap(x=>[x.image,x.flagImage,lNationalFlags.find(f=>f.id===x.flag)?.image]),'assets/lineup/woso-emblem.png','assets/lineup/combined-title.png'].filter(Boolean);await Promise.race([Promise.all([Promise.all(fonts),...paths.map(path=>new Promise(resolve=>{const img=lImage(path);if(img.complete){resolve();return}img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))]),new Promise(resolve=>setTimeout(resolve,5000))]);}
-async function lDownload(){const btn=L('lineupDownload');btn.disabled=true;btn.textContent='در حال آماده‌سازی…';try{await lWaitResources();lDraw(false);const blob=await new Promise(resolve=>lCanvas.toBlob(resolve,'image/png'));if(!blob)throw Error('Canvas export unavailable');const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='WoSoCenter-Lineup-'+lState.formation+'-'+Date.now()+'.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);lNotify('فایل PNG با ابعاد ۱۰۸۰×۱۳۵۰ ساخته شد.')}catch(e){lNotify('دریافت PNG انجام نشد: '+e.message,'error')}finally{btn.disabled=false;btn.textContent='↓ دریافت PNG';lRender()}}
+async function lWaitResources(){const fonts=Object.values(lState.fonts).map(lLoadFont);const paths=[lFindTeam(lState.headerRightId)?.image,lFindTeam(lState.headerLeftId)?.image,lFindTeam(lState.backgroundLogoId)?.image,...lState.slots.flatMap(x=>[x.image,x.flagImage,lNationalFlags.find(f=>f.id===x.flag)?.image]),'assets/lineup/woso-emblem-full.png','assets/lineup/combined-title.png'].filter(Boolean);await Promise.race([Promise.all([Promise.all(fonts),...paths.map(path=>new Promise(resolve=>{const img=lImage(path);if(img.complete){resolve();return}img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))]),new Promise(resolve=>setTimeout(resolve,5000))]);}
+async function lDownload(scale=1){const ids=['lineupDownload','lineupDownloadBottom','lineupDownloadHQ','lineupDownloadHQBottom'],buttons=ids.map(L);buttons.forEach(b=>b.disabled=true);
+ try{await lWaitResources();const out=document.createElement('canvas');out.width=LW*scale;out.height=LH*scale;const old=lCtx;lCtx=out.getContext('2d',{alpha:false});lCtx.imageSmoothingEnabled=true;lCtx.imageSmoothingQuality='high';lCtx.scale(scale,scale);
+ try{lDraw(false)}finally{lCtx=old}
+ const blob=await new Promise(resolve=>out.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG export unavailable');
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='WoSoCenter-Lineup-'+lState.formation+'-'+(scale>1?'HQ-':'')+Date.now()+'.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ lNotify('خروجی PNG با ابعاد '+out.width+'×'+out.height+' پیکسل ساخته شد.');
+ }catch(e){lNotify('دریافت PNG انجام نشد: '+e.message,'error')}finally{buttons.forEach(b=>b.disabled=false);lRender();}}
 function lBlobToData(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob)})}
 async function lExport(){try{const snapshot=lClone(lState),media={};for(const slot of snapshot.slots)for(const k of ['imageKey','flagKey'])if(slot[k]&&!media[slot[k]]){const blob=(await lGetMedia(slot[k]))||await fetch(slot[k]==='imageKey'?slot.image:slot.flagImage).then(r=>r.blob()).catch(()=>null);if(blob)media[slot[k]]=await lBlobToData(blob)}
  // Remove ephemeral blob: URLs from exported state; importer rehydrates from media dictionary.
@@ -365,8 +397,6 @@ async function lInit(){
  let persisted=null;try{persisted=JSON.parse(localStorage.getItem(LSTORE)||'null')}catch{}
  lState=lValidate(persisted||lFresh());if(!persisted){lApplyPalette('barcelona');lState.matchup=lAutoMatch();}
  lLoaded=true;
- for(const l of lLeagues){const opt=document.createElement('option');opt.value=l.name;opt.textContent=l.name;L('lineupLeagueSelect').append(opt)}
- const flagSelect=L('lineupPlayerFlag');for(const flag of lNationalFlags){if(!flag?.id)continue;const option=document.createElement('option');option.value=flag.id;option.textContent=flag.name;flagSelect.append(option)}
  lDialogEvents();lSetInputs();lSync();lRender();lHistoryButtons();lLoadFont('Ario');await lRestoreMedia();
  if(!persisted){lTeamDialogRender();lOpen('lineupTeamDialog');}
 }

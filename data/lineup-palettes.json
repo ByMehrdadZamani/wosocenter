@@ -64,22 +64,6 @@
     "text": "#fff5ed"
   },
   {
-    "id": "liverpool-fc",
-    "name": "لیورپول ۲",
-    "teamId": "liverpool-fc",
-    "header": "#621d26",
-    "upper": "#561a22",
-    "lower": "#721824",
-    "accent": "#ed995e",
-    "side": "#eda15e",
-    "card1": "#861826",
-    "card2": "#894e1a",
-    "cardName": "#561019",
-    "cardBorder": "#aa182b",
-    "watermark": "#d4354a",
-    "text": "#fff7e9"
-  },
-  {
     "id": "montpellier-fc-logo",
     "name": "مون پلیه",
     "teamId": "montpellier-fc-logo",
@@ -160,22 +144,6 @@
     "text": "#fff7e9"
   },
   {
-    "id": "astry-wyn-2",
-    "name": "آستریا وین ۲",
-    "teamId": "astry-wyn-2",
-    "header": "#3e1d62",
-    "upper": "#371c54",
-    "lower": "#431872",
-    "accent": "#ed5eea",
-    "side": "#ed5ee2",
-    "card1": "#4d1886",
-    "card2": "#891a80",
-    "cardName": "#321056",
-    "cardBorder": "#5e18aa",
-    "watermark": "#8135d4",
-    "text": "#fff7e9"
-  },
-  {
     "id": "ayntrkht-frnkhfwrt",
     "name": "آینتراخت فرانکفورت",
     "teamId": "ayntrkht-frnkhfwrt",
@@ -243,22 +211,6 @@
     "id": "stwn-wyl",
     "name": "استون ویلا",
     "teamId": "stwn-wyl",
-    "header": "#621d38",
-    "upper": "#541c31",
-    "lower": "#72183a",
-    "accent": "#ed755e",
-    "side": "#ed7d5e",
-    "card1": "#861842",
-    "card2": "#89321a",
-    "cardName": "#56102b",
-    "cardBorder": "#aa1850",
-    "watermark": "#d43572",
-    "text": "#fff7e9"
-  },
-  {
-    "id": "stwn-wyl-2",
-    "name": "استون ویلا ۲",
-    "teamId": "stwn-wyl-2",
     "header": "#621d38",
     "upper": "#541c31",
     "lower": "#72183a",
@@ -432,22 +384,6 @@
     "text": "#fff7e9"
   },
   {
-    "id": "ttnhm-2",
-    "name": "تاتنهام ۲",
-    "teamId": "ttnhm-2",
-    "header": "#1d3562",
-    "upper": "#1c2f54",
-    "lower": "#183672",
-    "accent": "#7b5eed",
-    "side": "#845eed",
-    "card1": "#183d86",
-    "card2": "#371a89",
-    "cardName": "#102856",
-    "cardBorder": "#184aaa",
-    "watermark": "#356bd4",
-    "text": "#fff7e9"
-  },
-  {
     "id": "trnn",
     "name": "ترنانا",
     "teamId": "trnn",
@@ -547,22 +483,6 @@
     "id": "sswlw",
     "name": "ساسولو",
     "teamId": "sswlw",
-    "header": "#1d6236",
-    "upper": "#1c5430",
-    "lower": "#187238",
-    "accent": "#5eedde",
-    "side": "#5eede6",
-    "card1": "#18863f",
-    "card2": "#1a8984",
-    "cardName": "#105629",
-    "cardBorder": "#18aa4c",
-    "watermark": "#35d46d",
-    "text": "#fff7e9"
-  },
-  {
-    "id": "sswlw-2",
-    "name": "ساسولو ۲",
-    "teamId": "sswlw-2",
     "header": "#1d6236",
     "upper": "#1c5430",
     "lower": "#187238",
@@ -688,22 +608,6 @@
     "text": "#fff7e9"
   },
   {
-    "id": "ltzyw-2",
-    "name": "لاتزیو ۲",
-    "teamId": "ltzyw-2",
-    "header": "#1d4762",
-    "upper": "#1c3e54",
-    "lower": "#184f72",
-    "accent": "#5e68ed",
-    "side": "#5e60ed",
-    "card1": "#185b86",
-    "card2": "#1a1b89",
-    "cardName": "#103b56",
-    "cardBorder": "#1871aa",
-    "watermark": "#3596d4",
-    "text": "#fff7e9"
-  },
-  {
     "id": "lns",
     "name": "لانس",
     "teamId": "lns",
@@ -800,22 +704,6 @@
     "text": "#fff7e9"
   },
   {
-    "id": "lwwn-2",
-    "name": "لوون ۲",
-    "teamId": "lwwn-2",
-    "header": "#621d26",
-    "upper": "#541c23",
-    "lower": "#721823",
-    "accent": "#ed9a5e",
-    "side": "#eda35e",
-    "card1": "#861825",
-    "card2": "#894f1a",
-    "cardName": "#561018",
-    "cardBorder": "#aa182a",
-    "watermark": "#d43548",
-    "text": "#fff7e9"
-  },
-  {
     "id": "lwgrwnyw",
     "name": "لوگرونیو",
     "teamId": "lwgrwnyw",
@@ -864,22 +752,6 @@
     "text": "#fff7e9"
   },
   {
-    "id": "lywn-2",
-    "name": "لیون ۲",
-    "teamId": "lywn-2",
-    "header": "#1d3562",
-    "upper": "#1c2f54",
-    "lower": "#183772",
-    "accent": "#7b5eed",
-    "side": "#835eed",
-    "card1": "#183e86",
-    "card2": "#371a89",
-    "cardName": "#102856",
-    "cardBorder": "#184aaa",
-    "watermark": "#356cd4",
-    "text": "#fff7e9"
-  },
-  {
     "id": "mdryd",
     "name": "مادرید",
     "teamId": "mdryd",
@@ -893,38 +765,6 @@
     "cardName": "#561030",
     "cardBorder": "#aa185a",
     "watermark": "#d4357d",
-    "text": "#fff7e9"
-  },
-  {
-    "id": "mdryd-2",
-    "name": "مادرید ۲",
-    "teamId": "mdryd-2",
-    "header": "#2b621d",
-    "upper": "#27541c",
-    "lower": "#2a7218",
-    "accent": "#5eed8f",
-    "side": "#5eed98",
-    "card1": "#2d8618",
-    "card2": "#1a8947",
-    "cardName": "#1e5610",
-    "cardBorder": "#35aa18",
-    "watermark": "#54d435",
-    "text": "#fff7e9"
-  },
-  {
-    "id": "mrsy-2",
-    "name": "مارسی ۲",
-    "teamId": "mrsy-2",
-    "header": "#1d4e62",
-    "upper": "#1c4454",
-    "lower": "#185772",
-    "accent": "#5e76ed",
-    "side": "#5e6ded",
-    "card1": "#186586",
-    "card2": "#1a2589",
-    "cardName": "#104156",
-    "cardBorder": "#187eaa",
-    "watermark": "#35a5d4",
     "text": "#fff7e9"
   },
   {
@@ -973,22 +813,6 @@
     "cardName": "#561016",
     "cardBorder": "#aa1825",
     "watermark": "#d43543",
-    "text": "#fff7e9"
-  },
-  {
-    "id": "mwn-plyh",
-    "name": "مون پلیه",
-    "teamId": "mwn-plyh",
-    "header": "#1d4562",
-    "upper": "#1c3c54",
-    "lower": "#184b72",
-    "accent": "#5e63ed",
-    "side": "#635eed",
-    "card1": "#185786",
-    "card2": "#1d1a89",
-    "cardName": "#103856",
-    "cardBorder": "#186baa",
-    "watermark": "#3590d4",
     "text": "#fff7e9"
   },
   {
@@ -1277,22 +1101,6 @@
     "cardName": "#561016",
     "cardBorder": "#aa1825",
     "watermark": "#d43543",
-    "text": "#fff7e9"
-  },
-  {
-    "id": "ywntws-2",
-    "name": "یونتوس ۲",
-    "teamId": "ywntws-2",
-    "header": "#1d3c62",
-    "upper": "#1c3554",
-    "lower": "#184172",
-    "accent": "#6b5eed",
-    "side": "#745eed",
-    "card1": "#184a86",
-    "card2": "#2b1a89",
-    "cardName": "#103056",
-    "cardBorder": "#185aaa",
-    "watermark": "#357dd4",
     "text": "#fff7e9"
   },
   {

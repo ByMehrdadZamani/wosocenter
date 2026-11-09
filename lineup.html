@@ -5,88 +5,80 @@
  <meta name="theme-color" content="#100b19"><meta name="description" content="شماتیک‌ساز و ترکیب‌ساز فوتبال WoSoCenter؛ طراحی با عکس بازیکنان و خروجی PNG">
  <title>شماتیک‌ساز ترکیب فوتبال | WoSoCenter</title>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.1"><link rel="stylesheet" href="lineup.css?v=5.1">
- <script src="lineup.js?v=5.1" defer></script>
+ <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.2"><link rel="stylesheet" href="lineup.css?v=5.2">
+ <script src="lineup.js?v=5.2" defer></script>
 </head>
 <body class="lineup-page">
 <header class="topbar">
  <div class="identity"><span class="appmark woso-appmark" aria-hidden="true"><span class="appmark-icon"></span></span><div><strong>شماتیک‌ساز فوتبال</strong><small>WoSoCenter · قالب ترکیب ۰۱</small></div></div>
- <div class="top-actions"><a class="btn secondary lineup-nav-link" href="index.html">← کنداکتورساز</a><button id="lineupUndo" type="button" class="tool-btn" title="واگرد">↶</button><button id="lineupRedo" type="button" class="tool-btn" title="بازانجام">↷</button><button type="button" id="lineupTheme" class="tool-btn theme-btn" title="حالت تاریک/روشن">☀</button><span class="saved" id="lineupSave" aria-live="polite">ذخیره خودکار</span><button type="button" id="lineupDownload" class="btn primary">↓ دریافت PNG</button></div>
+ <div class="top-actions"><a class="btn secondary lineup-nav-link" href="index.html">← کنداکتورساز</a><button id="lineupUndo" type="button" class="tool-btn" title="واگرد">↶</button><button id="lineupRedo" type="button" class="tool-btn" title="بازانجام">↷</button><button type="button" id="lineupTheme" class="tool-btn theme-btn" title="حالت تاریک/روشن">☀</button><span class="saved" id="lineupSave" aria-live="polite">ذخیره خودکار</span><button type="button" id="lineupDownload" class="btn primary">↓ دریافت PNG</button><button type="button" id="lineupDownloadHQ" class="btn secondary" title="نسخه با وضوح دوبرابر">✦ کیفیت بالا</button></div>
 </header>
 <main class="workspace lineup-workspace">
  <aside class="editor lineup-editor" aria-label="تنظیمات شماتیک‌ساز">
   <div class="section-head"><div><h1>طراحی شماتیک ترکیب</h1><p>هدر، کارت‌های بازیکنان و اطلاعات پایین پوستر را ویرایش کنید.</p></div><span class="template-tag">طرح ۰۲</span></div>
   <nav class="tabs lineup-tabs" aria-label="بخش‌های شماتیک‌ساز">
-   <button type="button" class="tab active" data-ltab="header">هدر و پس‌زمینه</button>
-   <button type="button" class="tab" data-ltab="players">بازیکنان</button>
+   <button type="button" class="tab active" data-ltab="team">تیم و ترکیب</button>
+   <button type="button" class="tab" data-ltab="header">هدر</button>
+   <button type="button" class="tab" data-ltab="card">کارت بازیکن</button>
    <button type="button" class="tab" data-ltab="footer">بخش پایین</button>
+   <button type="button" class="tab" data-ltab="pattern">پترن</button>
   </nav>
-  <div id="ltab-header" class="tab-content">
+  <div id="ltab-team" class="tab-content">
    <div class="settings-group">
-    <h2>تیم و بانک بازیکنان</h2><p class="hint compact">با انتخاب تیم، لوگوی محو پس‌زمینه و رنگ‌های پیشنهادی هم تنظیم می‌شوند.</p>
+    <h2>تیم و بانک بازیکنان</h2>
     <button id="lineupChangeTeam" type="button" class="lineup-team-button"><span id="lineupTeamIcon" class="lineup-team-icon"></span><span class="lineup-team-info"><strong id="lineupTeamLabel">انتخاب تیم</strong><small id="lineupTeamCaption">برای انتخاب بزنید</small></span><span>تغییر ›</span></button>
+    <p class="hint compact">همه تیم‌ها قابل انتخاب‌اند. فهرست بازیکنان هر تیم از بانک رسمی ثبت‌شده برای همان تیم نمایش داده می‌شود.</p>
    </div>
-   <div class="settings-group">
-    <h2>متن‌های هدر</h2>
-    <div class="two-col">
-     <label>لیگ‌های آماده<select id="lineupLeagueSelect"><option value="">انتخاب از فهرست…</option></select></label>
-     <label>نام لیگ / تورنمنت<input type="text" id="lineupLeague" maxlength="75"></label>
-     <label>هفته یا مرحله<input type="text" id="lineupWeek" maxlength="35"></label>
-     <label>ساعت مسابقه<input id="lineupTime" type="text" maxlength="20" dir="ltr"></label>
-    </div>
-    <div class="lineup-match-row">
-     <label>عنوان مسابقه<input type="text" id="lineupMatch" maxlength="100"></label>
-     <button id="lineupAutoMatch" class="btn secondary" type="button" title="بازسازی عنوان از روی لوگوها">↻ نام خودکار</button>
-    </div>
-    <p class="hint compact">جداکننده‌های عمودی فقط وقتی هر دو متن کناری موجود باشند نمایش داده می‌شوند.</p>
-   </div>
-   <div class="settings-group">
-    <h2>لوگوهای وسط هدر و تصویر پس‌زمینه</h2><p class="hint compact">در حالت منتخب، تصویر «ترکیب منتخب» جای دو لوگو قرار می‌گیرد.</p>
-    <div class="two-col"><button id="lineupHeaderRight" type="button" class="lineup-select-card"><span id="lineupHeaderRightImg"></span><span>تیم سمت راست</span></button><button id="lineupHeaderLeft" type="button" class="lineup-select-card"><span id="lineupHeaderLeftImg"></span><span>تیم سمت چپ</span></button></div>
-    <div class="two-col"><label>رنگ نوشته ترکیب منتخب<input id="lineupMixedColor" type="color" value="#f2bc27"></label><label>لوگوی بزرگ پس‌زمینه<button id="lineupWatermarkPick" type="button" class="btn secondary lineup-field-button">انتخاب لوگو</button></label></div>
-   </div>
-   <div class="settings-group">
-    <h2>نوار بالای بازیکنان</h2>
-    <div class="two-col"><label>عنوان نوار<input type="text" id="lineupTitle" maxlength="38" value="شماتیک ترکیب"></label><label>آیدی تلگرام مشترک<input id="lineupTelegram" type="text" maxlength="40" dir="ltr"></label></div>
-    <label class="lineup-check"><input id="lineupTelegramTop" type="checkbox"> نمایش شناسه در بالای تصویر</label>
-   </div>
-   <div class="settings-group">
-    <div class="lineup-group-head"><h2>پالت‌های رنگی تیم‌ها</h2><button id="lineupShowPalettes" type="button" class="btn secondary">مشاهده همه / جست‌وجو</button></div>
-    <p class="hint compact">۱۰ پالت قابل انتخاب؛ انتخاب پالت، تیم و بازیکنان را تغییر نمی‌دهد.</p><div id="lineupPaletteTop" class="palette-list"></div>
-    <details class="details lineup-details"><summary>تنظیم دستی رنگ‌های پس‌زمینه و قالب</summary>
-     <div class="two-col"><label>رنگ هدر<input type="color" data-lcolor="header"></label><label>رنگ نیم‌دایره بالا<input type="color" data-lcolor="upper"></label><label>رنگ بخش پایین<input type="color" data-lcolor="lower"></label><label>رنگ شکل‌های تزئینی<input type="color" data-lcolor="accent"></label><label>رنگ خطوط کناری<input type="color" data-lcolor="side"></label><label>رنگ متن‌ها<input type="color" data-lcolor="text"></label><label>رنگ پیشنهادی لوگو<input type="color" data-lcolor="watermark"></label></div>
-    </details>
-   </div>
-   <div class="settings-group">
-    <h2>فونت هدر و قالب</h2>
-    <div class="two-col"><label>فونت هدر<button type="button" class="font-pick lineup-font-btn" data-lfont="header"></button></label><label>فونت نوار بالای تصویر<button type="button" class="font-pick lineup-font-btn" data-lfont="title"></button></label></div>
-    <details class="details lineup-details"><summary>تغییر فونت همه بخش‌ها</summary><button class="font-pick lineup-font-btn" type="button" data-lfont="all"></button><button id="lineupFontAll" type="button" class="btn secondary full">اعمال روی تمام متن‌ها</button></details>
-   </div>
+   <div class="settings-group"><h2>آرایش ترکیب</h2><div class="lineup-fixed-formation"><span>۴-۳-۳</span><small>آرایش پیش‌فرض ثابت است؛ چینش‌های جدید در نسخه‌های بعدی اضافه می‌شوند.</small></div></div>
+   <div class="settings-group"><h2>انتخاب بازیکنان</h2><p class="hint compact">روی هر کارت در پیش‌نمایش بزنید تا فهرست بازیکنان همان تیم باز شود؛ دکمه ✓ برای ثبت و × برای حذف کارت است. برای جابه‌جایی، کارت را به کارت دیگر بکشید.</p><button type="button" id="lineupOpenSelectedPlayer" class="btn secondary full">انتخاب بازیکن کارت فعلی</button></div>
   </div>
-  <div id="ltab-players" class="tab-content hidden">
-   <div class="settings-group"><h2>انتخاب کارت بازیکن</h2><p class="hint compact">روی کارت پیش‌نمایش یا یکی از دکمه‌های زیر بزنید. آرایش فعلی ۴-۳-۳ ثابت است.</p><div id="lineupSlotGrid" class="lineup-slot-grid"></div></div>
-   <div class="settings-group"><h2 id="lineupSelectedTitle">مشخصات بازیکن</h2><div class="lineup-player-choose"><button id="lineupPlayerLibrary" type="button" class="btn secondary">انتخاب از بانک بازیکنان</button><button id="lineupPlayerUpload" type="button" class="btn accent">＋ آپلود تصویر بازیکن</button></div><input id="lineupPlayerFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-    <div class="two-col"><label>نام بازیکن<input id="lineupPlayerName" type="text" maxlength="60" placeholder="نام بازیکن"></label><label>پوزیشن<input id="lineupPlayerPosition" type="text" maxlength="9" placeholder="خودکار: CM" dir="ltr"></label><label>پرچم ملیت<select id="lineupPlayerFlag"><option value="">بدون پرچم</option><option value="tr">🇹🇷 ترکیه</option><option value="es">🇪🇸 اسپانیا</option><option value="de">🇩🇪 آلمان</option><option value="fr">🇫🇷 فرانسه</option><option value="gb">🇬🇧 انگلیس</option><option value="us">🇺🇸 آمریکا</option><option value="br">🇧🇷 برزیل</option><option value="ar">🇦🇷 آرژانتین</option><option value="pt">🇵🇹 پرتغال</option><option value="it">🇮🇹 ایتالیا</option></select></label><label>اندازه تصویر بازیکن<input id="lineupPhotoScale" type="range" min="70" max="145" value="100" step="1" /></label></div>
-    <label>فایل پرچم شخصی<input id="lineupCustomFlag" type="file" accept="image/png,image/jpeg,image/webp"></label><div class="two-col"><button id="lineupResetPosition" type="button" class="btn secondary">بازگشت به پوزیشن خودکار</button><button id="lineupClearPlayer" type="button" class="btn danger-text">پاک‌کردن کارت</button></div>
+  <div id="ltab-header" class="tab-content hidden">
+   <div class="settings-group"><h2>متن‌های هدر</h2>
+    <label>انتخاب لیگ آماده<button type="button" id="lineupLeaguePick" class="asset-pick lineup-league-pick"><span class="asset-sample">🏆</span><span id="lineupLeaguePickName" class="asset-pick-name">انتخاب از لیگ‌های آماده</span><span class="pick-arrow">⌄</span></button></label>
+    <div class="two-col"><label>نام لیگ / تورنمنت<input type="text" id="lineupLeague" maxlength="75"></label><label>هفته یا مرحله<input type="text" id="lineupWeek" maxlength="35"></label><label>ساعت مسابقه<input id="lineupTime" type="text" maxlength="20" dir="ltr"></label><label>رنگ متن هدر<button type="button" class="lineup-color-button" data-lcolor="headerText" data-color-label="رنگ متن هدر"></button></label></div>
+    <div class="lineup-match-row"><label>عنوان مسابقه<input type="text" id="lineupMatch" maxlength="100"></label><button id="lineupAutoMatch" class="btn secondary" type="button">↻ نام خودکار</button></div>
+    <p class="hint compact">جداکننده‌ها تنها زمانی ظاهر می‌شوند که هر دو فیلد کناری پر باشند.</p>
    </div>
-   <div class="settings-group"><h2>رنگ و قاب کارت‌ها</h2><div class="two-col"><label>رنگ اول کارت<input id="lineupCard1" type="color"></label><label>رنگ دوم کارت<input id="lineupCard2" type="color"></label></div><label class="lineup-check"><input id="lineupSecondColor" type="checkbox" checked> نمایش دو بخش رنگی مجزا</label><div class="two-col"><label>رنگ حاشیه<input id="lineupCardBorder" type="color"></label><label>پس‌زمینه نوار نام<input id="lineupCardNameBg" type="color"></label></div><div class="two-col"><label>رنگ نام بازیکن<input id="lineupCardText" type="color"></label><label>فونت نام بازیکنان<button type="button" class="font-pick lineup-font-btn" data-lfont="player"></button></label></div></div>
-   <div class="settings-group"><h2>بانک بازیکنان</h2><p class="hint compact">فعلاً عکس‌های نمونه بارسلونا موجود هستند؛ بازیکنان تیم‌های جدید پس از افزودن به <code>data/players.json</code> در پنجره انتخاب تیم ظاهر می‌شوند.</p></div>
+   <div class="settings-group"><h2>لوگوهای وسط هدر</h2>
+    <div class="two-col"><button id="lineupHeaderRight" type="button" class="lineup-select-card"><span id="lineupHeaderRightImg"></span><span>تیم سمت راست</span></button><button id="lineupHeaderLeft" type="button" class="lineup-select-card"><span id="lineupHeaderLeftImg"></span><span>تیم سمت چپ</span></button></div>
+    <div class="two-col"><label>رنگ زمینه قاب لوگو<button class="lineup-color-button" type="button" data-lcolor="logoBg" data-color-label="رنگ قاب لوگو"></button></label><label>رنگ نوشته «ترکیب منتخب»<button type="button" class="lineup-color-button" data-lcolor="mixColor" data-color-label="رنگ ترکیب منتخب"></button></label></div>
+   </div>
+   <div class="settings-group"><h2>نوار بالای بازیکنان</h2>
+    <div class="two-col"><label>عنوان نوار<input type="text" id="lineupTitle" maxlength="38" value="شماتیک ترکیب"></label><label>آیدی تلگرام مشترک<input id="lineupTelegram" type="text" maxlength="40" dir="ltr"></label><label>رنگ متن نوار<button type="button" class="lineup-color-button" data-lcolor="topText" data-color-label="متن نوار بالا"></button></label><label>رنگ باکس عنوان<button type="button" class="lineup-color-button" data-lcolor="topBox" data-color-label="باکس عنوان بالا"></button></label></div>
+    <p class="hint compact">در صورت خالی‌بودن آیدی تلگرام، هر دو نمایش بالا و پایین خودکار مخفی می‌شوند.</p>
+   </div>
+   <div class="settings-group"><h2>فونت‌های هدر</h2><div class="two-col"><label>فونت متن هدر<button type="button" class="font-pick lineup-font-btn" data-lfont="header"></button></label><label>فونت نوار بالایی<button type="button" class="font-pick lineup-font-btn" data-lfont="title"></button></label></div></div>
+  </div>
+  <div id="ltab-card" class="tab-content hidden">
+   <div class="settings-group"><h2>رنگ و قاب کارت بازیکنان</h2><p class="hint compact">به‌صورت پیش‌فرض یک رنگ داریم. دکمه ＋ یک رنگ دوم با تقسیم دقیق ۵۰ / ۵۰ اضافه می‌کند.</p>
+    <div class="lineup-card-colors"><label>رنگ اول کارت<button type="button" class="lineup-color-button" data-lcolor="card1" data-color-label="رنگ اول کارت"></button></label><button id="lineupAddSecondColor" type="button" class="lineup-color-add" title="افزودن رنگ دوم">＋</button><div id="lineupSecondColorArea" class="lineup-second-color"><label>رنگ دوم کارت<button type="button" class="lineup-color-button" data-lcolor="card2" data-color-label="رنگ دوم کارت"></button></label><button id="lineupRemoveSecondColor" type="button" class="lineup-color-remove" title="حذف رنگ دوم">×</button></div></div>
+    <div class="two-col"><label>رنگ حاشیه<button type="button" class="lineup-color-button" data-lcolor="cardBorder" data-color-label="حاشیه کارت"></button></label><label>پس‌زمینه نام<button type="button" class="lineup-color-button" data-lcolor="cardName" data-color-label="زمینه نام"></button></label><label>رنگ نام بازیکن<button type="button" class="lineup-color-button" data-lcolor="cardText" data-color-label="نام بازیکن"></button></label><label>رنگ پوزیشن<button type="button" class="lineup-color-button" data-lcolor="cardPosition" data-color-label="پوزیشن بازیکن"></button></label></div>
+   </div>
+   <div class="settings-group"><h2>فونت کارت بازیکن</h2><button type="button" class="font-pick lineup-font-btn" data-lfont="player"></button></div>
   </div>
   <div id="ltab-footer" class="tab-content hidden">
-   <div class="settings-group"><h2>مربی و ورزشگاه</h2><div class="two-col"><label>نام سرمربی<input type="text" id="lineupCoach" maxlength="65"></label><label>نام ورزشگاه<input type="text" id="lineupStadium" maxlength="65"></label></div><p class="hint compact">خالی‌گذاشتن هر فیلد، قاب مربوط به آن را در خروجی مخفی می‌کند. لوگوی WoSoCenter ثابت است.</p></div>
-   <div class="settings-group"><h2>آیدی کانال در بخش پایین</h2><p class="hint compact">همان آیدی بخش بالاست و متن مشترک فقط از تب هدر تغییر می‌کند.</p><label class="lineup-check"><input id="lineupTelegramBottom" type="checkbox"> نمایش آیدی و لوگوی تلگرام در پایین</label></div>
+   <div class="settings-group"><h2>مربی، ورزشگاه و تلگرام</h2><div class="two-col"><label>نام سرمربی<input type="text" id="lineupCoach" maxlength="65"></label><label>نام ورزشگاه<input type="text" id="lineupStadium" maxlength="65"></label><label>آیدی کانال (مشترک با بالا)<input id="lineupTelegramFooter" type="text" maxlength="40" dir="ltr"></label></div><p class="hint compact">هر باکس با خالی‌بودن متن آن مخفی می‌شود. شناسه تلگرام بالا و پایین مشترک است.</p></div>
+   <div class="settings-group"><h2>رنگ‌های بخش پایین</h2><div class="two-col"><label>رنگ نوشته‌ها<button type="button" class="lineup-color-button" data-lcolor="footerText" data-color-label="متن بخش پایین"></button></label><label>رنگ باکس مربی<button type="button" class="lineup-color-button" data-lcolor="footerBox" data-color-label="باکس سرمربی"></button></label><label>رنگ لوگوی WoSoCenter<button type="button" class="lineup-color-button" data-lcolor="logoTint" data-color-label="لوگوی ووسو سنتر"></button></label></div></div>
    <div class="settings-group"><h2>فونت بخش پایین</h2><button type="button" class="font-pick lineup-font-btn" data-lfont="footer"></button></div>
-   <div class="settings-group"><h2>مدیریت پروژه و نسخه پشتیبان</h2><div class="two-col"><button id="lineupExport" type="button" class="btn secondary">↓ دریافت پروژه JSON</button><button id="lineupImport" type="button" class="btn secondary">↑ بارگذاری پروژه</button></div><input id="lineupImportFile" type="file" accept=".json,application/json" hidden><p class="hint compact">نسخه پشتیبان شامل عکس‌های آپلودشده نیز می‌شود.</p><button id="lineupReset" class="btn danger-text full" type="button">شروع پروژه جدید</button></div>
+   <div class="settings-group"><h2>پروژه و نسخه پشتیبان</h2><div class="two-col"><button id="lineupExport" type="button" class="btn secondary">↓ دریافت پروژه JSON</button><button id="lineupImport" type="button" class="btn secondary">↑ بارگذاری پروژه</button></div><input id="lineupImportFile" type="file" accept=".json,application/json" hidden><button id="lineupReset" type="button" class="btn danger-text full">شروع پروژه جدید</button></div>
+  </div>
+  <div id="ltab-pattern" class="tab-content hidden">
+   <div class="settings-group"><h2>لوگوی محو پس‌زمینه</h2><p class="hint compact">لوگوی انتخابی با زوم و شفافیت ثابت پشت کارت‌ها نمایش داده می‌شود؛ مستقل از بانک بازیکنان.</p><button id="lineupWatermarkPick" type="button" class="btn secondary lineup-field-button">انتخاب لوگوی پس‌زمینه</button></div>
+   <div class="settings-group"><div class="lineup-group-head"><h2>پالت‌های آماده تیم‌ها</h2><button id="lineupShowPalettes" type="button" class="btn secondary">مشاهده همه / جست‌وجو</button></div><p class="hint compact">۱۰ پالت نخست در اینجا و تمام پالت‌ها همراه با لوگو در پنجره جست‌وجو نمایش داده می‌شوند.</p><div id="lineupPaletteTop" class="palette-list"></div></div>
+   <div class="settings-group"><h2>رنگ‌های زمینه و شکل‌ها</h2><div class="two-col"><label>رنگ هدر<button type="button" class="lineup-color-button" data-lcolor="header" data-color-label="زمینه هدر"></button></label><label>رنگ نیم‌دایره بالا<button type="button" class="lineup-color-button" data-lcolor="upper" data-color-label="نیم‌دایره بالا"></button></label><label>رنگ پایین پوستر<button type="button" class="lineup-color-button" data-lcolor="lower" data-color-label="پایین پوستر"></button></label><label>رنگ اشکال تزئینی<button type="button" class="lineup-color-button" data-lcolor="accent" data-color-label="اشکال تزئینی"></button></label><label>رنگ حاشیه کناری<button type="button" class="lineup-color-button" data-lcolor="side" data-color-label="خطوط کناری"></button></label><label>رنگ لوگوی محو<button type="button" class="lineup-color-button" data-lcolor="watermark" data-color-label="رنگ لوگوی محو"></button></label></div></div>
+   <div class="settings-group"><h2>فونت کلی پوستر</h2><button class="font-pick lineup-font-btn" type="button" data-lfont="all"></button><button id="lineupFontAll" type="button" class="btn secondary full">اعمال فونت روی همه بخش‌ها</button></div>
   </div>
   <div id="lineupFeedback" class="feedback" role="status" aria-live="polite"></div>
  </aside>
- <section class="preview-area lineup-preview" aria-label="پیش‌نمایش شماتیک"><div class="preview-head"><div><h2>پیش‌نمایش شماتیک</h2><p>کارت بازیکن رو لمس کن تا بتونی ویرایشش کنی.</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div><div class="canvas-holder lineup-canvas-holder"><canvas id="lineupCanvas" width="1080" height="1350" role="img" aria-label="پوستر ترکیب فوتبالی"></canvas></div><div class="lineup-preview-foot"><span id="lineupPreviewHint">پیش‌نمایش لحظه‌ای · عکس نمونه قابل جایگزینی</span><button id="lineupDownloadBottom" type="button" class="btn secondary">↓ دانلود تصویر</button></div></section>
+ <section class="preview-area lineup-preview" aria-label="پیش‌نمایش شماتیک"><div class="preview-head"><div><h2>پیش‌نمایش شماتیک</h2><p>کارت بازیکن رو لمس کن تا بتونی ویرایشش کنی.</p></div><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div><div class="canvas-holder lineup-canvas-holder"><canvas id="lineupCanvas" width="1080" height="1350" role="img" aria-label="پوستر ترکیب فوتبالی"></canvas></div><div class="lineup-preview-foot"><span id="lineupPreviewHint">پیش‌نمایش لحظه‌ای · عکس نمونه قابل جایگزینی</span><div class="lineup-download-actions"><button id="lineupDownloadBottom" type="button" class="btn secondary">↓ دانلود تصویر</button><button id="lineupDownloadHQBottom" type="button" class="btn primary">✦ تصویر باکیفیت ۲×</button></div></div></section>
 </main>
 <footer class="site-footer">WoSoCenter · <a href="index.html">کنداکتورساز</a> · <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer">@ByMehrdad</a></footer>
-<dialog class="picker-dialog lineup-modal" id="lineupTeamDialog"><div class="dialog-head"><div><h2>شماتیک کدام تیم را می‌سازید؟</h2><p>فقط تیم‌های دارای بانک بازیکن و حالت ترکیب منتخب نمایش داده می‌شوند.</p></div><button class="dialog-close" data-lclose="lineupTeamDialog" type="button" aria-label="بستن">×</button></div><div class="dialog-search"><input id="lineupTeamSearch" type="search" placeholder="جست‌وجو در تیم‌های دارای بازیکن…"></div><div class="lineup-team-grid" id="lineupTeamGrid"></div></dialog>
+<dialog class="picker-dialog lineup-modal" id="lineupTeamDialog"><div class="dialog-head"><div><h2>شماتیک کدام تیم را می‌سازید؟</h2><p>تمام تیم‌ها قابل انتخاب‌اند؛ بازیکنان هر تیم فقط از بانک ثبت‌شده بارگذاری می‌شوند.</p></div><button class="dialog-close" data-lclose="lineupTeamDialog" type="button" aria-label="بستن">×</button></div><div class="dialog-search"><input id="lineupTeamSearch" type="search" placeholder="جست‌وجوی نام تیم…"></div><div class="lineup-team-grid" id="lineupTeamGrid"></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupLogoDialog"><div class="dialog-head"><div><h2 id="lineupLogoTitle">انتخاب لوگوی تیم</h2><p>از بانک تیم‌های کنداکتورساز</p></div><button class="dialog-close" data-lclose="lineupLogoDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupLogoSearch" type="search" placeholder="جست‌وجوی لوگو…"></div><div class="lineup-logo-grid" id="lineupLogoGrid"></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupPaletteDialog"><div class="dialog-head"><div><h2>تمام پالت‌های رنگی تیم‌ها</h2><p>انتخاب پالت به بازیکنان تیم وابسته نیست.</p></div><button class="dialog-close" data-lclose="lineupPaletteDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupPaletteSearch" type="search" placeholder="جست‌وجو بر اساس نام تیم…"></div><div id="lineupPaletteGrid" class="lineup-palette-grid"></div></dialog>
-<dialog class="picker-dialog lineup-modal" id="lineupPlayerDialog"><div class="dialog-head"><div><h2>بازیکن را انتخاب کنید</h2><p id="lineupPlayerCount">بازیکنان تیم انتخابی</p></div><button class="dialog-close" data-lclose="lineupPlayerDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupPlayerSearch" type="search" placeholder="جست‌وجوی نام بازیکن…"></div><div id="lineupPlayerGrid" class="lineup-library-grid"></div></dialog>
+<dialog class="picker-dialog lineup-modal" id="lineupPlayerDialog"><div class="dialog-head"><div><h2 id="lineupPlayerDialogTitle">انتخاب بازیکن کارت</h2><p id="lineupPlayerCount">بازیکنان تیم</p></div><button class="dialog-close" data-lclose="lineupPlayerDialog" type="button" title="بستن بدون تغییر">×</button></div><div class="dialog-search"><input id="lineupPlayerSearch" type="search" placeholder="جست‌وجوی نام بازیکن…"></div><div id="lineupPlayerGrid" class="lineup-library-grid"></div><div class="lineup-popup-fields"><label>نام روی کارت<input id="lineupPopupName" type="text" maxlength="60"></label><label>پوزیشن دلخواه<input id="lineupPopupPosition" type="text" maxlength="12" dir="ltr" placeholder="خودکار"></label><label>اندازه تصویر<input id="lineupPopupScale" type="range" min="70" max="145" step="1" value="100"></label></div><div class="lineup-popup-actions"><button id="lineupPlayerRemove" type="button" class="btn danger-text">× حذف بازیکن</button><button id="lineupPlayerConfirm" type="button" class="btn primary">✓ ثبت انتخاب</button></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupFontDialog"><div class="dialog-head"><div><h2>انتخاب فونت فارسی</h2><p>پیش‌نمایش واقعی با عبارت «بارسلونا»</p></div><button class="dialog-close" data-lclose="lineupFontDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupFontSearch" type="search" placeholder="جست‌وجوی فونت…"></div><div id="lineupFontGrid" class="lineup-font-grid"></div></dialog>
+<dialog class="picker-dialog lineup-modal" id="lineupLeagueDialog"><div class="dialog-head"><div><h2>انتخاب لیگ / تورنمنت</h2><p>نام انتخابی در فیلد هدر قرار می‌گیرد و قابل ویرایش است.</p></div><button type="button" class="dialog-close" data-lclose="lineupLeagueDialog">×</button></div><div class="dialog-search"><input id="lineupLeagueSearch" type="search" placeholder="جست‌وجوی لیگ…"></div><div id="lineupLeagueGrid" class="lineup-league-grid"></div></dialog>
+<dialog class="picker-dialog color-dialog" id="lineupColorDialog"><div class="dialog-head"><div><h2 id="lineupColorTitle">انتخاب رنگ</h2><p>انتخابگر رنگ اختصاصی WoSoCenter</p></div><button type="button" class="dialog-close" data-lclose="lineupColorDialog">×</button></div><div class="color-preview-row"><div id="lineupColorPreview" class="color-preview"></div><label>کد رنگ HEX<input type="text" id="lineupColorHex" maxlength="7" dir="ltr" spellcheck="false"></label></div><div class="picker-sv" id="lineupColorSV"><span class="picker-target" id="lineupColorTarget"></span></div><label class="hue-label">طیف رنگ<input id="lineupColorHue" type="range" min="0" max="360" value="270"></label><div id="lineupColorSwatches" class="color-swatches"></div><button id="lineupColorDone" type="button" class="btn primary full">✓ تأیید رنگ</button></dialog>
 </body>
 </html>

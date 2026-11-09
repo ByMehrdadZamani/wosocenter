@@ -42,3 +42,46 @@
 .lineup-modal .dialog-search input[type="search"]{border:0!important;box-shadow:none!important;outline:0!important;background:transparent!important;border-radius:0!important;padding:9px 0!important;min-height:0!important;height:38px!important;line-height:20px;width:100%!important;appearance:none}
 .lineup-modal .dialog-search input:focus{border:0!important;box-shadow:none!important;outline:0!important}
 @media(max-width:510px){.lineup-tabs .tab{font-size:10.5px}.lineup-editor .tab-content .two-col{gap:8px}.lineup-match-row .btn{min-width:76px;font-size:10px}.lineup-modal .dialog-search input{height:35px!important}}
+
+/* v5.2: section-based editor, styled custom picker and touch-friendly card colors */
+.lineup-page{font-family:Ario,Tahoma,sans-serif}
+.lineup-tabs{flex-wrap:wrap;justify-content:space-between;gap:0;padding:0 8px}
+.lineup-tabs .tab{flex:1 1 18%;min-width:0;font-size:10.8px;line-height:1.5;padding:11px 3px;white-space:normal}
+.lineup-download-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.lineup-download-actions .btn{font-size:10px;padding:9px 10px}
+.lineup-fixed-formation{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.lineup-fixed-formation span{font-size:26px;direction:ltr;font-weight:900;color:var(--violet);font-family:Ario,Tahoma,sans-serif}
+.lineup-fixed-formation small{color:var(--muted);font-size:11px;line-height:1.9;flex:1}
+.lineup-league-pick{margin-top:6px}
+.lineup-color-button{width:100%;display:flex;align-items:center;gap:10px;min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--input-border);background:var(--input);color:var(--text);text-align:right;direction:rtl}
+.lineup-color-button:hover{border-color:var(--violet)}
+.lineup-color-round{display:block;width:29px;height:29px;flex:none;border-radius:50%;border:3px solid #fff9;box-shadow:0 0 0 1px #7775,0 2px 6px #0002}
+.lineup-color-code{font-size:11px;letter-spacing:.4px;font-family:system-ui,sans-serif;direction:ltr;flex:1;text-align:left}
+.lineup-color-chevron{font-size:18px;color:var(--muted)}
+.lineup-card-colors{display:flex;align-items:end;gap:8px;flex-wrap:wrap;margin:10px 0 16px}
+.lineup-card-colors label{flex:1;min-width:100px}
+.lineup-color-add,.lineup-color-remove{width:38px;height:42px;display:grid;place-items:center;flex:none;background:var(--input);border:1px solid var(--input-border);border-radius:10px;color:var(--violet);font-size:24px;line-height:1}
+.lineup-color-add:hover,.lineup-color-remove:hover{border-color:var(--violet)}
+.lineup-color-remove{color:#ef829c;font-size:23px}
+.lineup-second-color{display:flex;gap:8px;align-items:end;flex:1.1}
+.lineup-second-color[hidden],.lineup-color-add[hidden]{display:none!important}
+.lineup-palette-grid .palette-option,.lineup-page .palette-option{min-height:82px}
+.lineup-palette-label{display:flex;align-items:center;gap:8px;min-height:32px;width:100%;padding-left:16px}
+.lineup-palette-logo{width:32px;height:32px;flex:none;background:#8882;border-radius:8px;padding:4px;object-fit:contain}
+.lineup-palette-label strong{font-size:11px;line-height:1.6;min-width:0}
+.lineup-palette-label .lineup-brandmark{font-size:22px;color:var(--violet)}
+.lineup-library-grid button.pending{border:2px solid #30c38b;background:color-mix(in srgb,#30c38b 12%,var(--input))}
+.lineup-library-grid button:focus-visible,.lineup-color-button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.lineup-popup-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:15px 0}
+.lineup-popup-fields label{margin:0}
+.lineup-popup-fields input[type=text]{width:100%;min-width:0;border:1px solid var(--input-border);border-radius:9px;background:var(--input);color:var(--text);padding:9px;font-size:12px;min-height:40px}
+.lineup-popup-fields input[type=range]{width:100%;accent-color:var(--violet);min-height:38px}
+.lineup-popup-actions{display:flex;justify-content:space-between;gap:12px;margin-top:15px}
+.lineup-popup-actions button{flex:1}
+.lineup-league-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:56dvh;overflow:auto}
+.lineup-league-grid button{background:var(--input);color:var(--text);border:1px solid var(--edge);border-radius:10px;min-height:58px;padding:11px;display:flex;align-items:center;gap:10px;text-align:right}
+.lineup-league-grid button img{width:38px;height:38px;object-fit:contain;flex:none}
+.lineup-league-grid button:hover{border-color:var(--violet)}
+#lineupColorDialog{width:min(485px,calc(100vw - 24px))}
+#lineupColorSV{touch-action:none}
+@media(max-width:510px){.lineup-tabs .tab{font-size:9.4px;padding:10px 2px}.lineup-popup-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.lineup-popup-fields label:last-child{grid-column:1/-1}.lineup-color-code{font-size:10px}.lineup-page .top-actions #lineupDownloadHQ{font-size:9px;padding:7px}}
