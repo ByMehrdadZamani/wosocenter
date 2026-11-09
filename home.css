@@ -14,3 +14,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;ba
 .home-tile{padding-left:66px}
 .tile-arrow{top:50%;bottom:auto;transform:translateY(-50%);left:20px;display:grid;place-items:center;line-height:1;pointer-events:none}
 @media(max-width:680px){.home-tile{padding-left:56px;min-height:130px}.tile-arrow{left:14px;top:50%;bottom:auto}}
+/* Interview tool: third home card; no changes to existing tile styling. */
+.interview-tile .tile-art{background:#4c6bd022;color:#9bb1ff;border-color:#7997ee66}
+.interview-tile .tile-text small{color:#9db7e8}
+@media(min-width:681px){.home-actions:has(.interview-tile){grid-template-columns:repeat(3,minmax(0,1fr))}.home-actions:has(.interview-tile) .home-tile{padding-right:18px;padding-left:53px}.home-actions:has(.interview-tile) .tile-text strong{font-size:21px}.home-actions:has(.interview-tile) .tile-arrow{left:12px}}
