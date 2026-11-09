@@ -76,3 +76,7 @@
 
 ## v4.3
 Image banks use exact-pixel lossless WebP where smaller than original PNG. All details in UPDATE-V4.3.md.
+
+## نسخه ۵.۰ — شماتیک‌ساز ترکیب
+
+صفحه جدید `lineup.html` شامل شماتیک‌ساز مستقل است. برای اطلاعات نصب و قابلیت‌ها `UPDATE-V5.0.md` و برای فرمت فایل بانک عکس بازیکنان و پرچم‌ها `PLAYERS-DATA-GUIDE.md` را ببینید. هر ۲۰ فونت و ۸۲ لوگوی نسخه قبلی حفظ شده‌اند. کنداکتورساز در همان `index.html` باقی مانده و کلیدهای ذخیره‌سازی پروژه‌های قدیمی آن تغییر نکرده‌اند.

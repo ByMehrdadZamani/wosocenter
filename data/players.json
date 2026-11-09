@@ -1,0 +1,20 @@
+[
+  {
+    "id": "demo-bonmati",
+    "teamId": "barcelona",
+    "name": "آیتانا بونماتی",
+    "image": "assets/lineup/demo-portrait-a.png",
+    "flag": "tr",
+    "position": "CM",
+    "demo": true
+  },
+  {
+    "id": "demo-patri",
+    "teamId": "barcelona",
+    "name": "پاتری",
+    "image": "assets/lineup/demo-portrait-b.png",
+    "flag": "tr",
+    "position": "CM",
+    "demo": true
+  }
+]
