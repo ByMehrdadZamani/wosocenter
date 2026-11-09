@@ -6,41 +6,50 @@
 <title>مصاحبه ووسو | WoSoCenter</title>
 <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"/>
-<link rel="stylesheet" href="interview.css?v=1.0"/>
-<script src="interview.js?v=1.0" defer></script>
+<link rel="stylesheet" href="interview.css?v=1.1"/>
+<script src="interview.js?v=1.1" defer></script>
 </head>
 <body>
-<header class="app-header">
- <a href="index.html" class="brand-link"><span class="brand-symbol">W</span><span><strong>ووسو سنتر</strong><small>INTERVIEW STUDIO</small></span></a>
- <div class="header-actions"><span class="header-version">مصاحبه‌ساز · قالب ۱</span><button type="button" class="btn ghost" id="resetProject">↻ طرح جدید</button><button type="button" class="btn primary" id="downloadTop">↓ دانلود PNG</button></div>
+<header class="topbar woso-editor-topbar">
+  <div class="identity"><span class="appmark woso-appmark" aria-hidden="true"><span class="appmark-icon"></span></span><div><strong>مصاحبه‌ساز ووسو</strong><small>WoSoCenter · قالب ۰۱</small></div></div>
+  <a href="index.html" class="btn secondary woso-home-link woso-home-separated" title="بازگشت به خانه" aria-label="خانه"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg><span>خانه</span></a>
+  <div class="top-actions"><div class="history-actions" aria-label="ویرایش‌های قبلی">
+    <button id="undoBtn" class="tool-btn" type="button" title="بازگشت به تغییر قبلی (Ctrl+Z)" aria-label="واگرد">↶</button>
+    <button id="redoBtn" class="tool-btn" type="button" title="بازگرداندن تغییر (Ctrl+Y)" aria-label="بازانجام">↷</button>
+    <button id="showHistoryBtn" class="tool-btn history-icon" type="button" title="مشاهده تاریخچه" aria-label="تاریخچه تغییرات"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/></svg></button>
+  </div><button id="themeToggle" class="tool-btn theme-btn" type="button" title="تغییر حالت روشن و تاریک" aria-label="تغییر حالت روشن و تاریک">☀</button>
+  <span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار</span>
+  <button type="button" class="btn secondary" id="resetProject">↻ طرح جدید</button>
+  <button type="button" class="btn primary" id="downloadTop">↓ دریافت PNG</button></div>
 </header>
 <main class="workspace">
- <aside class="sidebar" aria-label="تنظیمات مصاحبه">
-  <div class="sidebar-header"><div><h1>مصاحبه ووسو</h1><p>عکس، سؤال و پاسخ را وارد کنید؛ پوستر آماده بگیرید.</p></div></div>
+ <aside class="sidebar editor" aria-label="تنظیمات مصاحبه">
+  <div class="sidebar-header section-head"><div><h1>تنظیمات مصاحبه</h1><p>عکس، سؤال و پاسخ را وارد کنید؛ پوستر آماده بگیرید.</p></div><span class="template-tag">طرح ۰۱</span></div>
   <nav class="tabs" aria-label="بخش تنظیمات">
-   <button class="tab active" type="button" data-tab="content">متن مصاحبه</button>
-   <button class="tab" type="button" data-tab="photo">تصویر و لوگو</button>
+   <button class="tab active" type="button" data-tab="photo" aria-selected="true">تصویر و لوگو</button>
+   <button class="tab" type="button" data-tab="content" aria-selected="false">متن مصاحبه</button>
    <button class="tab" type="button" data-tab="design">رنگ و قالب</button>
-   <button class="tab" type="button" data-tab="footer">آیدی کانال</button>
+   <button class="tab" type="button" data-tab="footer" aria-selected="false">آیدی کانال</button>
+   <button class="tab" type="button" data-tab="history" aria-selected="false">تاریخچه</button>
   </nav>
-  <div class="tab-panel" id="tab-content">
+  <div class="tab-panel hidden" id="tab-content">
    <section class="setting"><h2>سؤال مصاحبه</h2><p class="help">متن زردرنگ قسمت اول. می‌توانید متن را انتخاب و قالب‌بندی کنید.</p>
-     <div class="editor-toolbar" data-editor="questionEditor"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="پاک‌کردن قالب‌بندی">Tx</button><button type="button" data-cmd="justifyFull" title="تراز دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
+     <div class="editor-toolbar" data-editor="questionEditor"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="پاک‌کردن قالب‌بندی">Tx</button><button type="button" data-align="right" title="راست‌چین">⇥</button><button type="button" data-align="center" title="وسط‌چین">≡</button><button type="button" data-align="left" title="چپ‌چین">⇤</button><button type="button" data-align="justify" title="تراز دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
      <div class="rich-editor" id="questionEditor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="متن سؤال مصاحبه" dir="rtl" spellcheck="true">نینا پاتالون، سرمربی تیم ملی لهستان، گفته بود که تو در این فصل شایسته عنوان بهترین بازیکن جهان بوده‌ای. هم‌تیمی‌هایت نیز حمایت زیادی از تو نشان داده‌اند. این حمایت برایت چه معنایی دارد؟</div>
      <div class="two-cols"><label>فونت سؤال<button type="button" class="select-btn" data-font="question" id="fontQuestion">مخیک ▾</button></label><label>رنگ سؤال<button type="button" class="color-btn" data-color="questionColor" aria-label="رنگ سؤال"></button></label></div>
-     <label>اندازهٔ قلم سؤال <span class="live-number" id="questionSizeLabel"></span><input id="questionSize" data-number="questionSize" type="range" min="16" max="36" step="1"/></label>
+     <div class="font-size-setting"><label>اندازهٔ قلم سؤال <span class="live-number" id="questionSizeLabel"></span><input id="questionSize" data-number="questionSize" type="range" min="16" max="36" step="1"/></label><label>پیکسل<input class="numeric-setting" id="questionSizeNumber" data-number-input="questionSize" type="number" min="16" max="36" step="1" dir="ltr"/></label></div><button type="button" class="btn secondary reset-font" data-reset-font="question">↻ بازگشت فونت و اندازهٔ سؤال به پیش‌فرض (آریو)</button>
    </section>
    <section class="setting"><h2>جواب مصاحبه</h2><p class="help">متن سفید زیر سؤال؛ شکست پاراگراف‌ها و نیم‌فاصله حفظ می‌شود.</p>
-     <div class="editor-toolbar" data-editor="answerEditor"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="پاک‌کردن قالب‌بندی">Tx</button><button type="button" data-cmd="justifyFull" title="تراز دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
+     <div class="editor-toolbar" data-editor="answerEditor"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="پاک‌کردن قالب‌بندی">Tx</button><button type="button" data-align="right" title="راست‌چین">⇥</button><button type="button" data-align="center" title="وسط‌چین">≡</button><button type="button" data-align="left" title="چپ‌چین">⇤</button><button type="button" data-align="justify" title="تراز دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
      <div class="rich-editor" id="answerEditor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="متن جواب مصاحبه" dir="rtl" spellcheck="true">حالا که دوباره این حرف‌ها را می‌شنوم، واقعاً احساس گرمای خاصی در قلبم دارم. از این کلمات و پیام‌هایی که از دخترها دریافت کردم، عمیقاً تحت تأثیر قرار گرفتم و بسیار سپاسگزارم. خوشحالم که عضوی از چنین تیم فوق‌العاده‌ای هستم؛ تیمی که هرکدام از ما تمام توانمان را به کار می‌گیریم تا در کنار یکدیگر به دستاوردی ویژه برسیم. اینکه کاپیتان چنین تیمی هستم، برایم افتخار بزرگی است. حمایت هم‌تیمی‌هایم واقعاً اهمیت زیادی برایم دارد و از آن‌ها بسیار ممنونم.</div>
      <div class="two-cols"><label>فونت جواب<button type="button" class="select-btn" data-font="answer" id="fontAnswer">مخیک ▾</button></label><label>رنگ جواب<button type="button" class="color-btn" data-color="answerColor" aria-label="رنگ جواب"></button></label></div>
-     <label>اندازهٔ قلم جواب <span class="live-number" id="answerSizeLabel"></span><input id="answerSize" data-number="answerSize" type="range" min="16" max="36" step="1"/></label>
+     <div class="font-size-setting"><label>اندازهٔ قلم جواب <span class="live-number" id="answerSizeLabel"></span><input id="answerSize" data-number="answerSize" type="range" min="16" max="36" step="1"/></label><label>پیکسل<input class="numeric-setting" id="answerSizeNumber" data-number-input="answerSize" type="number" min="16" max="36" step="1" dir="ltr"/></label></div><button type="button" class="btn secondary reset-font" data-reset-font="answer">↻ بازگشت فونت و اندازهٔ جواب به پیش‌فرض (آریو)</button>
    </section>
    <section class="setting"><h2>تنظیم نمایش متن</h2><p class="help">تراز پیش‌فرض دوطرفه (Justify) است. اگر متن طولانی شود، صفحات بعدی خودکار ساخته می‌شوند.</p>
     <label>فاصلهٔ بین خطوط <span class="live-number" id="lineHeightLabel"></span><input type="range" data-number="lineHeight" id="lineHeight" min="1.2" max="2.0" step="0.05"/></label>
    </section>
   </div>
-  <div class="tab-panel hidden" id="tab-photo">
+  <div class="tab-panel" id="tab-photo">
    <section class="setting"><h2>تصویر اصلی مصاحبه</h2><p class="help">بهتر است عکس عمودی و باکیفیت انتخاب شود. در صورت تمایل هر عکس افقی هم قابل تنظیم است.</p>
     <div class="photo-sample" id="photoSample"></div>
     <input type="file" id="photoUpload" accept="image/png,image/jpeg,image/webp,image/avif,image/gif,image/bmp" hidden/>
@@ -56,8 +65,8 @@
    <section class="setting"><h2>پالت‌های رنگی آماده</h2><p class="help">پالت‌های خود ووسو سنتر؛ تصویر پس‌زمینه با انتخاب پالت تغییر نمی‌کند.</p><div id="paletteList" class="palettes"></div></section>
    <section class="setting"><h2>باکس متن مصاحبه</h2>
     <div class="two-cols"><label>رنگ زمینه<button type="button" class="color-btn" data-color="panelColor"></button></label><label>رنگ خط زیر کادر<button type="button" class="color-btn" data-color="stripe0"></button></label></div>
-    <label>شفافیت (Opacity) <span id="panelOpacityLabel" class="live-number"></span><input type="range" id="panelOpacity" data-number="panelOpacity" min="0" max="100" step="1"/></label>
-    <label>انحنای گوشه‌ها <span id="panelRadiusLabel" class="live-number"></span><input type="range" id="panelRadius" data-number="panelRadius" min="0" max="60" step="1"/></label>
+    <div class="font-size-setting"><label>شفافیت (Opacity) <span id="panelOpacityLabel" class="live-number"></span><input type="range" id="panelOpacity" data-number="panelOpacity" min="0" max="100" step="1"/></label><label>درصد<input class="numeric-setting" id="panelOpacityNumber" data-number-input="panelOpacity" type="number" min="0" max="100" step="1" dir="ltr"/></label></div>
+    <div class="font-size-setting"><label>انحنای گوشه‌ها <span id="panelRadiusLabel" class="live-number"></span><input type="range" id="panelRadius" data-number="panelRadius" min="0" max="60" step="1"/></label><label>پیکسل<input class="numeric-setting" id="panelRadiusNumber" data-number-input="panelRadius" type="number" min="0" max="60" step="1" dir="ltr"/></label></div>
    </section>
    <section class="setting"><h2>نوار رنگی پایین کادر</h2><p class="help">رنگ‌های عکس مرجع به‌صورت پیش‌فرض حفظ شده‌اند؛ هر بخش جداگانه قابل تغییر است.</p><div class="stripe-controls" id="stripeColors"></div></section>
    <section class="setting"><h2>پروژه</h2><div class="two-cols"><button class="btn secondary" type="button" id="exportProject">↓ ذخیره تنظیمات JSON</button><button class="btn secondary" type="button" id="importProject">↑ بازیابی تنظیمات</button></div><input type="file" id="projectUpload" accept="application/json,.json" hidden/><p class="help">در فایل پروژه، تصویر آپلودشده نیز ذخیره می‌شود؛ حجم آن به حجم عکس بستگی دارد.</p></section>
@@ -70,16 +79,18 @@
     <p class="help">اگر آیدی را خالی بگذارید، آیکن و متن پایین پوستر نمایش داده نمی‌شود.</p>
    </section>
   </div>
+  <div class="tab-panel hidden" id="tab-history"><div class="history-top"><div><h2>تاریخچهٔ تغییرات</h2><small id="historyCount">۰ تغییر</small></div><div class="inline-tools"><button class="btn secondary" type="button" id="historyUndo">↶ واگرد</button><button class="btn secondary" type="button" id="historyRedo">↷ بازانجام</button></div></div><p class="help">روی هر مرحله بزنید تا به همان وضعیت برگردید؛ مراحل جدید پس از بازانجام، از همان نقطه ثبت می‌شوند.</p><div class="history-list" id="historyList"></div></div>
   <div role="status" aria-live="polite" class="status" id="status"></div>
  </aside>
- <section class="preview-section" aria-label="پیش‌نمایش مصاحبه">
-  <div class="preview-heading"><div><h2>پیش‌نمایش زنده</h2><p>اندازه خروجی: ۱۰۸۰ × ۱۳۵۰ پیکسل</p></div><div class="head-side"><span class="page-tag" id="pageCounter">صفحه ۱ از ۱</span><button class="btn secondary" type="button" id="downloadAll">↓ دریافت همه صفحات</button></div></div>
+ <section class="preview-section preview-area" aria-label="پیش‌نمایش مصاحبه">
+  <div class="preview-heading preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><div class="head-side preview-head-tools"><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span><button type="button" id="openPagesBtn" class="btn secondary page-manage-trigger" aria-haspopup="dialog" aria-controls="pagesDialog">▦ مدیریت صفحات <span id="pageTotal">۱ صفحه</span></button></div></div>
   <div class="poster-wrapper"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش پوستر مصاحبه"></canvas></div>
-  <div class="preview-bottom"><button type="button" id="previousPage" class="btn secondary">→ صفحه قبل</button><div id="pageDots" class="page-dots"></div><button type="button" id="nextPage" class="btn secondary">صفحه بعد ←</button></div>
+  <div class="preview-bottom"><button type="button" id="previousPage" class="btn secondary">→ صفحه قبل</button><div id="pageDots" class="page-dots"></div><button type="button" id="nextPage" class="btn secondary">صفحه بعد ←</button><span class="page-tag" id="pageCounter">صفحه ۱ از ۱</span></div>
   <div class="preview-hint"><span>✦</span> متن و قالب صفحه‌های بعدی خودکار تنظیم می‌شوند؛ هیچ قسمتی از مصاحبه حذف نمی‌شود.</div>
  </section>
 </main>
 <footer class="app-footer">WoSoCenter · <a href="index.html">بازگشت به صفحهٔ اصلی</a></footer>
+<dialog id="pagesDialog" class="modal pages-dialog" aria-labelledby="pagesTitle"><div class="modal-head"><div><h2 id="pagesTitle">مدیریت صفحات مصاحبه</h2><p>انتخاب، جابه‌جایی، تکثیر و دریافت جداگانهٔ صفحات</p></div><button type="button" class="close-modal" data-close="pagesDialog">×</button></div><div class="pages-dialog-buttons"><button type="button" class="btn secondary" id="addPageBtn">＋ افزودن صفحه</button><button type="button" class="btn primary" id="downloadAllPagesBtn">↓ دانلود همهٔ صفحات (PNG جداگانه)</button></div><div class="page-gallery" id="pageGallery"></div><div id="manualPageEditing" class="manual-page-edit hidden"><h3>متن صفحهٔ دستی</h3><p class="help">برای صفحه‌های افزوده‌شده یا تکثیرشده می‌توانید متن مستقل بنویسید. صفحات خودکار از متن اصلی ساخته می‌شوند.</p><label>سؤال صفحه<input type="text" id="manualQuestion" placeholder="سؤال این صفحه"/></label><label>جواب صفحه<textarea id="manualAnswer" rows="3" placeholder="متن پاسخ این صفحه"></textarea></label><p class="help" id="manualPageWarning"></p></div><p class="help pages-download-hint">فایل هر صفحه جداگانه دانلود می‌شود. در صورت درخواست مرورگر، اجازهٔ دانلود چند فایل از این سایت را بدهید. صفحات خودکار حاوی متن اصلی محفوظ می‌مانند.</p></dialog>
 <dialog id="logoDialog" class="modal" aria-labelledby="logoTitle"><div class="modal-head"><div><h2 id="logoTitle">انتخاب لوگوی کانال</h2><p>لوگوی فعال با تیک سبز مشخص شده است.</p></div><button type="button" class="close-modal" data-close="logoDialog">×</button></div><div class="logo-options" id="logoOptions"></div></dialog>
 <dialog id="fontDialog" class="modal" aria-labelledby="fontTitle"><div class="modal-head"><div><h2 id="fontTitle">انتخاب فونت فارسی</h2><p>فونت‌های نصب‌شده در ووسو سنتر</p></div><button type="button" class="close-modal" data-close="fontDialog">×</button></div><input type="search" id="fontSearch" placeholder="جستجوی فونت…" class="modal-search"/><div class="font-options" id="fontOptions"></div></dialog>
 <dialog id="colorDialog" class="modal color-modal" aria-labelledby="colorTitle"><div class="modal-head"><div><h2 id="colorTitle">انتخاب رنگ</h2><p>کد رنگ یا انتخابگر بصری</p></div><button type="button" class="close-modal" data-close="colorDialog">×</button></div><div class="color-row"><input type="color" id="nativeColor" aria-label="رنگ دلخواه"/><label>کد HEX<input id="hexColor" dir="ltr" maxlength="7"/></label></div><div id="colorArea" class="color-area"><span id="colorPointer"></span></div><label>طیف رنگ<input id="colorHue" type="range" min="0" max="360" step="1"/></label><div id="colorPresets" class="color-presets"></div><button type="button" class="btn primary full" id="confirmColor">✓ تأیید رنگ</button></dialog>
