@@ -1,20 +1,212 @@
 [
   {
-    "id": "demo-bonmati",
+    "id": "barca-03",
     "teamId": "barcelona",
-    "name": "آیتانا بونماتی",
-    "image": "assets/lineup/demo-portrait-a.png",
-    "flag": "tr",
-    "position": "CM",
-    "demo": true
+    "name": "تایلر مک‌کیمی",
+    "image": "assets/players/barcelona/player-03.png",
+    "positionGroup": "GK",
+    "category": "دروازه‌بان",
+    "position": "GK",
+    "flag": ""
   },
   {
-    "id": "demo-patri",
+    "id": "barca-04",
     "teamId": "barcelona",
-    "name": "پاتری",
-    "image": "assets/lineup/demo-portrait-b.png",
-    "flag": "tr",
-    "position": "CM",
-    "demo": true
+    "name": "خما فونت",
+    "image": "assets/players/barcelona/player-04.png",
+    "positionGroup": "GK",
+    "category": "دروازه‌بان",
+    "position": "GK",
+    "flag": ""
+  },
+  {
+    "id": "barca-05",
+    "teamId": "barcelona",
+    "name": "کاتا کول",
+    "image": "assets/players/barcelona/player-05.png",
+    "positionGroup": "GK",
+    "category": "دروازه‌بان",
+    "position": "GK",
+    "flag": ""
+  },
+  {
+    "id": "barca-07",
+    "teamId": "barcelona",
+    "name": "آیشا کامارا",
+    "image": "assets/players/barcelona/player-07.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-08",
+    "teamId": "barcelona",
+    "name": "اسمه پروختس",
+    "image": "assets/players/barcelona/player-08.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-09",
+    "teamId": "barcelona",
+    "name": "ایرنه پاردس",
+    "image": "assets/players/barcelona/player-09.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-10",
+    "teamId": "barcelona",
+    "name": "رنه ون‌آستن",
+    "image": "assets/players/barcelona/player-10.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-11",
+    "teamId": "barcelona",
+    "name": "لایا الکساندری",
+    "image": "assets/players/barcelona/player-11.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-12",
+    "teamId": "barcelona",
+    "name": "مارتا تورخون",
+    "image": "assets/players/barcelona/player-12.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-13",
+    "teamId": "barcelona",
+    "name": "مارتینا گونزالس",
+    "image": "assets/players/barcelona/player-13.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-14",
+    "teamId": "barcelona",
+    "name": "کارلا جولیا",
+    "image": "assets/players/barcelona/player-14.png",
+    "positionGroup": "DEF",
+    "category": "مدافع",
+    "position": "DEF",
+    "flag": ""
+  },
+  {
+    "id": "barca-16",
+    "teamId": "barcelona",
+    "name": "اوا پایور",
+    "image": "assets/players/barcelona/player-16.png",
+    "positionGroup": "FWD",
+    "category": "مهاجم",
+    "position": "FWD",
+    "flag": ""
+  },
+  {
+    "id": "barca-17",
+    "teamId": "barcelona",
+    "name": "کارولین گراهام هانسن",
+    "image": "assets/players/barcelona/player-17.png",
+    "positionGroup": "FWD",
+    "category": "مهاجم",
+    "position": "FWD",
+    "flag": ""
+  },
+  {
+    "id": "barca-18",
+    "teamId": "barcelona",
+    "name": "کرولین نیکولی",
+    "image": "assets/players/barcelona/player-18.png",
+    "positionGroup": "FWD",
+    "category": "مهاجم",
+    "position": "FWD",
+    "flag": ""
+  },
+  {
+    "id": "barca-19",
+    "teamId": "barcelona",
+    "name": "کلودیا پینا",
+    "image": "assets/players/barcelona/player-19.png",
+    "positionGroup": "FWD",
+    "category": "مهاجم",
+    "position": "FWD",
+    "flag": ""
+  },
+  {
+    "id": "barca-21",
+    "teamId": "barcelona",
+    "name": "آیتانا بونماتی",
+    "image": "assets/players/barcelona/player-21.png",
+    "positionGroup": "MID",
+    "category": "هافبک",
+    "position": "MID",
+    "flag": ""
+  },
+  {
+    "id": "barca-22",
+    "teamId": "barcelona",
+    "name": "سیدنی شرتنلیب",
+    "image": "assets/players/barcelona/player-22.png",
+    "positionGroup": "MID",
+    "category": "هافبک",
+    "position": "MID",
+    "flag": ""
+  },
+  {
+    "id": "barca-23",
+    "teamId": "barcelona",
+    "name": "ویکی لوپز",
+    "image": "assets/players/barcelona/player-23.png",
+    "positionGroup": "MID",
+    "category": "هافبک",
+    "position": "MID",
+    "flag": ""
+  },
+  {
+    "id": "barca-24",
+    "teamId": "barcelona",
+    "name": "پاتری گیخارو",
+    "image": "assets/players/barcelona/player-24.png",
+    "positionGroup": "MID",
+    "category": "هافبک",
+    "position": "MID",
+    "flag": ""
+  },
+  {
+    "id": "barca-25",
+    "teamId": "barcelona",
+    "name": "کلارا سراجوردی",
+    "image": "assets/players/barcelona/player-25.png",
+    "positionGroup": "MID",
+    "category": "هافبک",
+    "position": "MID",
+    "flag": ""
+  },
+  {
+    "id": "barca-26",
+    "teamId": "barcelona",
+    "name": "کیکا نازارث",
+    "image": "assets/players/barcelona/player-26.png",
+    "positionGroup": "MID",
+    "category": "هافبک",
+    "position": "MID",
+    "flag": ""
   }
 ]
