@@ -8,7 +8,7 @@ const LDEFAULT_COLORS={header:'#920a36',upper:'#0e3562',lower:'#970d39',accent:'
 const LDUMMY_A='',LDUMMY_B='';
 const LFORMATION={
  '4-3-3':[[218,305,'LW'],[540,305,'ST'],[862,305,'RW'],[218,590,'LCM'],[540,590,'CM'],[862,590,'RCM'],[162,846,'LB'],[414,846,'CB'],[666,846,'CB'],[918,846,'RB']],
- '4-2-3-1':[[540,272,'ST',.84],[218,461,'LW',.84],[540,461,'CAM',.84],[862,461,'RW',.84],[355,651,'LDM',.84],[725,651,'RDM',.84],[125,846,'LB',.84],[391,846,'LCB',.84],[655,846,'RCB',.84],[925,846,'RB',.84]],
+ '4-2-3-1':[[540,275,'ST',.84],[218,481,'LW',.84],[540,481,'CAM',.84],[862,481,'RW',.84],[355,687,'CDM',.84],[725,687,'CDM',.84],[170.64,894,'LB',.84],[416.88,894,'CB',.84],[663.12,894,'CB',.84],[909.36,894,'RB',.84]],
  '4-4-2':[[346,305,'ST'],[734,305,'ST'],[125,587,'LM'],[390,587,'CM'],[655,587,'CM'],[925,587,'RM'],[125,846,'LB'],[391,846,'CB'],[655,846,'CB'],[925,846,'RB']],
  '3-5-2':[[340,310,'ST'],[740,310,'ST'],[103,581,'LWB',.78],[322,581,'LCM',.78],[540,581,'CM',.78],[758,581,'RCM',.78],[977,581,'RWB',.78],[255,846,'LCB'],[540,846,'CB'],[825,846,'RCB']],
  '3-4-3':[[218,307,'LW'],[540,307,'ST'],[862,307,'RW'],[135,590,'LM'],[392,590,'CM'],[658,590,'CM'],[943,590,'RM'],[255,846,'LCB'],[540,846,'CB'],[825,846,'RCB']],
@@ -48,7 +48,7 @@ function lValidate(raw){
  const def=lFresh(),s={...def,...raw};
  s.colors={...LDEFAULT_COLORS,...(raw?.colors||{})};for(const key of Object.keys(LDEFAULT_COLORS))s.colors[key]=lHex(s.colors[key],LDEFAULT_COLORS[key]);
  s.fonts={...def.fonts,...(raw?.fonts||{})};for(const key of ['league','match'])if(!raw?.fonts?.[key])s.fonts[key]=lFont(s.fonts.header);for(const key of ['coach','stadium','channel'])if(!raw?.fonts?.[key])s.fonts[key]=lFont(s.fonts.footer);for(const key in s.fonts)s.fonts[key]=lFont(s.fonts[key]);s.fontAll=lFont(s.fontAll);
- s.formation='4-3-3'; // Formation selector is intentionally disabled until new layouts are supplied.
+ s.formation=['4-3-3','4-2-3-1'].includes(raw?.formation)?raw.formation:'4-3-3';
  s.teamId=String(s.teamId||'barcelona');s.backgroundPatternType=s.backgroundPatternType==='graphic'?'graphic':'logo';s.backgroundPatternId=String(s.backgroundPatternId||'');
  s.slots=Array.from({length:11},(_,i)=>{const inp=raw?.slots?.[i]||def.slots[i];const slot={...lNewSlots('mixed')[i],...inp,name:String(inp?.name||'').slice(0,65),positionOverride:String(inp?.positionOverride||'').slice(0,12),photoScale:Math.min(1.45,Math.max(.7,Number(inp?.photoScale)||1))};const p=lFindPlayer(slot.playerId);if(p&&!slot.flagCustomized){slot.flag=p.flag||'';slot.flagImage='';}return slot;});
  for(const key of ['league','week','matchup','time','channel','title','coach','stadium'])s[key]=String(s[key]??def[key]).slice(0,110);
@@ -118,9 +118,10 @@ function lTeamChoose(id){
  });lClose('lineupTeamDialog');lWarmPlayerImages();lNotify(id==='mixed'?'ترکیب منتخب فعال شد؛ همه بازیکنان قابل انتخاب‌اند.':'تیم و رنگ‌های پیشنهادی انتخاب شدند.');
 }
 function lSelectedSlot(){return lState.slots[lSelected]}
-function lSpotList(){const array=LFORMATION['4-3-3'];return [...array.map((a,i)=>({i,x:a[0],y:a[1],position:a[2],scale:a[3]||1})),{i:10,x:540,y:1097,position:'GK',scale:1}];}
+function lSpotList(){const formation=['4-3-3','4-2-3-1'].includes(lState?.formation)?lState.formation:'4-3-3';const array=LFORMATION[formation];const scale=formation==='4-2-3-1'?.84:1;return [...array.map((a,i)=>({i,x:a[0],y:a[1],position:a[2],scale:a[3]||1})),{i:10,x:540,y:1097,position:'GK',scale}];}
 function lSync(){
  if(!lLoaded)return;
+ L('lineupFormation').value=lState.formation;
  const team=lFindTeam(lState.teamId),isMix=lState.teamId==='mixed';
  L('lineupTeamLabel').textContent=isMix?'ترکیب منتخب':team?.name||'تیم جدید';
  L('lineupTeamCaption').textContent=isMix?'تمام بازیکنانِ بانک':'بازیکنان ثبت‌شده همین تیم';
@@ -141,6 +142,7 @@ function lHistoryLabel(previous,next){
  if(!previous||!next)return 'شروع تاریخچه';
  const changed=key=>JSON.stringify(previous[key])!==JSON.stringify(next[key]);
  if(changed('teamId'))return 'تغییر تیم ترکیب';
+ if(changed('formation'))return 'تغییر آرایش به '+next.formation;
  if(changed('paletteId')&&next.paletteId)return 'انتخاب پالت رنگی';
  if(changed('backgroundPatternType')||changed('backgroundPatternId')||changed('backgroundLogoId'))return 'تغییر پترن پس‌زمینه';
  if(changed('headerRightId')||changed('headerLeftId'))return 'تغییر لوگوی هدر';
@@ -300,6 +302,16 @@ function lSelectTab(name,scroll=false){
  if(scroll)requestAnimationFrame(()=>L('ltab-'+name)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));
 }
 function lSetInputs(){
+ L('lineupFormation').onchange=e=>{
+  const next=e.target.value;
+  if(!['4-3-3','4-2-3-1'].includes(next)||next===lState.formation)return;
+  lChange(()=>{
+   const order=next==='4-2-3-1'?[1,0,4,2,3,5,6,7,8,9,10]:[1,0,3,4,2,5,6,7,8,9,10];
+   lState.slots=order.map(i=>lState.slots[i]);
+   lState.formation=next;
+   lSelected=0;
+  });
+ };
  document.querySelectorAll('[data-ltab]').forEach(btn=>btn.addEventListener('click',()=>lSelectTab(btn.dataset.ltab)));
  L('lineupChangeTeam').onclick=()=>{L('lineupTeamSearch').value='';lTeamDialogRender();lOpen('lineupTeamDialog')};
  for(const [id,target] of [['lineupHeaderRight','headerRightId'],['lineupHeaderLeft','headerLeftId']])L(id).onclick=()=>{lLogoTarget=target;L('lineupLogoTitle').textContent=target==='backgroundLogoId'?'انتخاب لوگوی محو پس‌زمینه':'انتخاب لوگوی هدر';L('lineupLogoSearch').value='';lLogoDialogRender();lOpen('lineupLogoDialog')};

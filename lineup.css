@@ -211,3 +211,9 @@
 .lineup-history-item em{font-size:10px;font-style:normal}
 .lineup-history-item.future{opacity:.6}
 #lineupHistoryCount{font-size:11px;color:var(--muted)}
+
+/* v5.9 — compact three-button manager and separate home navigation. */
+.lineup-pages-dialog .lineup-pages-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:13px 0 15px;align-items:stretch}
+.lineup-pages-dialog .lineup-pages-actions .btn{min-width:0;width:100%;padding:9px 5px;font-size:11px;white-space:nowrap;line-height:1.6}
+.lineup-page .woso-editor-topbar .top-actions{width:auto;flex:0 1 auto;margin-inline-start:auto;justify-content:flex-end!important}
+@media(max-width:500px){.lineup-pages-dialog .lineup-pages-actions{gap:5px}.lineup-pages-dialog .lineup-pages-actions .btn{font-size:10px;padding:8px 3px}.lineup-page .woso-editor-topbar .top-actions{min-width:0;flex-wrap:wrap;max-width:calc(100% - 88px)}}
