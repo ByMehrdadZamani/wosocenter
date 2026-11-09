@@ -1,0 +1,1 @@
+WoSoCenter 5.8: unzip and upload files/folders to GitHub in main, preserving paths. Commit and hard-refresh. Files changed: index.html, home.css, lineup.html, lineup.css, lineup.js, data/players.json; new assets/lineup/woso-emblem-vector.svg. Existing fonts, original player images and fixture generator remain unchanged.

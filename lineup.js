@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v5.7 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v5.8 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1',LPAGES_STORE='wosocenter-lineup-pages-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -7,7 +7,7 @@ const LFONTS=new Set(LFONT.map(x=>x[0]));
 const LDEFAULT_COLORS={header:'#920a36',upper:'#0e3562',lower:'#970d39',accent:'#e6aa22',side:'#edb824',card1:'#a51a47',card2:'#134e87',cardName:'#0b3157',cardBorder:'#ab1b52',watermark:'#d01847',text:'#f2bc27',headerText:'#f2bc27',logoBg:'#092c5d',topText:'#f2bc27',topBox:'#a51a47',footerText:'#f2bc27',footerBox:'#a51a47',logoTint:'#f2bc27',cardPosition:'#f2bc27',topShapes:'#d2992d',leagueText:'#f2bc27',matchText:'#f2bc27',coachText:'#f2bc27',stadiumText:'#f2bc27',channelText:'#f2bc27'};
 const LDUMMY_A='',LDUMMY_B='';
 const LFORMATION={
- '4-3-3':[[218,305,'LW'],[540,305,'ST'],[862,305,'RW'],[218,590,'LCM'],[540,590,'CM'],[862,590,'RCM'],[125,846,'LB'],[391,846,'CB'],[655,846,'CB'],[925,846,'RB']],
+ '4-3-3':[[218,305,'LW'],[540,305,'ST'],[862,305,'RW'],[218,590,'LCM'],[540,590,'CM'],[862,590,'RCM'],[162,846,'LB'],[414,846,'CB'],[666,846,'CB'],[918,846,'RB']],
  '4-2-3-1':[[540,272,'ST',.84],[218,461,'LW',.84],[540,461,'CAM',.84],[862,461,'RW',.84],[355,651,'LDM',.84],[725,651,'RDM',.84],[125,846,'LB',.84],[391,846,'LCB',.84],[655,846,'RCB',.84],[925,846,'RB',.84]],
  '4-4-2':[[346,305,'ST'],[734,305,'ST'],[125,587,'LM'],[390,587,'CM'],[655,587,'CM'],[925,587,'RM'],[125,846,'LB'],[391,846,'CB'],[655,846,'CB'],[925,846,'RB']],
  '3-5-2':[[340,310,'ST'],[740,310,'ST'],[103,581,'LWB',.78],[322,581,'LCM',.78],[540,581,'CM',.78],[758,581,'RCM',.78],[977,581,'RWB',.78],[255,846,'LCB'],[540,846,'CB'],[825,846,'RCB']],
@@ -137,11 +137,42 @@ function lSync(){
  L('lineupPatternThumb').innerHTML=pic?`<img src="${lEscape(lState.backgroundPatternType==='graphic'?(pat.thumb||pat.image):bg.image)}" alt="">`:'';L('lineupPatternName').textContent=pic?.name||'بدون پترن';
  lDrawPaletteList();lPrepareImages();
 }
+function lHistoryLabel(previous,next){
+ if(!previous||!next)return 'شروع تاریخچه';
+ const changed=key=>JSON.stringify(previous[key])!==JSON.stringify(next[key]);
+ if(changed('teamId'))return 'تغییر تیم ترکیب';
+ if(changed('paletteId')&&next.paletteId)return 'انتخاب پالت رنگی';
+ if(changed('backgroundPatternType')||changed('backgroundPatternId')||changed('backgroundLogoId'))return 'تغییر پترن پس‌زمینه';
+ if(changed('headerRightId')||changed('headerLeftId'))return 'تغییر لوگوی هدر';
+ if(changed('fontAll')||changed('fonts'))return 'تغییر فونت';
+ if(changed('slots')){
+  const oldSlots=previous.slots||[],newSlots=next.slots||[];
+  const ids=newSlots.map((slot,i)=>JSON.stringify(slot)!==JSON.stringify(oldSlots[i])?i:-1).filter(i=>i>=0);
+  if(ids.length>1)return 'جابه‌جایی یا تغییر بازیکنان';
+  if(ids.length===1){
+   const a=oldSlots[ids[0]]||{},b=newSlots[ids[0]]||{};
+   if(a.playerId!==b.playerId)return b.playerId?'انتخاب بازیکن':'حذف بازیکن';
+   if(a.flag!==b.flag)return 'تغییر پرچم بازیکن';
+   if(a.positionOverride!==b.positionOverride)return 'تغییر پوزیشن بازیکن';
+   if(a.photoScale!==b.photoScale)return 'تغییر اندازه تصویر بازیکن';
+   if(a.name!==b.name)return 'ویرایش نام بازیکن';
+  }
+  return 'ویرایش کارت بازیکن';
+ }
+ const fields={league:'تغییر نام لیگ',week:'تغییر هفته لیگ',matchup:'ویرایش نام مسابقه',time:'تغییر ساعت مسابقه',title:'ویرایش عنوان شماتیک',coach:'ویرایش نام مربی',stadium:'ویرایش نام ورزشگاه',channel:'تغییر آیدی تلگرام',cardSecond:'تغییر تعداد رنگ‌های کارت',cardText:'تغییر رنگ نام بازیکن'};
+ for(const [key,label] of Object.entries(fields))if(changed(key))return label;
+ if(changed('colors')){
+  const names={header:'رنگ هدر',upper:'رنگ نیم‌دایره',lower:'رنگ پس‌زمینه',topShapes:'رنگ شکل‌های بالا',accent:'رنگ اشکال تزئینی',side:'رنگ حاشیه',card1:'رنگ اول کارت',card2:'رنگ دوم کارت',cardName:'رنگ نوار نام',cardBorder:'رنگ حاشیه کارت',headerText:'رنگ متن هدر',logoBg:'رنگ زمینه لوگوها',topText:'رنگ عنوان بالا',topBox:'رنگ کادر عنوان',footerText:'رنگ نوشته‌های پایین',footerBox:'رنگ کادر مربی',logoTint:'رنگ لوگوی کانال',cardPosition:'رنگ پوزیشن',leagueText:'رنگ نام لیگ',matchText:'رنگ نام مسابقه',coachText:'رنگ نام مربی',stadiumText:'رنگ ورزشگاه',channelText:'رنگ آیدی تلگرام'};
+  const diff=Object.keys(next.colors||{}).filter(key=>previous.colors?.[key]!==next.colors[key]);
+  return diff.length===1?'تغییر '+(names[diff[0]]||'رنگ'):diff.length>1?'تغییر رنگ‌های قالب':'تغییر رنگ';
+ }
+ return 'ویرایش تنظیمات';
+}
 function lHistoryRender(){
  if(!L('lineupHistoryList'))return;
  const all=[...lPast,{...lClone(lState)} ,...lFuture.slice().reverse()];const current=lPast.length;
  L('lineupHistoryCount').textContent=`${all.length-1} تغییر · مرحله ${current+1}`;
- L('lineupHistoryList').innerHTML=all.map((val,i)=>`<button type="button" class="lineup-history-item ${i===current?'selected':''}" data-lhist="${i}"><b>${i+1}</b><span>${i===current?'وضعیت فعلی':i<current?'تغییر قبلی':'تغییر بعدی'} · مرحله ${i+1}</span>${i===current?'<em>فعال</em>':''}</button>`).reverse().join('');
+ L('lineupHistoryList').innerHTML=all.map((val,i)=>`<button type="button" class="lineup-history-item ${i===current?'selected':''} ${i>current?'future':''}" data-lhist="${i}"><b>${i+1}</b><span>${lEscape(i?lHistoryLabel(all[i-1],val):'شروع تاریخچه')}</span>${i===current?'<em>فعال</em>':''}</button>`).reverse().join('');
  lHistoryButtons();
 }
 function lHistoryJump(i){const current=lPast.length;if(i===current)return;if(i<current){while(lPast.length>i)lUndo();}else{for(let j=current;j<i;j++)lRedo();}lHistoryRender()}
@@ -454,7 +485,7 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
   // top of the head rises about 50px above the card frame.
   const player=lFindPlayer(slot.playerId);
   const face=player?.image===src&&Array.isArray(player.portraitFace)&&player.portraitFace.length===4?player.portraitFace:null;
-  const factor=slot.photoScale||1;
+  const factor=(slot.photoScale||1)*(Number(player?.portraitZoom)||1);
   let dx,dy,dw,dh;
   if(face){
    const [, ,faceW]=face;

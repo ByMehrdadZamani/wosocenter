@@ -510,7 +510,8 @@
       366
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-24.webp"
+    "thumb": "assets/players/thumbs/barca-24.webp",
+    "portraitZoom": 1.14
   },
   {
     "id": "barca-25",
