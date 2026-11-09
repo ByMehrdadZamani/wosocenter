@@ -3,10 +3,10 @@
 <head>
  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
  <meta name="theme-color" content="#100b19"><meta name="description" content="شماتیک‌ساز و ترکیب‌ساز فوتبال WoSoCenter؛ طراحی با عکس بازیکنان و خروجی PNG">
- <title>شماتیک‌ساز ترکیب فوتبال | WoSoCenter</title>
+ <title>شماتیک‌ساز با ۳۱ آرایش فوتبال | WoSoCenter</title>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=5.9">
- <script src="lineup.js?v=5.9" defer></script>
+ <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.0">
+ <script src="lineup.js?v=6.0" defer></script>
 </head>
 <body class="lineup-page">
 <header class="topbar woso-editor-topbar">
@@ -31,7 +31,14 @@
     <button id="lineupChangeTeam" type="button" class="lineup-team-button"><span id="lineupTeamIcon" class="lineup-team-icon"></span><span class="lineup-team-info"><strong id="lineupTeamLabel">انتخاب تیم</strong><small id="lineupTeamCaption">برای انتخاب بزنید</small></span><span>تغییر ›</span></button>
     <p class="hint compact">همه تیم‌ها قابل انتخاب‌اند. فهرست بازیکنان هر تیم از بانک رسمی ثبت‌شده برای همان تیم نمایش داده می‌شود.</p>
    </div>
-   <div class="settings-group"><h2>آرایش ترکیب</h2><label for="lineupFormation">انتخاب چینش بازیکنان<select id="lineupFormation"><option value="4-3-3">۴-۳-۳ — پیش‌فرض</option><option value="4-2-3-1">۴-۲-۳-۱ — آزمایشی</option></select></label><p class="hint compact">آرایش ۴-۲-۳-۱ شامل یک مهاجم، سه هافبک هجومی و دو هافبک دفاعی است. دروازه‌بان در جای ثابت می‌ماند.</p></div>
+   <div class="settings-group lineup-formation-settings"><h2>آرایش ترکیب</h2>
+    <button type="button" id="lineupFormationOpen" class="lineup-formation-trigger" aria-haspopup="dialog" aria-controls="lineupFormationDialog">
+      <span id="lineupFormationMini" class="lineup-formation-trigger-mini" aria-hidden="true"></span>
+      <span class="lineup-formation-trigger-text"><strong id="lineupFormationName" dir="ltr">4-3-3</strong><small>مشاهده و انتخاب ترکیب با پیش‌نمایش جای بازیکنان</small></span>
+      <span class="lineup-formation-trigger-arrow" aria-hidden="true">⌄</span>
+    </button>
+    <p class="hint compact">چیدمان کارت‌ها با انتخاب آرایش تنظیم می‌شود؛ همه بازیکنان و دروازه‌بان ثابت حفظ می‌شوند.</p>
+   </div>
    <div class="settings-group"><h2>انتخاب بازیکنان</h2><p class="hint compact">روی هر کارت در پیش‌نمایش بزنید تا فهرست بازیکنان همان تیم باز شود؛ دکمه ✓ برای ثبت و × برای حذف کارت است. برای جابه‌جایی، کارت را به کارت دیگر بکشید.</p></div>
   </div>
   <div id="ltab-header" class="tab-content hidden">
@@ -104,6 +111,11 @@
 </main>
 <footer class="site-footer">WoSoCenter · <a href="index.html">خانه</a> · <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer">@ByMehrdad</a></footer>
 <dialog class="picker-dialog lineup-modal" id="lineupTeamDialog"><div class="dialog-head"><div><h2>شماتیک کدام تیم را می‌سازید؟</h2><p>تمام تیم‌ها قابل انتخاب‌اند؛ بازیکنان هر تیم فقط از بانک ثبت‌شده بارگذاری می‌شوند.</p></div><button class="dialog-close" data-lclose="lineupTeamDialog" type="button" aria-label="بستن">×</button></div><div class="dialog-search"><input id="lineupTeamSearch" type="search" placeholder="جست‌وجوی نام تیم…"></div><div class="lineup-team-grid" id="lineupTeamGrid"></div></dialog>
+<dialog class="picker-dialog lineup-modal lineup-formation-dialog" id="lineupFormationDialog" aria-labelledby="lineupFormationDialogTitle">
+ <div class="dialog-head"><div><h2 id="lineupFormationDialogTitle">انتخاب آرایش ترکیب</h2><p>جایگاه تمام ۱۱ بازیکن روی زمین نمایش داده شده؛ آرایش‌های شلوغ‌تر به‌اندازه لازم فشرده می‌شوند.</p></div><button type="button" class="dialog-close" data-lclose="lineupFormationDialog" aria-label="بستن">×</button></div>
+ <div class="dialog-search"><input id="lineupFormationSearch" type="search" placeholder="جست‌وجوی آرایش مثل 4-2-3-1…" dir="ltr" autocomplete="off" aria-label="جست‌وجوی ترکیب"></div>
+ <div id="lineupFormationGrid" class="lineup-formation-grid" aria-label="فهرست آرایش‌های فوتبال"></div>
+</dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupLogoDialog"><div class="dialog-head"><div><h2 id="lineupLogoTitle">انتخاب لوگوی تیم</h2><p>از بانک تیم‌های کنداکتورساز</p></div><button class="dialog-close" data-lclose="lineupLogoDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupLogoSearch" type="search" placeholder="جست‌وجوی لوگو…"></div><div class="lineup-logo-grid" id="lineupLogoGrid"></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupPatternDialog"><div class="dialog-head"><div><h2>انتخاب پترن پس‌زمینه</h2><p>طرح انتخابی روی رنگ‌های تنظیم‌شده تأثیر نمی‌گذارد.</p></div><button type="button" class="dialog-close" data-lclose="lineupPatternDialog">×</button></div><div class="lineup-switch-tabs" id="lineupPatternTabs"><button type="button" data-lpattab="logo" class="active">لوگو تیم</button><button type="button" data-lpattab="graphic">طرح گرافیکی</button></div><div class="dialog-search"><input id="lineupPatternSearch" type="search" placeholder="جست‌وجوی نام تیم یا طرح…"></div><div class="lineup-pattern-grid" id="lineupPatternGrid"></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupPaletteDialog"><div class="dialog-head"><div><h2 id="lineupAllPaletteTitle">تمام پالت‌های رنگی</h2><p>انتخاب پالت به بازیکنان تیم وابسته نیست.</p></div><button class="dialog-close" data-lclose="lineupPaletteDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupPaletteSearch" type="search" placeholder="جست‌وجو بر اساس نام تیم…"></div><div id="lineupPaletteGrid" class="lineup-palette-grid"></div></dialog>
