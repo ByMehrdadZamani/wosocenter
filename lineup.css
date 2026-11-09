@@ -19,3 +19,26 @@
 @media(max-width:1100px){.lineup-workspace{gap:13px;padding:14px;grid-template-columns:minmax(340px,430px) minmax(320px,1fr)}.lineup-preview{padding:14px}.lineup-editor .tab-content{padding:15px}}
 @media(max-width:840px){.lineup-workspace{grid-template-columns:1fr}.lineup-preview{position:static;grid-row:1}.lineup-editor{grid-row:2}.lineup-tabs .tab{font-size:11px}.lineup-canvas-holder{max-width:520px}}
 @media(max-width:510px){.lineup-page .topbar{flex-wrap:wrap}.lineup-page .top-actions{width:100%;justify-content:space-between;gap:5px}.lineup-page .saved{display:none}.lineup-page .lineup-nav-link{font-size:10px;padding:9px}.lineup-page .top-actions .btn{font-size:11px}.lineup-team-grid,.lineup-library-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lineup-logo-grid,.lineup-palette-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lineup-font-grid{grid-template-columns:1fr}.lineup-modal{padding:13px}.lineup-slot-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.lineup-preview-foot{font-size:9px}}
+
+/* v5.1: exactly three content-based tabs and compact fields, matching the fixture builder. */
+.lineup-tabs .tab{font-size:12px;padding:12px 7px}
+.lineup-editor .tab-content .two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:11px}
+.lineup-editor .tab-content .settings-group>label{margin-top:8px}
+.lineup-editor .tab-content .two-col>label{margin:0}
+.lineup-editor .tab-content label{line-height:1.5}
+.lineup-editor .tab-content input:not([type=checkbox]):not([type=range]):not([type=color]):not([type=file]),
+.lineup-editor .tab-content select{min-width:0;width:100%;height:40px;min-height:40px;padding:7px 9px;font-size:12px}
+.lineup-match-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:11px;align-items:end}
+.lineup-match-row label{min-width:0}
+.lineup-match-row .btn{height:40px;min-width:82px;padding:6px 9px;font-size:11px}
+.lineup-field-button{height:40px;width:100%;font-size:11px}
+.lineup-editor .lineup-details{margin-top:15px}
+.lineup-editor .lineup-details .two-col{margin-top:12px}
+.lineup-editor .lineup-details .font-pick{margin:12px 0 6px}
+.lineup-editor .lineup-details .btn{margin-top:7px}
+.lineup-editor .lineup-font-btn{width:100%;max-width:100%}
+.lineup-modal .dialog-search{background:var(--input);border:1px solid var(--input-border);border-radius:10px;padding:2px 12px;box-shadow:none}
+.lineup-modal .dialog-search input,
+.lineup-modal .dialog-search input[type="search"]{border:0!important;box-shadow:none!important;outline:0!important;background:transparent!important;border-radius:0!important;padding:9px 0!important;min-height:0!important;height:38px!important;line-height:20px;width:100%!important;appearance:none}
+.lineup-modal .dialog-search input:focus{border:0!important;box-shadow:none!important;outline:0!important}
+@media(max-width:510px){.lineup-tabs .tab{font-size:10.5px}.lineup-editor .tab-content .two-col{gap:8px}.lineup-match-row .btn{min-width:76px;font-size:10px}.lineup-modal .dialog-search input{height:35px!important}}

@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v5.0 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v5.1 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -42,9 +42,13 @@ function lValidate(raw){
  const def=lFresh(),s={...def,...raw};
  s.colors={...LDEFAULT_COLORS,...(raw?.colors||{})};for(const key of Object.keys(LDEFAULT_COLORS))s.colors[key]=lHex(s.colors[key],LDEFAULT_COLORS[key]);
  s.fonts={...def.fonts,...(raw?.fonts||{})};for(const key in s.fonts)s.fonts[key]=lFont(s.fonts[key]);s.fontAll=lFont(s.fontAll);
- s.formation=LFORMATION[s.formation]?s.formation:'4-3-3';s.teamId=String(s.teamId||'barcelona');
+ s.formation='4-3-3'; // Formation selector is intentionally disabled until new layouts are supplied.s.teamId=String(s.teamId||'barcelona');
  s.slots=Array.from({length:11},(_,i)=>{const inp=raw?.slots?.[i]||def.slots[i];return {...lNewSlots('mixed')[i],...inp,name:String(inp?.name||'').slice(0,65),positionOverride:String(inp?.positionOverride||'').slice(0,12),photoScale:Math.min(1.45,Math.max(.7,Number(inp?.photoScale)||1))};});
  for(const key of ['league','week','matchup','time','channel','title','coach','stadium'])s[key]=String(s[key]??def[key]).slice(0,110);
+ // One-time color refinement: migrate only untouched v5.0 Barcelona template shades.
+ if(raw?.colors&&s.paletteId==='barcelona'&&s.colors.header==='#920a36'&&s.colors.upper==='#0e3562'&&s.colors.lower==='#970d39'&&s.colors.accent==='#e6aa22'&&s.colors.side==='#edb824'){
+  Object.assign(s.colors,{header:'#940930',upper:'#073265',lower:'#940930',accent:'#d2992d',side:'#e1bd2c'});
+ }
  s.mixColor=lHex(s.mixColor,'#f2bc27');s.cardText=lHex(s.cardText,'#f2bc27');return s;
 }
 function lSave(){clearTimeout(lSaveTimer);lSaveTimer=setTimeout(()=>{try{localStorage.setItem(LSTORE,JSON.stringify(lState));L('lineupSave').textContent='ذخیره شد ✓';}catch(e){L('lineupSave').textContent='فضای ذخیره‌سازی محدود';console.warn(e)}},220);}
@@ -76,6 +80,7 @@ function lPalette(id){return lPalettes.find(x=>x.id===id)||lPalettes[0]||{...LDE
 function lApplyPalette(id){const p=lPalette(id);lState.paletteId=p.id;for(const key of Object.keys(LDEFAULT_COLORS))if(p[key])lState.colors[key]=p[key];lState.cardText=p.text||'#f2bc27';}
 function lAutoMatch(){const a=lName(lFindTeam(lState.headerRightId)?.name||''),b=lName(lFindTeam(lState.headerLeftId)?.name||'');return [a,b].filter(Boolean).join(' - ');}
 function lTeamChoose(id){
+ if(id!=='mixed'&&!lHasTeamRoster(lFindTeam(id))){lNotify('برای این تیم هنوز بانک بازیکن موجود نیست.','warning');return;}
  if(id===lState.teamId){lClose('lineupTeamDialog');return;}
  const editing=lState.slots.some(x=>x.imageKey||x.name&&!['آیتانا بونماتی','پاتری'].includes(x.name));
  if(editing && id!==lState.teamId && !window.confirm('با تغییر تیم، کارت‌های بازیکنان فعلی با کارت‌های پیش‌فرض جایگزین می‌شوند. ادامه می‌دهید؟'))return;
@@ -87,14 +92,14 @@ function lTeamChoose(id){
  });lClose('lineupTeamDialog');lNotify(id==='mixed'?'ترکیب منتخب فعال شد؛ همه بازیکنان قابل انتخاب‌اند.':'تیم و رنگ‌های پیشنهادی انتخاب شدند.');
 }
 function lSelectedSlot(){return lState.slots[lSelected]}
-function lSpotList(){const array=LFORMATION[lState.formation]||LFORMATION['4-3-3'];return [...array.map((a,i)=>({i,x:a[0],y:a[1],position:a[2],scale:a[3]||1})),{i:10,x:540,y:1097,position:'GK',scale:1}];}
+function lSpotList(){const array=LFORMATION['4-3-3'];return [...array.map((a,i)=>({i,x:a[0],y:a[1],position:a[2],scale:a[3]||1})),{i:10,x:540,y:1097,position:'GK',scale:1}];}
 function lSync(){
  if(!lLoaded)return;
  const team=lFindTeam(lState.teamId),isMix=lState.teamId==='mixed';
  L('lineupTeamLabel').textContent=isMix?'ترکیب منتخب':team?.name||'تیم جدید';
  L('lineupTeamCaption').textContent=isMix?'تمام بازیکنانِ همه تیم‌ها':'بازیکنان این تیم + آپلود دلخواه';
  L('lineupTeamIcon').innerHTML=team?`<img src="${lEscape(team.image)}" alt="">`:'⚽';
- L('lineupFormation').value=lState.formation;
+ // Formation is fixed at 4-3-3 for now; keep saved player placements and GK spot stable.
  for(const [target,id] of [['lineupHeaderRightImg',lState.headerRightId],['lineupHeaderLeftImg',lState.headerLeftId]]){const t=lFindTeam(id);L(target).innerHTML=t?`<img src="${lEscape(t.image)}" alt="${lEscape(t.name)}">`:'⚽';}
  L('lineupHeaderRight').disabled=isMix;L('lineupHeaderLeft').disabled=isMix;
  L('lineupMixedColor').value=lState.mixColor;
@@ -123,11 +128,16 @@ function lDrawPaletteList(){
 }
 function lPaletteHTML(p){const chosen=lState.paletteId===p.id;return `<button type="button" class="palette-option ${chosen?'selected':''}" data-lpalette="${lEscape(p.id)}"><span class="palette-dots">${[p.upper,p.lower,p.accent,p.card1].map(c=>`<i style="background:${lHex(c)}"></i>`).join('')}</span><span>${lEscape(p.name)}</span>${chosen?'<b>✓</b>':''}</button>`;}
 function lFilterText(v){return String(v||'').normalize('NFKC').toLocaleLowerCase('fa-IR').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/\s+/g,' ').trim()}
+function lHasTeamRoster(t){
+ if(!t||/\s+[0-9۰-۹]+\s*$/.test(t.name||''))return false;
+ return lPlayers.some(p=>p&&p.teamId===t.id&&typeof p.image==='string'&&p.image.trim()&&typeof p.name==='string'&&p.name.trim());
+}
 function lTeamDialogRender(){const q=lFilterText(L('lineupTeamSearch').value);const important=['barcelona','real-madrid','bayern-munich'];
- const ordered=[...important.map(lFindTeam).filter(Boolean),...lTeams.filter(t=>!important.includes(t.id))].filter(x=>lFilterText(x.name).includes(q));
+ const eligible=lTeams.filter(lHasTeamRoster);
+ const ordered=[...important.map(lFindTeam).filter(t=>t&&lHasTeamRoster(t)),...eligible.filter(t=>!important.includes(t.id))].filter(x=>lFilterText(x.name).includes(q));
  let html=(!q||'ترکیب منتخب'.includes(q))?'<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>بازیکنان تمام تیم‌ها</small></button>':'';
  html+=ordered.map((t)=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${important.includes(t.id)?'promoted':''}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span>${important.includes(t.id)?'<em>پیشنهادی</em>':''}</button>`).join('');
- L('lineupTeamGrid').innerHTML=html||'<div class="lineup-empty">تیمی پیدا نشد.</div>';
+ L('lineupTeamGrid').innerHTML=html||'<div class="lineup-empty">تیمی با بانک بازیکن پیدا نشد. با اضافه‌شدن فایل بازیکنان، تیم خودکار به این فهرست اضافه می‌شود.</div>';
 }
 function lLogoDialogRender(){const q=lFilterText(L('lineupLogoSearch').value);L('lineupLogoGrid').innerHTML=lTeams.filter(t=>lFilterText(t.name).includes(q)).map(t=>`<button type="button" class="lineup-logo-option" data-llogo="${lEscape(t.id)}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span></button>`).join('')||'<div class="lineup-empty">نتیجه‌ای پیدا نشد.</div>';}
 function lPaletteDialogRender(){const q=lFilterText(L('lineupPaletteSearch').value);L('lineupPaletteGrid').innerHTML=lPalettes.filter(p=>lFilterText(p.name).includes(q)).map(lPaletteHTML).join('')||'<div class="lineup-empty">پالتی پیدا نشد.</div>';}
@@ -164,7 +174,7 @@ function lSetInputs(){
   document.querySelectorAll('[id^="ltab-"]').forEach(n=>n.classList.add('hidden'));L('ltab-'+btn.dataset.ltab).classList.remove('hidden');
  }));
  L('lineupChangeTeam').onclick=()=>{L('lineupTeamSearch').value='';lTeamDialogRender();lOpen('lineupTeamDialog')};
- L('lineupFormation').onchange=e=>lChange(()=>{lState.formation=e.target.value;lState.slots.forEach(slot=>slot.positionOverride='')});
+ // Formation UI intentionally omitted in v5.1; the 4-3-3 layout is always used.
  for(const [id,target] of [['lineupHeaderRight','headerRightId'],['lineupHeaderLeft','headerLeftId'],['lineupWatermarkPick','backgroundLogoId']])L(id).onclick=()=>{lLogoTarget=target;L('lineupLogoTitle').textContent=target==='backgroundLogoId'?'لوگوی پس‌زمینه و تیم پروژه':'لوگوی هدر';L('lineupLogoSearch').value='';lLogoDialogRender();lOpen('lineupLogoDialog')};
  L('lineupMixedColor').oninput=e=>lChange(()=>lState.mixColor=e.target.value,{history:false});
  L('lineupShowPalettes').onclick=()=>{L('lineupPaletteSearch').value='';lPaletteDialogRender();lOpen('lineupPaletteDialog')};
@@ -212,16 +222,40 @@ function lJersey(x,y,col){lCtx.save();lCtx.translate(x,y);lCtx.beginPath();lCtx.
 function lPerson(x,y,c){const ctx=lCtx;ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y-9,9,0,Math.PI*2);ctx.fill();lFillRounded(ctx,x-16,y+3,32,19,[12,12,1,1],c)}
 function lStadium(x,y,c){const ctx=lCtx;ctx.save();ctx.strokeStyle=c;ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(x,y,18,7,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(x-18,y);ctx.lineTo(x-16,y+14);ctx.quadraticCurveTo(x,y+25,x+16,y+14);ctx.lineTo(x+18,y);ctx.stroke();for(let i=-3;i<=3;i++){ctx.beginPath();ctx.moveTo(x+i*4,y+5);ctx.lineTo(x+i*3.5,y+17);ctx.stroke()}ctx.restore()}
 function lDashes(x,y,w,h,c){const ctx=lCtx;ctx.save();ctx.setLineDash([9,5]);lFillRounded(ctx,x,y,w,h,13,null,c,2);ctx.setLineDash([]);ctx.restore()}
+// Detect the opaque bounding box so each crest has the same visual scale even if its source
+// image contains different transparent margins. Cache per source image; never alter pixels.
+const lCrestBounds=new WeakMap();
+function lLogoBounds(img){
+ if(lCrestBounds.has(img))return lCrestBounds.get(img);
+ let out={sx:0,sy:0,sw:img.naturalWidth||img.width,sh:img.naturalHeight||img.height};
+ try{
+  const w=Math.min(512,img.naturalWidth||img.width),h=Math.min(512,img.naturalHeight||img.height),off=document.createElement('canvas');off.width=w;off.height=h;
+  const oc=off.getContext('2d',{willReadFrequently:true});oc.drawImage(img,0,0,w,h);
+  const a=oc.getImageData(0,0,w,h).data;let minX=w,minY=h,maxX=-1,maxY=-1;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(a[(y*w+x)*4+3]>25){if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;}
+  if(maxX>=minX&&maxY>=minY){
+   const iw=out.sw,ih=out.sh;
+   out={sx:Math.max(0,minX*iw/w),sy:Math.max(0,minY*ih/h),sw:Math.min(iw,(maxX-minX+1)*iw/w),sh:Math.min(ih,(maxY-minY+1)*ih/h)};
+  }
+ }catch(e){console.warn('Crest bounds:',e)}
+ lCrestBounds.set(img,out);return out;
+}
+function lDrawLargeWatermark(){
+ const t=lFindTeam(lState.backgroundLogoId);if(!t)return;
+ const img=lReady(t.image)||lImage(t.image);if(!img?.complete||!img.naturalWidth)return;
+ const b=lLogoBounds(img),zoom=1638/Math.max(b.sw,b.sh),w=b.sw*zoom,h=b.sh*zoom;
+ lCtx.save();lCtx.globalAlpha=.042;
+ // Keep selected crest behind the poster contents, centered and deeply zoomed as in the user's reference.
+ lCtx.drawImage(img,b.sx,b.sy,b.sw,b.sh,536-w/2,766-h/2,w,h);
+ lCtx.restore();
+}
 function lDrawBackground(){const c=lCtx,col=lState.colors;
  c.fillStyle=col.lower;c.fillRect(0,0,LW,LH);
  // Upper curved field (blue in the reference) bends down in the center.
  c.beginPath();c.moveTo(8,108);c.lineTo(1072,108);c.lineTo(1072,585);c.bezierCurveTo(823,745,277,751,8,593);c.closePath();c.fillStyle=col.upper;c.fill();
- // large translucent stadium/grid forms
- c.save();c.globalAlpha=.12;c.fillStyle='#2481a1';
- for(const [x,y,w,h] of [[0,108,170,163],[350,108,180,165],[658,108,62,497],[912,108,59,510],[8,451,330,154],[531,160,138,448],[250,607,125,215]])c.fillRect(x,y,w,h);
- c.globalAlpha=.11;c.fillStyle='#000a28';for(const [x,y,w,h] of [[170,160,180,290],[532,250,187,350],[913,270,159,330],[8,829,1064,7],[260,942,320,13],[712,738,342,10]])c.fillRect(x,y,w,h);c.restore();
- // Watermark: a selected club crest at intentionally very low opacity.
- const watermark=lFindTeam(lState.backgroundLogoId);if(watermark){lImageBox(watermark.image,275,650,540,570,true,.075)}
+ // The reference has no synthetic grid pattern: its translucent forms belong to the enlarged crest itself.
+ // A single full-height watermark reproduces the reference scale and preserves the selected team's actual emblem.
+ lDrawLargeWatermark();
  // Header & vertical edge strokes
  c.fillStyle=col.header;c.fillRect(8,0,1064,108);
  c.fillStyle=col.side;c.fillRect(0,0,8,108);c.fillRect(1072,0,8,108);
