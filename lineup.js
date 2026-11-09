@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v6.1 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v6.2 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1',LPAGES_STORE='wosocenter-lineup-pages-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -17,6 +17,8 @@ const LFORMATION={
 
 // v6.0: formation names come from the 29 user-supplied reference images.
 // Poster geometry is data-driven; all other builder behavior uses the same renderer.
+// Five frequently used formations stay at the front, including when filtered.
+const LFORMATION_RECOMMENDED=['4-3-3','4-4-2','4-2-3-1','4-3-2-1','3-4-3'];
 const LFORMATION_NAMES=["4-3-3", "4-2-3-1", "2-3-2-3", "3-1-4-2", "3-2-4-1", "3-3-2-2", "3-3-3-1", "3-3-4", "3-4-1-2", "3-4-2-1", "3-4-3", "3-5-1-1", "3-5-2", "4-1-2-1-2", "4-1-2-2-1", "4-1-2-3", "4-1-3-2", "4-1-4-1", "4-2-1-3", "4-2-2-2", "4-2-4", "4-3-1-2", "4-3-2-1", "4-4-1-1", "4-4-2", "4-5-1", "5-2-2-1", "5-2-3", "5-3-1-1", "5-3-2", "5-4-1"];
 function lRowRoles(count,kind,advanced=false,defenders=4){
  if(kind==='defence')return ({2:['CB','CB'],3:['LCB','CB','RCB'],4:['LB','CB','CB','RB'],5:['LWB','CB','CB','CB','RWB']})[count]||[];
@@ -67,9 +69,11 @@ function lFormationSvg(name){
 }
 function lFormationDialogRender(){
  const root=L('lineupFormationGrid'),q=(L('lineupFormationSearch')?.value||'').trim();
- root.innerHTML=LFORMATION_NAMES.filter(n=>!q||n.includes(q)||n.replaceAll('-','').includes(q.replace(/\s/g,''))).map(n=>{
-  const active=n===lState.formation;
-  return `<button type="button" class="lineup-formation-option ${active?'active':''}" data-lformation="${n}" aria-pressed="${active}" aria-label="آرایش ${n}">
+ const names=[...LFORMATION_RECOMMENDED,...LFORMATION_NAMES.filter(n=>!LFORMATION_RECOMMENDED.includes(n))];
+ root.innerHTML=names.filter(n=>!q||n.includes(q)||n.replaceAll('-','').includes(q.replace(/\s/g,''))).map(n=>{
+  const active=n===lState.formation,recommended=LFORMATION_RECOMMENDED.includes(n);
+  return `<button type="button" class="lineup-formation-option ${active?'active':''}" data-lformation="${n}" aria-pressed="${active}" aria-label="آرایش ${n}${recommended?'، پیشنهادی':''}">
+    ${recommended?'<span class="lineup-formation-recommended">پیشنهادی</span>':''}
     <span class="lineup-formation-pitch">${lFormationSvg(n)}</span>
     <span class="lineup-formation-label" dir="ltr">${n}</span>
     ${active?'<span class="lineup-formation-check" aria-label="انتخاب‌شده">✓</span>':''}
@@ -577,40 +581,25 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
  // Draw the frame underneath the transparent player cutout: no line across the forehead.
  c.save();c.beginPath();c.roundRect(x,y,w,h,13*spot.scale);c.strokeStyle=col.cardBorder;c.lineWidth=3.8*spot.scale;c.stroke();c.restore();
  const src=slot.image;if(src){const img=lReady(src)||lImage(src);if(img?.complete&&img.naturalWidth){
-  // v5.6: Align EACH portrait using its own source-image face coordinates.
-  // The original transparent PNG remains whole and is never resampled on disk.
-  // An annotated face occupies 96 units in the 1080-wide poster in EVERY
-  // formation. Only card dimensions and vertical head clearance depend on
-  // spot.scale; this keeps the same portrait large even in compact layouts.
+  // v6.2: Per-player landmarks, calibrated on all 21 transparent PNG sources.
+  // Equal interpupillary spacing (36 poster pixels) and aligned BROWS for
+  // every official player. Compact cards shrink, faces do not.
+  // Custom user zoom remains a deliberate, independent override.
   const player=lFindPlayer(slot.playerId);
   const face=player?.image===src&&Array.isArray(player.portraitFace)&&player.portraitFace.length===4?player.portraitFace:null;
-  const factor=(slot.photoScale||1)*(Number(player?.portraitZoom)||1);
-  // Compact five-line formations need more jersey below a full-size face.
-  // Raise the portrait only if it cannot cover a preceding card in the same
-  // column; in crowded columns, the original head clearance is preserved.
-  const originalRise=(Number(player?.portraitHeadRise)||50)*spot.scale;
-  let headRise=originalRise;
-  if(spot.scale<.8){
-   const blockers=lSpotList().filter(other=>{
-    if(other.y>=y||other.i===spot.i)return false;
-    const overlap=Math.min(spot.x+w/2,other.x+90*other.scale)-Math.max(spot.x-w/2,other.x-90*other.scale);
-    return overlap>12;
-   });
-   const safeRise=blockers.length?Math.min(...blockers.map(other=>y-(other.y+189*other.scale)-6)):Infinity;
-   headRise=Math.max(originalRise,Math.min(Number(player?.portraitHeadRise)||50,safeRise));
-  }
+  const factor=slot.photoScale||1;
   let dx,dy,dw,dh;
   if(face){
-   const [, ,faceW]=face;
-   const scale=(96/faceW)*factor;
+   const eyeDistance=Number(player.portraitEyeDistance)||face[2]*.375;
+   const scale=(36/eyeDistance)*factor;
    dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
-   // Center the face, not the entire uncropped PNG: works for asymmetrical hair.
+   const browY=Number.isFinite(player.portraitBrowY)?player.portraitBrowY:face[1]+face[3]*.275;
    dx=spot.x-(face[0]+face[2]/2)*scale;
-   // Use each transparent source's actual topmost nontransparent pixel.
-   const headTop=Array.isArray(player.viewBox)?player.viewBox[1]:0;
-   dy=y-headRise-headTop*scale;
+   // Eyebrows sit a few pixels below the card's upper edge, regardless of
+   // each player's original crop, posture, or transparent margins.
+   dy=y+3-browY*scale;
   }else{
-   // Backward-compatible fallback for future clubs without portraitFace.
+   // Backward-compatible behavior for custom pictures / other future teams.
    const bounds=player?.image===src&&Array.isArray(player.viewBox)&&player.viewBox.length===4?player.viewBox:null;
    const sx=bounds?bounds[0]:0,sy=bounds?bounds[1]:0;
    const sw=bounds?Math.max(1,bounds[2]-bounds[0]):img.naturalWidth;
@@ -618,14 +607,24 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
    const scale=Math.min((180*.98)/sw,(189+50)/sh)*factor;
    dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
    dx=spot.x-(sx+sw*.5)*scale;
-   dy=y-headRise-sy*scale;
+   dy=y-(Number(player?.portraitHeadRise)||50)*spot.scale-sy*scale;
   }
+  // In dense 4/5-line formations, keep the top of hair from painting across
+  // another card above it. This never alters face or eyebrow scale/position.
+  const horizontallyOverlappingAbove=lSpotList().filter(other=>
+   other.i!==spot.i&&other.y<y&&
+   Math.min(spot.x+w/2,other.x+90*other.scale)-Math.max(spot.x-w/2,other.x-90*other.scale)>8
+  );
+  const safeTop=horizontallyOverlappingAbove.length
+   ?Math.max(...horizontallyOverlappingAbove.map(other=>other.y+189*other.scale+3))
+   :y-100*spot.scale;
   // Crop ONLY the display area: clothes stay INSIDE side borders and above
   // the name band; the player's hair can extend outside the top edge.
   // This resolves the oversized upper body and border-overlap problem.
   const borderInset=4*spot.scale;
   const bandY=y+h-31*spot.scale;
-  c.save();c.beginPath();c.rect(x+borderInset,y-100*spot.scale,w-2*borderInset,bandY-(y-100*spot.scale));c.clip();
+  const cropTop=Math.min(bandY-1,Math.max(y-100*spot.scale,safeTop));
+  c.save();c.beginPath();c.rect(x+borderInset,cropTop,w-2*borderInset,bandY-cropTop);c.clip();
   c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
   c.drawImage(img,dx,dy,dw,dh);c.restore();
  }}else{

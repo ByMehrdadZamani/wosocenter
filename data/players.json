@@ -18,13 +18,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      778,
-      134,
-      368,
-      368
+      777,
+      143,
+      352,
+      352
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-03.webp"
+    "thumb": "assets/players/thumbs/barca-03.webp",
+    "portraitBrowY": 242.0,
+    "portraitEyeDistance": 127
   },
   {
     "id": "barca-04",
@@ -45,13 +47,15 @@
     "sourceHeight": 1916,
     "sourceFormat": "PNG",
     "portraitFace": [
-      662,
-      239,
-      623,
-      623
+      679,
+      255,
+      583,
+      583
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-04.webp"
+    "thumb": "assets/players/thumbs/barca-04.webp",
+    "portraitBrowY": 418.8,
+    "portraitEyeDistance": 212
   },
   {
     "id": "barca-05",
@@ -72,13 +76,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      768,
-      124,
-      398,
-      398
+      787,
+      145,
+      356,
+      356
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-05.webp"
+    "thumb": "assets/players/thumbs/barca-05.webp",
+    "portraitBrowY": 245.6,
+    "portraitEyeDistance": 125
   },
   {
     "id": "barca-07",
@@ -105,7 +111,9 @@
       340
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-07.webp"
+    "thumb": "assets/players/thumbs/barca-07.webp",
+    "portraitBrowY": 248.5,
+    "portraitEyeDistance": 125.6
   },
   {
     "id": "barca-08",
@@ -126,13 +134,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      781,
-      136,
-      351,
-      351
+      785,
+      147,
+      326,
+      326
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-08.webp"
+    "thumb": "assets/players/thumbs/barca-08.webp",
+    "portraitBrowY": 242.8,
+    "portraitEyeDistance": 126
   },
   {
     "id": "barca-09",
@@ -153,13 +163,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      830,
-      156,
-      374,
-      374
+      845,
+      164,
+      352,
+      352
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-09.webp"
+    "thumb": "assets/players/thumbs/barca-09.webp",
+    "portraitBrowY": 267.5,
+    "portraitEyeDistance": 127
   },
   {
     "id": "barca-10",
@@ -180,13 +192,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      769,
-      87,
-      372,
-      372
+      791,
+      105,
+      331,
+      331
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-10.webp"
+    "thumb": "assets/players/thumbs/barca-10.webp",
+    "portraitBrowY": 198.2,
+    "portraitEyeDistance": 125
   },
   {
     "id": "barca-11",
@@ -207,13 +221,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      789,
-      147,
-      352,
-      352
+      796,
+      156,
+      333,
+      333
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-11.webp"
+    "thumb": "assets/players/thumbs/barca-11.webp",
+    "portraitBrowY": 258.5,
+    "portraitEyeDistance": 118
   },
   {
     "id": "barca-12",
@@ -234,13 +250,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      783,
-      174,
-      355,
-      355
+      794,
+      183,
+      337,
+      337
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-12.webp"
+    "thumb": "assets/players/thumbs/barca-12.webp",
+    "portraitBrowY": 284.1,
+    "portraitEyeDistance": 110
   },
   {
     "id": "barca-13",
@@ -261,13 +279,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      787,
-      112,
-      368,
-      368
+      804,
+      124,
+      333,
+      333
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-13.webp"
+    "thumb": "assets/players/thumbs/barca-13.webp",
+    "portraitBrowY": 218.5,
+    "portraitEyeDistance": 123
   },
   {
     "id": "barca-14",
@@ -288,13 +308,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      779,
-      130,
-      352,
-      352
+      789,
+      139,
+      329,
+      329
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-14.webp"
+    "thumb": "assets/players/thumbs/barca-14.webp",
+    "portraitBrowY": 229.0,
+    "portraitEyeDistance": 126
   },
   {
     "id": "barca-16",
@@ -315,13 +337,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      762,
-      141,
-      348,
-      348
+      768,
+      156,
+      326,
+      326
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-16.webp"
+    "thumb": "assets/players/thumbs/barca-16.webp",
+    "portraitBrowY": 248.3,
+    "portraitEyeDistance": 116
   },
   {
     "id": "barca-17",
@@ -342,13 +366,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      767,
-      79,
-      364,
-      364
+      796,
+      102,
+      307,
+      307
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-17.webp"
+    "thumb": "assets/players/thumbs/barca-17.webp",
+    "portraitBrowY": 191.8,
+    "portraitEyeDistance": 115.1
   },
   {
     "id": "barca-18",
@@ -369,13 +395,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      699,
-      73,
-      427,
-      427
+      732,
+      105,
+      365,
+      365
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-18.webp"
+    "thumb": "assets/players/thumbs/barca-18.webp",
+    "portraitBrowY": 199.7,
+    "portraitEyeDistance": 132
   },
   {
     "id": "barca-19",
@@ -396,13 +424,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      784,
-      119,
-      380,
-      380
+      806,
+      132,
+      341,
+      341
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-19.webp"
+    "thumb": "assets/players/thumbs/barca-19.webp",
+    "portraitBrowY": 233.2,
+    "portraitEyeDistance": 115
   },
   {
     "id": "barca-21",
@@ -423,13 +453,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      781,
-      140,
-      325,
-      325
+      783,
+      143,
+      320,
+      320
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-21.webp"
+    "thumb": "assets/players/thumbs/barca-21.webp",
+    "portraitBrowY": 233.4,
+    "portraitEyeDistance": 133
   },
   {
     "id": "barca-22",
@@ -450,13 +482,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      817,
-      148,
-      359,
-      359
+      834,
+      164,
+      326,
+      326
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-22.webp"
+    "thumb": "assets/players/thumbs/barca-22.webp",
+    "portraitBrowY": 253.8,
+    "portraitEyeDistance": 122.2
   },
   {
     "id": "barca-23",
@@ -477,13 +511,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      785,
-      182,
-      331,
-      331
+      794,
+      192,
+      311,
+      311
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-23.webp"
+    "thumb": "assets/players/thumbs/barca-23.webp",
+    "portraitBrowY": 280.8,
+    "portraitEyeDistance": 129
   },
   {
     "id": "barca-24",
@@ -504,14 +540,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      791,
-      84,
-      366,
-      366
+      802,
+      96,
+      337,
+      337
     ],
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-24.webp",
-    "portraitZoom": 1.14
+    "portraitBrowY": 198.6,
+    "portraitEyeDistance": 119
   },
   {
     "id": "barca-25",
@@ -532,13 +569,15 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      749,
-      115,
-      363,
-      363
+      759,
+      128,
+      333,
+      333
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-25.webp"
+    "thumb": "assets/players/thumbs/barca-25.webp",
+    "portraitBrowY": 219.5,
+    "portraitEyeDistance": 118
   },
   {
     "id": "barca-26",
@@ -559,12 +598,14 @@
     "sourceHeight": 1196,
     "sourceFormat": "PNG",
     "portraitFace": [
-      763,
-      145,
-      338,
-      338
+      770,
+      151,
+      326,
+      326
     ],
     "portraitHeadRise": 50,
-    "thumb": "assets/players/thumbs/barca-26.webp"
+    "thumb": "assets/players/thumbs/barca-26.webp",
+    "portraitBrowY": 242.8,
+    "portraitEyeDistance": 117
   }
 ]

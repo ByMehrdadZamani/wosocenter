@@ -245,3 +245,11 @@
 .lineup-formation-check{position:absolute;left:7px;bottom:32px;width:25px;height:25px;background:#16a34a;color:#fff;border-radius:50%;display:grid;place-items:center;border:2px solid #fff;font-size:16px;font-weight:900;line-height:1;box-shadow:0 2px 6px #0005;z-index:2;pointer-events:none}
 @media(max-width:860px){.lineup-formation-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}}
 @media(max-width:560px){.lineup-formation-dialog{padding:12px;width:calc(100vw - 14px)}.lineup-formation-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:67dvh}.lineup-formation-option{padding:6px;gap:3px}.lineup-formation-check{width:23px;height:23px;left:4px;bottom:25px;font-size:15px}.lineup-formation-label{font-size:12px}.lineup-formation-pitch{max-width:94px}.lineup-formation-trigger{min-height:85px}}
+
+/* v6.2 — five promoted formations at the top-right of each field preview. */
+.lineup-formation-recommended{position:absolute;top:7px;right:7px;z-index:3;
+ border-radius:8px;background:#f0b827;color:#092b50;border:1px solid #f5d26c;
+ padding:3px 7px;font:800 10px/1.45 Ario,Tahoma,sans-serif;
+ box-shadow:0 2px 5px #0006;pointer-events:none}
+@media(max-width:560px){.lineup-formation-recommended{top:4px;right:4px;
+ font-size:8px;padding:2px 4px;border-radius:6px}}
