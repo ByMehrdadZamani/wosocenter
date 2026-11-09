@@ -1,109 +1,35 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#100b19" />
-  <meta name="description" content="WoSoCenter — کنداکتورساز آنلاین فوتبال با قالب آماده، بانک لوگو و خروجی تصویر" />
-  <title>کنداکتورساز فوتبال | WoSoCenter</title>
-  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1" />
-  <link rel="stylesheet" href="styles.css?v=5.5" />
-  <script src="app.js?v=5.5" defer></script>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#100c19"><meta name="description" content="WoSoCenter — ابزارهای ساخت کنداکتور و شماتیک فوتبالی">
+ <title>WoSoCenter | خانه</title>
+ <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
+ <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="home.css?v=5.7">
 </head>
 <body>
-  <header class="topbar">
-    <div class="identity"><span class="appmark woso-appmark" aria-hidden="true"><span class="appmark-icon"></span></span><div><strong>کنداکتورساز فوتبال</strong><small>WoSoCenter · قالب ۰۱</small></div></div>
-    <div class="top-actions"><a href="lineup.html" class="btn secondary" style="text-decoration:none;display:inline-flex;align-items:center" title="ورود به شماتیک‌ساز">⚽ شماتیک‌ساز</a>
-      <div class="history-actions" aria-label="ویرایش‌های قبلی">
-        <button id="undoBtn" class="tool-btn" type="button" title="بازگشت به تغییر قبلی (Ctrl+Z)" aria-label="واگرد">↶</button>
-        <button id="redoBtn" class="tool-btn" type="button" title="بازگرداندن تغییر (Ctrl+Y)" aria-label="بازانجام">↷</button>
-        <button id="showHistoryBtn" class="tool-btn history-icon" type="button" title="مشاهده تاریخچه" aria-label="تاریخچه تغییرات"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/></svg></button>
-      </div>
-      <button id="themeToggle" class="tool-btn theme-btn" type="button" title="تغییر حالت روشن و تاریک" aria-label="تغییر حالت روشن و تاریک">☀</button>
-      <span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار</span>
-      <button id="downloadBtn" class="btn primary" type="button">↓ دریافت PNG</button>
-    </div>
-  </header>
-  <main class="workspace">
-    <aside class="editor" aria-label="پنل تنظیمات کنداکتور">
-      <div class="section-head"><div><h1>تنظیمات کنداکتور</h1><p>تیم‌ها، متن‌ها، رنگ‌ها و فونت‌ها را انتخاب کنید.</p></div><span class="template-tag">طرح ۰۱</span></div>
-      <nav class="tabs" aria-label="بخش‌های ویرایش">
-        <button class="tab active" data-tab="games" aria-selected="true" type="button">مسابقات</button>
-        <button class="tab" data-tab="header" aria-selected="false" type="button">هدر و پایین</button>
-        <button class="tab" data-tab="design" aria-selected="false" type="button">طرح و رنگ</button>
-        <button class="tab" data-tab="history" aria-selected="false" type="button">تاریخچه</button>
-      </nav>
-      <div class="tab-content" id="gamesTab">
-        <div class="subheading"><div><h2>بازی‌ها</h2><small id="gameCount">۱ از ۶ مسابقه</small></div><button id="addGameBtn" class="btn accent" type="button">＋ افزودن بازی</button></div>
-        <div id="gamesList" class="games-list"></div>
-        <p class="hint">برای انتخاب لوگوی تیم یا پرچم، روی گزینه مربوط بزنید و در فهرست جست‌وجو کنید.</p>
-      </div>
-      <div class="tab-content hidden" id="headerTab">
-        <div class="settings-group"><h2>تاریخ بالای تصویر</h2>
-          <div class="two-col"><label>روز هفته<input id="weekDay" maxlength="22" type="text" placeholder="شنبه" /></label><label>روز و ماه<input id="monthDay" maxlength="22" type="text" placeholder="۱۶ آبان" /></label></div>
-          <div class="two-col"><label>رنگ روز هفته<button type="button" class="color-trigger" data-global-color="dayColor"></button></label><label>رنگ روز و ماه<button type="button" class="color-trigger" data-global-color="dateColor"></button></label></div>
-          <div class="two-col"><label>فونت روز هفته<button id="dayFontPick" type="button" class="font-pick" data-global-font="dayFont" aria-label="انتخاب فونت"></button></label><label>فونت روز و ماه<button id="dateFontPick" type="button" class="font-pick" data-global-font="dateFont" aria-label="انتخاب فونت"></button></label></div>
-          <label>رنگ خط نقطه‌چین<button type="button" class="color-trigger" data-global-color="dateLineColor"></button></label>
-        </div>
-        <div class="settings-group"><h2>عنوان گرافیکی</h2>
-          <div class="two-col"><label>رنگ «برنامه»<button type="button" class="color-trigger" data-global-color="titlePurple"></button></label><label>رنگ «بازی‌های امروز»<button type="button" class="color-trigger" data-global-color="titleWhite"></button></label></div>
-        </div>
-        <div class="settings-group"><h2>لوگوی WoSoCenter</h2><label>رنگ لوگوی بالای تصویر<button type="button" class="color-trigger" data-global-color="brandLogoColor"></button></label></div>
-        <div class="settings-group"><h2>آیدی کانال در تصویر</h2>
-          <label>نام یا آیدی کانال<input id="footerText" maxlength="45" type="text" placeholder="WoSoCenter" /></label>
-          <div class="two-col"><label>رنگ نوشته<button type="button" class="color-trigger" data-global-color="footerColor"></button></label><label>رنگ آیکون تلگرام<button type="button" class="color-trigger" data-global-color="telegramColor"></button></label></div>
-          <label>فونت نوشته<button id="footerFontPick" type="button" class="font-pick" data-global-font="footerFont" aria-label="انتخاب فونت"></button></label>
-        </div>
-      </div>
-      <div class="tab-content hidden" id="designTab">
-        <div class="settings-group"><h2>ترکیب رنگی آماده</h2><p class="hint compact">برای تغییر هماهنگ رنگ تمام اجزای تصویر، یک ترکیب را انتخاب کنید.</p><div id="paletteList" class="palette-list"></div></div>
-        <div class="settings-group"><h2>پترن پس‌زمینه</h2><button id="patternPick" type="button" class="asset-pick large" data-pick="patternId"><span class="asset-sample" id="patternSample"></span><span class="asset-pick-name" id="patternName">انتخاب پترن</span><span class="pick-arrow">⌄</span></button><p class="hint compact">پترن‌ها از بانک طرح‌های سایت انتخاب می‌شوند.</p>
-          <div class="pattern-color-card">
-            <div class="pattern-color-head"><div class="pattern-color-copy"><strong>رنگ دلخواه پترن</strong><span id="patternTintHint">رنگ‌های تصویر را شخصی‌سازی کنید.</span></div><label class="pattern-toggle" for="patternTintToggle" title="فعال یا غیرفعال‌کردن رنگ دلخواه"><input id="patternTintToggle" type="checkbox" checked aria-label="فعال‌کردن رنگ دلخواه پترن"/><span class="pattern-toggle-track" aria-hidden="true"></span></label></div>
-            <div class="pattern-color-picker" id="patternColorPicker"><span>رنگ پترن</span><button type="button" class="color-trigger" data-global-color="patternColor" aria-label="انتخاب رنگ پترن"></button></div>
-          </div>
-        </div>
-        <div class="settings-group"><h2>رنگ اجزای تصویر</h2>
-          <div class="two-col"><label>رنگ زمینه<button type="button" class="color-trigger" data-global-color="background"></button></label><label>رنگ لایه مرکزی<button type="button" class="color-trigger" data-global-color="frameColor"></button></label><label>رنگ کادر مسابقه<button type="button" class="color-trigger" data-global-color="cardColor"></button></label></div>
-        </div>
-        <div class="settings-group"><h2>فونت یکسان برای متن‌ها</h2><label>انتخاب فونت<button id="globalFontPick" type="button" class="font-pick" data-global-font="globalFont" aria-label="انتخاب فونت"></button></label><button class="btn secondary full" type="button" id="applyAllFonts">اعمال روی تمام نوشته‌های قابل ویرایش</button><p class="hint compact">عنوان گرافیکی بالای تصویر ثابت می‌ماند.</p></div>
-        <div class="settings-group"><h2>مدیریت طرح</h2><div class="two-col"><button class="btn secondary" id="exportProject" type="button">دریافت تنظیمات JSON</button><button class="btn secondary" id="importProjectBtn" type="button">بازیابی تنظیمات</button></div><input id="projectFile" type="file" accept=".json,application/json" hidden /><button class="btn danger-text full" id="resetBtn" type="button">بازگشت به طرح پیش‌فرض</button><p class="hint compact">تنظیمات و تاریخچه تغییرات در همین مرورگر نگهداری می‌شوند.</p></div>
-      </div>
-      <div class="tab-content hidden" id="historyTab"><div class="subheading"><div><h2>تاریخچه تغییرات</h2><small id="historyCount">۰ تغییر</small></div><div class="inline-tools"><button type="button" class="btn secondary" id="historyUndo">↶ واگرد</button><button type="button" class="btn secondary" id="historyRedo">↷ بازانجام</button></div></div><p class="hint compact history-hint">هر ردیف یک مرحله است. روی هر مرحله بزنید تا طرح به همان وضعیت برگردد. تا ۵۰۰ مرحله اخیر نگهداری می‌شود.</p><div id="historyList" class="history-list"></div></div>
-      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
-    </aside>
-    <section class="preview-area" aria-label="پیش‌نمایش خروجی">
-      <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><div class="preview-head-tools"><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span><button type="button" id="openPagesBtn" class="btn secondary page-manage-trigger" aria-haspopup="dialog" aria-controls="pagesDialog">▦ مدیریت صفحات <span id="pageTotal">۱ صفحه</span></button></div></div>
-
-      <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش برنامه بازی‌های فوتبال"></canvas></div>
-      <div class="preview-foot"><span>تصویر خروجی ۱۰۸۰ × ۱۳۵۰ پیکسل است.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
-    </section>
+ <div class="home-orbit orbit-one"></div><div class="home-orbit orbit-two"></div>
+ <div class="home-stage">
+  <header class="home-top"><div class="brand-stamp"><span class="stamp-dot"></span> WOSO<span>CENTER</span></div><span class="home-kicker">STUDIO · FOOTBALL GRAPHICS</span></header>
+  <main class="home-main">
+   <section class="home-intro" aria-label="ووسو سنتر">
+    <div class="home-emblem" role="img" aria-label="لوگوی ووسو سنتر"></div>
+    <div class="home-eyebrow"><i></i> ابزارهای طراحی فوتبال <i></i></div>
+    <h1>ووسو <span>سنتر</span></h1>
+    <p>طراحی حرفه‌ای کنداکتور و ترکیب فوتبال، با سلیقه خودت.</p>
+   </section>
+   <section class="home-actions" aria-label="انتخاب ابزار">
+    <a class="home-tile fixture-tile" href="fixture.html">
+     <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 72 72" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="12" width="48" height="48" rx="9"/><path d="M22 25h28M22 35h28M22 45h19"/><circle cx="24" cy="25" r="3" fill="currentColor" stroke="none"/><circle cx="24" cy="35" r="3" fill="currentColor" stroke="none"/><circle cx="24" cy="45" r="3" fill="currentColor" stroke="none"/></svg></div>
+     <span class="tile-text"><small>FIXTURE MAKER</small><strong>کنداکتور ووسو</strong><span>ساخت پوستر مسابقات و برنامه بازی‌ها</span></span><span class="tile-arrow" aria-hidden="true">‹</span>
+    </a>
+    <a class="home-tile lineup-tile" href="lineup.html">
+     <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 72 72" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="10" width="54" height="52" rx="8"/><path d="M36 10v52M9 36h54" stroke-dasharray="3 5"/><circle cx="36" cy="36" r="9"/><circle cx="22" cy="23" r="4" fill="currentColor" stroke="none"/><circle cx="50" cy="23" r="4" fill="currentColor" stroke="none"/><circle cx="22" cy="49" r="4" fill="currentColor" stroke="none"/><circle cx="50" cy="49" r="4" fill="currentColor" stroke="none"/></svg></div>
+     <span class="tile-text"><small>LINEUP BUILDER</small><strong>شماتیک ووسو</strong><span>چیدمان ترکیب و نمایش تصاویر بازیکنان</span></span><span class="tile-arrow" aria-hidden="true">‹</span>
+    </a>
+   </section>
   </main>
-  <footer class="site-footer">WoSoCenter <span aria-hidden="true">·</span> ارتباط با سازنده: <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" dir="ltr">@ByMehrdad</a></footer>
-  <dialog class="picker-dialog pages-dialog" id="pagesDialog" tabindex="-1" aria-labelledby="pagesDialogTitle">
-    <div class="dialog-head pages-dialog-head"><div><h2 id="pagesDialogTitle">مدیریت صفحات کنداکتور</h2><p>برای ویرایش هر صفحه روی پیش‌نمایش آن بزنید.</p></div><button type="button" class="dialog-close" data-close-dialog="pagesDialog" aria-label="بستن مدیریت صفحات">×</button></div>
-    <div class="page-buttons pages-dialog-buttons"><button type="button" id="addPageBtn" class="btn accent">＋ افزودن صفحه</button><button type="button" id="downloadAllPagesBtn" class="btn secondary">↓ دانلود همه صفحات</button></div>
-    <div id="pageTabs" class="page-tabs page-gallery" aria-label="فهرست صفحات"></div>
-    <p class="pages-download-hint">فایل هر صفحه جداگانه با فرمت PNG دانلود می‌شود. ممکن است مرورگر اجازه دانلود چند فایل را درخواست کند.</p>
-  </dialog>
-  <dialog class="picker-dialog" id="assetDialog" tabindex="-1" aria-labelledby="assetDialogTitle">
-    <div class="dialog-head"><div><h2 id="assetDialogTitle">انتخاب از فهرست</h2><p id="assetCount">برای انتخاب روی یک مورد بزنید.</p></div><button type="button" class="dialog-close" data-close-dialog="assetDialog" aria-label="بستن">×</button></div>
-    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="assetSearch" type="search" autocomplete="off" autocapitalize="off" inputmode="search" placeholder="جست‌وجوی نام تیم، کشور یا پترن…" aria-label="جست‌وجوی فهرست"/></div>
-    <div class="asset-results" id="assetResults"></div>
-  </dialog>
-  <dialog class="picker-dialog font-dialog" id="fontDialog" tabindex="-1" aria-labelledby="fontDialogTitle">
-    <div class="dialog-head"><div><h2 id="fontDialogTitle">انتخاب فونت فارسی</h2><p id="fontCount">پیش‌نمایش فونت‌ها با واژه بارسلونا</p></div><button type="button" class="dialog-close" data-close-dialog="fontDialog" aria-label="بستن">×</button></div>
-    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="fontSearch" type="search" autocomplete="off" inputmode="search" placeholder="جست‌وجوی نام فونت…" aria-label="جست‌وجوی فونت" /></div>
-    <div class="font-results" id="fontResults"></div>
-  </dialog>
-  <dialog class="picker-dialog color-dialog" id="colorDialog" aria-labelledby="colorDialogTitle">
-    <div class="dialog-head"><div><h2 id="colorDialogTitle">انتخاب رنگ</h2><p>رنگ دلخواه یا کد HEX را وارد کنید.</p></div><button type="button" class="dialog-close" data-close-dialog="colorDialog" aria-label="بستن">×</button></div>
-    <div class="color-preview-row"><div id="colorPreview" class="color-preview"></div><label>کد رنگ HEX<input type="text" id="colorHex" maxlength="7" dir="ltr" inputmode="text" spellcheck="false" value="#FFFFFF" /></label><input type="color" id="colorNative" title="انتخابگر رنگ گوشی" aria-label="انتخابگر رنگ دستگاه" /></div>
-    <div class="picker-sv" id="pickerSV" aria-label="روشنایی و غلظت رنگ"><span class="picker-target" id="pickerTarget"></span></div>
-    <label class="hue-label">طیف رنگ<input id="pickerHue" type="range" min="0" max="360" value="270" /></label>
-    <div id="colorSwatches" class="color-swatches" aria-label="رنگ‌های پیشنهادی"></div>
-    <button class="btn primary full" id="colorDone" type="button">تأیید رنگ</button>
-  </dialog>
+  <footer class="home-footer"><span>© WoSoCenter</span><a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" aria-label="تلگرام ByMehrdad"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 3-8 18-4-7-6-4z"/><path d="M9 14 21 3"/></svg><b dir="ltr">@ByMehrdad</b></a></footer>
+ </div>
 </body>
 </html>

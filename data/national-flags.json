@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "id": "es",
+    "name": "اسپانیا",
+    "image": "assets/national-flags/es.png"
+  },
+  {
+    "id": "pl",
+    "name": "لهستان",
+    "image": "assets/national-flags/pl.png"
+  },
+  {
+    "id": "no",
+    "name": "نروژ",
+    "image": "assets/national-flags/no.png"
+  },
+  {
+    "id": "pt",
+    "name": "پرتغال",
+    "image": "assets/national-flags/pt.png"
+  },
+  {
+    "id": "ch",
+    "name": "سوئیس",
+    "image": "assets/national-flags/ch.png"
+  },
+  {
+    "id": "br",
+    "name": "برزیل",
+    "image": "assets/national-flags/br.png"
+  },
+  {
+    "id": "nl",
+    "name": "هلند",
+    "image": "assets/national-flags/nl.png"
+  },
+  {
+    "id": "us",
+    "name": "آمریکا",
+    "image": "assets/national-flags/us.png"
+  }
+]

@@ -7,7 +7,7 @@
     "positionGroup": "GK",
     "category": "دروازه‌بان",
     "position": "GK",
-    "flag": "",
+    "flag": "us",
     "viewBox": [
       454,
       52,
@@ -23,7 +23,8 @@
       368,
       368
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-03.webp"
   },
   {
     "id": "barca-04",
@@ -33,7 +34,7 @@
     "positionGroup": "GK",
     "category": "دروازه‌بان",
     "position": "GK",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       153,
       95,
@@ -49,7 +50,8 @@
       623,
       623
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-04.webp"
   },
   {
     "id": "barca-05",
@@ -59,7 +61,7 @@
     "positionGroup": "GK",
     "category": "دروازه‌بان",
     "position": "GK",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       453,
       88,
@@ -75,7 +77,8 @@
       398,
       398
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-05.webp"
   },
   {
     "id": "barca-07",
@@ -85,7 +88,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       452,
       65,
@@ -101,7 +104,8 @@
       335,
       340
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-07.webp"
   },
   {
     "id": "barca-08",
@@ -111,7 +115,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "nl",
     "viewBox": [
       430,
       65,
@@ -127,7 +131,8 @@
       351,
       351
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-08.webp"
   },
   {
     "id": "barca-09",
@@ -137,7 +142,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       531,
       60,
@@ -153,7 +158,8 @@
       374,
       374
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-09.webp"
   },
   {
     "id": "barca-10",
@@ -163,7 +169,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "nl",
     "viewBox": [
       494,
       38,
@@ -179,7 +185,8 @@
       372,
       372
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-10.webp"
   },
   {
     "id": "barca-11",
@@ -189,7 +196,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       488,
       87,
@@ -205,7 +212,8 @@
       352,
       352
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-11.webp"
   },
   {
     "id": "barca-12",
@@ -215,7 +223,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       468,
       46,
@@ -231,7 +239,8 @@
       355,
       355
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-12.webp"
   },
   {
     "id": "barca-13",
@@ -241,7 +250,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       506,
       59,
@@ -257,7 +266,8 @@
       368,
       368
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-13.webp"
   },
   {
     "id": "barca-14",
@@ -267,7 +277,7 @@
     "positionGroup": "DEF",
     "category": "مدافع",
     "position": "DEF",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       486,
       65,
@@ -283,7 +293,8 @@
       352,
       352
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-14.webp"
   },
   {
     "id": "barca-16",
@@ -293,7 +304,7 @@
     "positionGroup": "FWD",
     "category": "مهاجم",
     "position": "FWD",
-    "flag": "",
+    "flag": "pl",
     "viewBox": [
       451,
       80,
@@ -309,7 +320,8 @@
       348,
       348
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-16.webp"
   },
   {
     "id": "barca-17",
@@ -319,7 +331,7 @@
     "positionGroup": "FWD",
     "category": "مهاجم",
     "position": "FWD",
-    "flag": "",
+    "flag": "no",
     "viewBox": [
       502,
       30,
@@ -335,7 +347,8 @@
       364,
       364
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-17.webp"
   },
   {
     "id": "barca-18",
@@ -345,7 +358,7 @@
     "positionGroup": "FWD",
     "category": "مهاجم",
     "position": "FWD",
-    "flag": "",
+    "flag": "br",
     "viewBox": [
       417,
       57,
@@ -361,7 +374,8 @@
       427,
       427
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-18.webp"
   },
   {
     "id": "barca-19",
@@ -371,7 +385,7 @@
     "positionGroup": "FWD",
     "category": "مهاجم",
     "position": "FWD",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       440,
       80,
@@ -387,7 +401,8 @@
       380,
       380
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-19.webp"
   },
   {
     "id": "barca-21",
@@ -397,7 +412,7 @@
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       409,
       65,
@@ -413,7 +428,8 @@
       325,
       325
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-21.webp"
   },
   {
     "id": "barca-22",
@@ -423,7 +439,7 @@
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
-    "flag": "",
+    "flag": "ch",
     "viewBox": [
       475,
       89,
@@ -439,7 +455,8 @@
       359,
       359
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-22.webp"
   },
   {
     "id": "barca-23",
@@ -449,7 +466,7 @@
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       474,
       62,
@@ -465,7 +482,8 @@
       331,
       331
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-23.webp"
   },
   {
     "id": "barca-24",
@@ -475,7 +493,7 @@
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       461,
       48,
@@ -491,7 +509,8 @@
       366,
       366
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-24.webp"
   },
   {
     "id": "barca-25",
@@ -501,7 +520,7 @@
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
-    "flag": "",
+    "flag": "es",
     "viewBox": [
       454,
       68,
@@ -517,7 +536,8 @@
       363,
       363
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-25.webp"
   },
   {
     "id": "barca-26",
@@ -527,7 +547,7 @@
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
-    "flag": "",
+    "flag": "pt",
     "viewBox": [
       432,
       62,
@@ -543,6 +563,7 @@
       338,
       338
     ],
-    "portraitHeadRise": 50
+    "portraitHeadRise": 50,
+    "thumb": "assets/players/thumbs/barca-26.webp"
   }
 ]
