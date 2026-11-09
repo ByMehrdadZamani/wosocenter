@@ -1,5 +1,5 @@
 'use strict';
-/* WoSoCenter Lineup Builder v6.0 — no external JS, API, CDN, or image service. */
+/* WoSoCenter Lineup Builder v6.1 — no external JS, API, CDN, or image service. */
 const L=$id=>document.getElementById($id),LW=1080,LH=1350;
 const LSTORE='wosocenter-lineup-v1',LMEDIA_DB='wosocenter-lineup-media-v1',LPAGES_STORE='wosocenter-lineup-pages-v1';
 const LFONT=[['Ario','آریو'],['DastNevis','دست‌نویس'],['ShahGosh','شاهگوش'],['Shokoh','شکوه'],['Paeez','پاییز'],['Tehran','تهران'],['Titr','تیتر'],['Hayat','حیات'],['DinArabic','دینا عربیک'],['Sahel','ساحل'],['Soltan','سلطان'],['Sepahbod','سپهبد'],['Cinema','سینما'],['Lalezar','لاله‌زار'],['Matin','متین'],['Mikhak','میخک'],['Haftad','هفتاد'],['Casablanca','کازابلانکا'],['GraphikArabic','گرافیک عربیک'],['YekanBoom','یکان بوم']];
@@ -72,7 +72,7 @@ function lFormationDialogRender(){
   return `<button type="button" class="lineup-formation-option ${active?'active':''}" data-lformation="${n}" aria-pressed="${active}" aria-label="آرایش ${n}">
     <span class="lineup-formation-pitch">${lFormationSvg(n)}</span>
     <span class="lineup-formation-label" dir="ltr">${n}</span>
-    ${active?'<span class="lineup-formation-active">✓ انتخاب‌شده</span>':'<span class="lineup-formation-help">انتخاب آرایش</span>'}
+    ${active?'<span class="lineup-formation-check" aria-label="انتخاب‌شده">✓</span>':''}
   </button>`;
  }).join('');
 }
@@ -579,32 +579,46 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
  const src=slot.image;if(src){const img=lReady(src)||lImage(src);if(img?.complete&&img.naturalWidth){
   // v5.6: Align EACH portrait using its own source-image face coordinates.
   // The original transparent PNG remains whole and is never resampled on disk.
-  // The reference card face occupies ~52% of the 180px card width, while the
-  // top of the head rises about 50px above the card frame.
+  // An annotated face occupies 96 units in the 1080-wide poster in EVERY
+  // formation. Only card dimensions and vertical head clearance depend on
+  // spot.scale; this keeps the same portrait large even in compact layouts.
   const player=lFindPlayer(slot.playerId);
   const face=player?.image===src&&Array.isArray(player.portraitFace)&&player.portraitFace.length===4?player.portraitFace:null;
   const factor=(slot.photoScale||1)*(Number(player?.portraitZoom)||1);
+  // Compact five-line formations need more jersey below a full-size face.
+  // Raise the portrait only if it cannot cover a preceding card in the same
+  // column; in crowded columns, the original head clearance is preserved.
+  const originalRise=(Number(player?.portraitHeadRise)||50)*spot.scale;
+  let headRise=originalRise;
+  if(spot.scale<.8){
+   const blockers=lSpotList().filter(other=>{
+    if(other.y>=y||other.i===spot.i)return false;
+    const overlap=Math.min(spot.x+w/2,other.x+90*other.scale)-Math.max(spot.x-w/2,other.x-90*other.scale);
+    return overlap>12;
+   });
+   const safeRise=blockers.length?Math.min(...blockers.map(other=>y-(other.y+189*other.scale)-6)):Infinity;
+   headRise=Math.max(originalRise,Math.min(Number(player?.portraitHeadRise)||50,safeRise));
+  }
   let dx,dy,dw,dh;
   if(face){
    const [, ,faceW]=face;
-   const scale=(96*spot.scale/faceW)*factor;
+   const scale=(96/faceW)*factor;
    dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
    // Center the face, not the entire uncropped PNG: works for asymmetrical hair.
    dx=spot.x-(face[0]+face[2]/2)*scale;
    // Use each transparent source's actual topmost nontransparent pixel.
    const headTop=Array.isArray(player.viewBox)?player.viewBox[1]:0;
-   const headRise=Number(player.portraitHeadRise)||50;
-   dy=y-headRise*spot.scale-headTop*scale;
+   dy=y-headRise-headTop*scale;
   }else{
    // Backward-compatible fallback for future clubs without portraitFace.
    const bounds=player?.image===src&&Array.isArray(player.viewBox)&&player.viewBox.length===4?player.viewBox:null;
    const sx=bounds?bounds[0]:0,sy=bounds?bounds[1]:0;
    const sw=bounds?Math.max(1,bounds[2]-bounds[0]):img.naturalWidth;
    const sh=bounds?Math.max(1,bounds[3]-bounds[1]):img.naturalHeight;
-   const scale=Math.min((w*.98)/sw,(h+50*spot.scale)/sh)*factor;
+   const scale=Math.min((180*.98)/sw,(189+50)/sh)*factor;
    dw=img.naturalWidth*scale;dh=img.naturalHeight*scale;
    dx=spot.x-(sx+sw*.5)*scale;
-   dy=y-50*spot.scale-sy*scale;
+   dy=y-headRise-sy*scale;
   }
   // Crop ONLY the display area: clothes stay INSIDE side borders and above
   // the name band; the player's hair can extend outside the top edge.
