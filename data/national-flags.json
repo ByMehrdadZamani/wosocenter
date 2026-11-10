@@ -38,5 +38,45 @@
     "id": "us",
     "name": "آمریکا",
     "image": "assets/national-flags/us.png"
+  },
+  {
+    "id": "de",
+    "name": "آلمان",
+    "image": "assets/national-flags/de.png"
+  },
+  {
+    "id": "au",
+    "name": "استرالیا",
+    "image": "assets/national-flags/au.png"
+  },
+  {
+    "id": "sco",
+    "name": "اسکاتلند",
+    "image": "assets/national-flags/sco.png"
+  },
+  {
+    "id": "eng",
+    "name": "انگلستان",
+    "image": "assets/national-flags/eng.png"
+  },
+  {
+    "id": "dk",
+    "name": "دانمارک",
+    "image": "assets/national-flags/dk.png"
+  },
+  {
+    "id": "se",
+    "name": "سوئد",
+    "image": "assets/national-flags/se.png"
+  },
+  {
+    "id": "fr",
+    "name": "فرانسه",
+    "image": "assets/national-flags/fr.png"
+  },
+  {
+    "id": "ca",
+    "name": "کانادا",
+    "image": "assets/national-flags/ca.png"
   }
 ]

@@ -128,9 +128,12 @@ const lImgCache=new Map(),lImageKeyUrls=new Map();
 let lPast=[],lFuture=[],lDataSeq=0,lSaveTimer=0,lDbPromise=null,lThumbnailTimer=0,lInputHistory=new WeakMap();
 let lPendingPlayerId=null,lPendingCustom=null,lCustomCropFile=null,lCustomCropImage=null,lCustomCropDraft=null,lCustomCropPointers=new Map(),lCustomCropGesture=null,lPendingFlagId=null,lColorKey=null,lColorStart='',lColorBefore=null,lColorHSV={h:270,s:1,v:1};
 function lNewSlots(team){
- const orderedNames=['اوا پایور','کارولین گراهام هانسن','کلودیا پینا','آیتانا بونماتی','پاتری گیخارو','ویکی لوپز','آیشا کامارا','ایرنه پاردس','لایا الکساندری','مارتا تورخون','کاتا کول'];
+ const barcelonaNames=['اوا پایور','کارولین گراهام هانسن','کلودیا پینا','آیتانا بونماتی','پاتری گیخارو','ویکی لوپز','آیشا کامارا','ایرنه پاردس','لایا الکساندری','مارتا تورخون','کاتا کول'];
+ // Starter lineup only; the complete 27-player Arsenal roster stays selectable in the picker.
+ const arsenalNames=['کیتلین فورد','آلسیا روسو','کلوئی کلی','ماریونا کالدنتی','کیم لیتل','فریدا مانوم','استف کتلی','لیا ویلیامسون','لوت ووبن‌موی','امیلی فاکس','دافنه ون دومسلار'];
+ const orderedNames=team==='barcelona'?barcelonaNames:team==='arsnl'?arsenalNames:[];
  return Array.from({length:11},(_,i)=>{
-  const p=team==='barcelona'?lPlayers.find(x=>x.teamId===team&&x.name===orderedNames[i]):null;
+  const p=orderedNames.length?lPlayers.find(x=>x.teamId===team&&x.name===orderedNames[i]):null;
   return {playerId:p?.id||'',name:p?.name||'',image:p?.image||'',imageKey:'',flag:p?.flag||'',flagKey:'',flagCustomized:false,positionOverride:'',photoScale:1};
  });
 }
@@ -189,9 +192,9 @@ function lPrepareImages(){
  const urls=[...(lState.backgroundPatternType==='graphic'?[lPatterns.find(p=>p.id===lState.backgroundPatternId)?.image]:[]),'assets/lineup/combined-title.png','assets/lineup/woso-emblem-full.png','assets/brand/logo-alpha.webp'];
  for(const id of [...(lState.backgroundPatternType==='graphic'?[]:[lState.backgroundLogoId]),lState.headerRightId,lState.headerLeftId]){const t=lFindTeam(id);if(t)urls.push(t.image)}
  for(const slot of lState.slots){
-  if(slot.image)urls.push(slot.image);
   const p=lFindPlayer(slot.playerId);
-  if(p?.lineupPortrait&&slot.image===p.image)urls.push(p.lineupPortrait);
+  const portrait=p?.lineupPortrait&&slot.image===p.image?p.lineupPortrait:slot.image;
+  if(portrait)urls.push(portrait);
   if(slot.flagImage)urls.push(slot.flagImage);const f=lNationalFlags.find(x=>x.id===slot.flag);if(f?.image)urls.push(f.image)
  }
  urls.forEach(lImage);
@@ -332,10 +335,16 @@ function lHasTeamRoster(t){
  if(!t||/\s+[0-9۰-۹]+\s*$/.test(t.name||''))return false;
  return lPlayers.some(p=>p&&p.teamId===t.id&&typeof p.image==='string'&&p.image.trim()&&typeof p.name==='string'&&p.name.trim());
 }
-function lTeamDialogRender(){const q=lFilterText(L('lineupTeamSearch').value);const important=['barcelona','real-madrid','bayern-munich'];
- const ordered=[...important.map(lFindTeam).filter(Boolean),...lTeams.filter(t=>!important.includes(t.id))].filter(x=>lFilterText(x.name).includes(q));
- let html=(!q||lFilterText('ترکیب منتخب').includes(q))?'<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>همه بازیکنان بانک</small></button>':'';
- html+=ordered.map(t=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${important.includes(t.id)?'promoted':''}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span>${important.includes(t.id)?'<em>پیشنهادی</em>':''}</button>`).join('');
+function lTeamDialogRender(){const q=lFilterText(L('lineupTeamSearch').value);
+ // A complete player bank is defined by data, not by a subjective recommended-team label.
+ const rosterCounts=new Map();for(const p of lPlayers)if(p.teamId&&p.image&&p.name)rosterCounts.set(p.teamId,(rosterCounts.get(p.teamId)||0)+1);
+ const hasRoster=t=>(rosterCounts.get(t.id)||0)>=20;
+ const complete=lTeams.filter(t=>hasRoster(t)&&!/\s+[0-9۰-۹]+\s*$/.test(t.name||''))
+   .sort((a,b)=>(a.id==='barcelona'?0:a.id==='arsnl'?1:2)-(b.id==='barcelona'?0:b.id==='arsnl'?1:2));
+ const promotedIds=new Set(complete.map(t=>t.id));
+ const ordered=[...complete,...lTeams.filter(t=>!promotedIds.has(t.id))].filter(t=>lFilterText(t.name).includes(q));
+ let html=ordered.map(t=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${hasRoster(t)?'complete':''}"><img src="${lEscape(t.image)}" loading="lazy" decoding="async" alt=""><span>${lEscape(t.name)}</span>${hasRoster(t)?'<em>لیست بازیکنان کامل</em>':''}</button>`).join('');
+ if(!q||lFilterText('ترکیب منتخب').includes(q))html+='<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>همه بازیکنان بانک</small></button>';
  L('lineupTeamGrid').innerHTML=html||'<div class="lineup-empty">تیمی با این نام پیدا نشد.</div>';
 }
 function lLogoDialogRender(){const q=lFilterText(L('lineupLogoSearch').value);L('lineupLogoGrid').innerHTML=lTeams.filter(t=>lFilterText(t.name).includes(q)).map(t=>`<button type="button" class="lineup-logo-option" data-llogo="${lEscape(t.id)}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span></button>`).join('')||'<div class="lineup-empty">نتیجه‌ای پیدا نشد.</div>';}
@@ -668,7 +677,9 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
   const calibratedImg=standardized?lReady(standardized)||lImage(standardized):null;
   const useCalibrated=!!(calibratedImg?.complete&&calibratedImg.naturalWidth);
   // Keep older projects usable even if the new PNGs were not uploaded yet.
-  const img=useCalibrated?calibratedImg:(lReady(src)||lImage(src));
+  // Avoid downloading a full-size fallback while the calibrated portrait is loading.
+  // Fall back only for older installs where the calibration image really is missing.
+  const img=useCalibrated?calibratedImg:(!standardized||lImgCache.get(standardized)?.error?(lReady(src)||lImage(src)):null);
   if(img?.complete&&img.naturalWidth){
   // v6.3: 21 actual transparent portrait cutouts, pre-calibrated to Patri's
   // 4-3-3 head. The image scale NEVER depends on formation/card size.
@@ -703,7 +714,13 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
   c.save();c.beginPath();c.rect(x+borderInset,cropTop,w-2*borderInset,bandY-cropTop);
   // Give hair and the full head a slight horizontal overflow above the
   // shoulders; sleeves and jersey remain confined to the card frame.
-  if(useCalibrated||slot.imageKey&&slot.customCrop)c.rect(x-14,cropTop,w+28,Math.min(bandY,y+65)-cropTop);
+  // A few wide natural hairstyles need a little more lateral room in 0.70-scale
+  // cards. Barcelona portraits and their original calibration are untouched.
+  if(useCalibrated||slot.imageKey&&slot.customCrop){
+   const wideHair=!!(useCalibrated&&player?.portraitWideHair);
+   const side=wideHair?20:14,headY=wideHair?100:65;
+   c.rect(x-side,cropTop,w+side*2,Math.min(bandY,y+headY)-cropTop);
+  }
   c.clip();
   c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
   c.drawImage(img,dx,dy,dw,dh);c.restore();
@@ -766,7 +783,7 @@ function lSetupPointer(){
  lCanvas.setAttribute('tabindex','0');lCanvas.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();lPlayerDialogShow(lSelected)}});
 }
 async function lLoadFont(id){if(!document.fonts)return;try{await Promise.race([document.fonts.load(`700 24px "${lFont(id)}"`),new Promise(resolve=>setTimeout(resolve,3500))]);lRender()}catch{}}
-async function lWaitResources(){const fonts=Object.values(lState.fonts).map(lLoadFont);const paths=[lFindTeam(lState.headerRightId)?.image,lFindTeam(lState.headerLeftId)?.image,...(lState.backgroundPatternType==='graphic'?[]:[lFindTeam(lState.backgroundLogoId)?.image]),lState.backgroundPatternType==='graphic'?lPatterns.find(p=>p.id===lState.backgroundPatternId)?.image:null,...lState.slots.flatMap(x=>{const p=lFindPlayer(x.playerId);return[x.image,p?.image===x.image?p?.lineupPortrait:null,x.flagImage,lNationalFlags.find(f=>f.id===x.flag)?.image]}),'assets/lineup/woso-emblem-full.png','assets/lineup/combined-title.png'].filter(Boolean);await Promise.race([Promise.all([Promise.all(fonts),...paths.map(path=>new Promise(resolve=>{const img=lImage(path);if(img.complete){resolve();return}img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))]),new Promise(resolve=>setTimeout(resolve,5000))]);}
+async function lWaitResources(){const fonts=Object.values(lState.fonts).map(lLoadFont);const paths=[lFindTeam(lState.headerRightId)?.image,lFindTeam(lState.headerLeftId)?.image,...(lState.backgroundPatternType==='graphic'?[]:[lFindTeam(lState.backgroundLogoId)?.image]),lState.backgroundPatternType==='graphic'?lPatterns.find(p=>p.id===lState.backgroundPatternId)?.image:null,...lState.slots.flatMap(x=>{const p=lFindPlayer(x.playerId);const portrait=p?.image===x.image&&p?.lineupPortrait?p.lineupPortrait:x.image;return[portrait,x.flagImage,lNationalFlags.find(f=>f.id===x.flag)?.image]}),'assets/lineup/woso-emblem-full.png','assets/lineup/combined-title.png'].filter(Boolean);await Promise.race([Promise.all([Promise.all(fonts),...paths.map(path=>new Promise(resolve=>{const img=lImage(path);if(img.complete){resolve();return}img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))]),new Promise(resolve=>setTimeout(resolve,5000))]);}
 async function lDownload(scale=1){const buttons=[L('lineupDownload')];buttons.forEach(b=>b.disabled=true);
  try{await lWaitResources();const out=document.createElement('canvas');out.width=LW*scale;out.height=LH*scale;const old=lCtx;lCtx=out.getContext('2d',{alpha:false});lCtx.imageSmoothingEnabled=true;lCtx.imageSmoothingQuality='high';lCtx.scale(scale,scale);
  try{lDraw(false)}finally{lCtx=old}

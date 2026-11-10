@@ -277,3 +277,9 @@
 .lineup-custom-upload-option .lineup-upload-card-icon{width:min(100%,104px);height:120px;display:grid;place-items:center;background:linear-gradient(110deg,var(--panel2),var(--input));}
 .lineup-custom-upload-option .lineup-upload-card-icon>b{width:49px;height:49px;display:grid;place-items:center;border:2px solid var(--violet);border-radius:50%;background:color-mix(in srgb,var(--violet) 11%,var(--input));font:600 29px/1 system-ui;color:var(--violet);box-shadow:0 3px 12px #0002}
 @media(max-width:740px){.lineup-custom-upload-option .lineup-upload-card-icon{height:80px}.lineup-custom-upload-option .lineup-upload-card-icon>b{width:42px;height:42px;font-size:25px}}
+
+/* v6.10: complete-roster teams, promoted ahead of incomplete clubs. */
+.lineup-team-option.complete{border-color:color-mix(in srgb,#36b993 65%,var(--edge));background:color-mix(in srgb,#36b993 8%,var(--input))}
+.lineup-team-option.complete em{font-size:10px;font-style:normal;font-weight:800;color:#46c8a7;line-height:1.4;white-space:normal;text-align:center}
+.lineup-team-option.complete img{width:52px;height:52px}
+@media(max-width:430px){.lineup-team-option.complete em{font-size:9px}}
