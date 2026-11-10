@@ -1158,13 +1158,14 @@
     "sourceHeight": 600,
     "sourceFormat": "WEBP",
     "thumb": "assets/players/thumbs/arsenal-17.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/arsenal-17.webp",
+    "lineupPortrait": "assets/players/lineup-calibrated/arsenal-17-v613.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
       "headWidth": 106.0,
       "headHeight": 106.0,
       "crownY": 64,
-      "method": "Barcelona-matched source portrait; face-width and crown alignment"
+      "method": "Barcelona-matched source portrait; face-width and crown alignment",
+      "verification": "v6.13: original Barcelona-matched 300x310 portrait; versioned URL to prevent stale full-body fallback"
     },
     "pickerPortrait": "assets/players/picker/arsenal-17.webp"
   },

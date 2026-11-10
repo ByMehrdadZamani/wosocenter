@@ -6,7 +6,7 @@
  <title>شماتیک‌ساز با ۳۱ آرایش فوتبال | WoSoCenter</title>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.12.0">
- <script src="lineup.js?v=6.12.0" defer></script>
+ <script src="lineup.js?v=6.13.0" defer></script>
 </head>
 <body class="lineup-page">
 <header class="topbar woso-editor-topbar">
@@ -45,15 +45,15 @@
     <label>انتخاب لیگ آماده<button type="button" id="lineupLeaguePick" class="asset-pick lineup-league-pick"><span class="asset-sample">🏆</span><span id="lineupLeaguePickName" class="asset-pick-name">انتخاب از لیگ‌های آماده</span><span class="pick-arrow">⌄</span></button></label>
     <div class="two-col"><label>نام لیگ / تورنمنت<input type="text" id="lineupLeague" maxlength="75"></label><label>هفته یا مرحله<input type="text" id="lineupWeek" maxlength="35"></label><label>رنگ متن لیگ و هفته<button type="button" class="lineup-color-button" data-lcolor="leagueText" data-color-label="رنگ لیگ و هفته"></button></label><label>فونت لیگ و هفته<button type="button" class="font-pick lineup-font-btn" data-lfont="league"></button></label></div>
    </div>
+   <div class="settings-group"><h2>لوگوهای وسط هدر</h2>
+    <div class="two-col"><button id="lineupHeaderRight" type="button" class="lineup-select-card"><span id="lineupHeaderRightImg"></span><span>تیم سمت راست</span></button><button id="lineupHeaderLeft" type="button" class="lineup-select-card"><span id="lineupHeaderLeftImg"></span><span>تیم سمت چپ</span></button></div>
+    <div class="two-col"><label>رنگ زمینه قاب لوگو<button class="lineup-color-button" type="button" data-lcolor="logoBg" data-color-label="رنگ قاب لوگو"></button></label><label>رنگ نوشته «ترکیب منتخب»<button type="button" class="lineup-color-button" data-lcolor="mixColor" data-color-label="رنگ ترکیب منتخب"></button></label></div>
+   </div>
    <div class="settings-group"><h2>نام مسابقه و ساعت</h2>
     <div class="two-col"><label>عنوان مسابقه<input type="text" id="lineupMatch" maxlength="100"></label><label>ساعت مسابقه<input id="lineupTime" type="text" maxlength="20" dir="ltr"></label></div>
     <button id="lineupAutoMatch" class="btn secondary lineup-auto-match" type="button">↻ ساخت نام خودکار از دو تیم</button>
     <div class="two-col"><label>رنگ متن مسابقه<button type="button" class="lineup-color-button" data-lcolor="matchText" data-color-label="رنگ متن مسابقه"></button></label><label>فونت مسابقه و ساعت<button type="button" class="font-pick lineup-font-btn" data-lfont="match"></button></label></div>
     <p class="hint compact">فقط وقتی هر دو متن وارد شده باشند، جداکننده عمودی نمایش داده می‌شود.</p>
-   </div>
-   <div class="settings-group"><h2>لوگوهای وسط هدر</h2>
-    <div class="two-col"><button id="lineupHeaderRight" type="button" class="lineup-select-card"><span id="lineupHeaderRightImg"></span><span>تیم سمت راست</span></button><button id="lineupHeaderLeft" type="button" class="lineup-select-card"><span id="lineupHeaderLeftImg"></span><span>تیم سمت چپ</span></button></div>
-    <div class="two-col"><label>رنگ زمینه قاب لوگو<button class="lineup-color-button" type="button" data-lcolor="logoBg" data-color-label="رنگ قاب لوگو"></button></label><label>رنگ نوشته «ترکیب منتخب»<button type="button" class="lineup-color-button" data-lcolor="mixColor" data-color-label="رنگ ترکیب منتخب"></button></label></div>
    </div>
    <div class="settings-group"><h2>نوار بالای بازیکنان</h2>
     <div class="two-col"><label>عنوان نوار<input type="text" id="lineupTitle" maxlength="38" value="شماتیک ترکیب"></label><label>رنگ نوشته نوار<button type="button" class="lineup-color-button" data-lcolor="topText" data-color-label="متن نوار بالا"></button></label><label>رنگ باکس عنوان<button type="button" class="lineup-color-button" data-lcolor="topBox" data-color-label="باکس عنوان بالا"></button></label><label>فونت نوار بالای بازیکنان<button type="button" class="font-pick lineup-font-btn" data-lfont="title"></button></label></div>
