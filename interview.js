@@ -66,7 +66,20 @@ function wrapRuns(root,kind){
  if(row.length||!lines.length)push(true);
  return lines;
 }
+// Reflow every manual page with the same live font, size, line-height and alignment
+// as page 1; never preserve stale line measurements after a design change.
+function reflowManualPage(manual){
+ const q=document.createElement('div'),a=document.createElement('div');
+ const oldQ=manual.question??manualTextFromLines(manual,'question'),oldA=manual.answer??manualTextFromLines(manual,'answer');
+ q.innerHTML=cleanRich(manual.questionHtml??manualLegacyHTML(oldQ));
+ a.innerHTML=cleanRich(manual.answerHtml??manualLegacyHTML(oldA));
+ const qs=wrapRuns(q,'question').filter(l=>l.words.length),as=wrapRuns(a,'answer').filter(l=>l.words.length);
+ const lines=[...qs,...as.map((l,i)=>({...l,breakBefore:i===0&&qs.length?22:0}))];
+ const used=lines.reduce((sum,l)=>sum+l.height+(l.breakBefore||0),0);
+ manual.lines=lines;manual.height=Math.max(370,used+76);return used;
+}
 function paginate(){
+ for(const manual of state.manualPages||[])reflowManualPage(manual);
  const questionLines=wrapRuns($('#questionEditor'),'question');const answerLines=wrapRuns($('#answerEditor'),'answer');
  if(questionLines.every(l=>!l.words.length)&&answerLines.every(l=>!l.words.length)){const auto={key:'auto:0',isAuto:true,lines:[],height:370};const manual=(state.manualPages||[]).map(m=>({key:`manual:${m.id}`,isAuto:false,lines:m.lines||[],height:m.height||370}));const keys=[auto,...manual];state.pagePlan=(state.pagePlan||[]).filter(k=>keys.some(p=>p.key===k));keys.forEach(p=>{if(!state.pagePlan.includes(p.key))state.pagePlan.push(p.key)});pages=state.pagePlan.map(k=>keys.find(p=>p.key===k));pageIndex=clamp(pageIndex,0,pages.length-1);return;}
  const entries=[];for(const l of questionLines)entries.push({...l});
@@ -150,18 +163,19 @@ async function downloadSeparatePages(){
 $('#downloadAllPagesBtn').onclick=downloadSeparatePages;
 $('#previousPage').onclick=()=>{pageIndex--;scheduleRender();};$('#nextPage').onclick=()=>{pageIndex++;scheduleRender();};
 // Editors: plain-text paste prevents inherited Word/website styles from breaking the poster.
-$$('.rich-editor').forEach(el=>{el.addEventListener('input',()=>{pageIndex=0;scheduleRender();});el.addEventListener('paste',e=>{e.preventDefault();const text=e.clipboardData.getData('text/plain');document.execCommand('insertText',false,text);});});
+$$('.rich-editor').forEach(el=>{el.addEventListener('input',()=>{if(el.id==='manualQuestion'||el.id==='manualAnswer')updateManualText();else{pageIndex=0;scheduleRender();}});el.addEventListener('paste',e=>{e.preventDefault();const text=e.clipboardData.getData('text/plain');document.execCommand('insertText',false,text);});});
 $$('.editor-toolbar button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
 $$('.editor-toolbar button').forEach(b=>b.onclick=()=>{const target=$('#'+b.closest('.editor-toolbar').dataset.editor);
- if(b.dataset.align){const kind=target.id==='questionEditor'?'question':'answer';state[kind+'Align']=b.dataset.align;updateAlignButtons();scheduleRender();return;}
- target.focus();document.execCommand(b.dataset.cmd,false,null);scheduleRender();});
-function updateAlignButtons(){$$('.editor-toolbar [data-align]').forEach(b=>{const kind=b.closest('.editor-toolbar').dataset.editor==='questionEditor'?'question':'answer';const selected=(state[kind+'Align']||'justify')===b.dataset.align;b.classList.toggle('active',selected);b.setAttribute('aria-pressed',String(selected));});$$('.rich-editor').forEach(el=>{el.style.textAlign=state[el.id==='questionEditor'?'questionAlign':'answerAlign']||'justify';});}
+ if(b.dataset.align){const kind=target.id.toLowerCase().includes('question')?'question':'answer';state[kind+'Align']=b.dataset.align;updateAlignButtons();scheduleRender();return;}
+ target.focus();document.execCommand(b.dataset.cmd,false,null);if(target.id.startsWith('manual'))updateManualText();else scheduleRender();});
+function updateAlignButtons(){$$('.editor-toolbar [data-align]').forEach(b=>{const kind=b.closest('.editor-toolbar').dataset.editor.toLowerCase().includes('question')?'question':'answer';const selected=(state[kind+'Align']||'justify')===b.dataset.align;b.classList.toggle('active',selected);b.setAttribute('aria-pressed',String(selected));});$$('.rich-editor').forEach(el=>{el.style.textAlign=state[el.id.toLowerCase().includes('question')?'questionAlign':'answerAlign']||'justify';});}
 $$('[data-reset-font]').forEach(b=>b.onclick=()=>{const kind=b.dataset.resetFont;state[kind+'Font']=DEFAULT[kind+'Font'];state[kind+'Size']=DEFAULT[kind+'Size'];refreshControls();changed(`تنظیمات پیش‌فرض ${kind==='question'?'سؤال':'جواب'} (آریو) بازیابی شد.`);});
 $$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-selected',String(x===b));});$$('.tab-panel').forEach(x=>x.classList.toggle('hidden',x.id!=='tab-'+b.dataset.tab));if(b.dataset.tab==='history')refreshHistoryUI();});
 const unitLabel=(key)=>({questionSize:'px',answerSize:'px',footerSize:'px',logoSize:'px',panelOpacity:'%',panelRadius:'px',lineHeight:'×'})[key];
-$$('[data-number]').forEach(el=>{const key=el.dataset.number;el.value=state[key];const lbl=$('#'+key+'Label');if(lbl)lbl.textContent=state[key]+unitLabel(key);el.addEventListener('input',()=>{state[key]=+el.value;if(lbl)lbl.textContent=el.value+unitLabel(key);scheduleRender();});});
-$$('[data-number-input]').forEach(input=>{const key=input.dataset.numberInput;input.value=state[key];const range=$('#'+key);input.oninput=()=>{if(input.value==='')return;const v=clamp(+input.value,+input.min,+input.max);state[key]=v;range.value=v;$('#'+key+'Label').textContent=v+unitLabel(key);scheduleRender();};input.onchange=()=>{input.value=state[key];};});
-$$('[data-number]').forEach(range=>range.addEventListener('input',()=>{const input=$('#'+range.dataset.number+'Number');if(input)input.value=state[range.dataset.number];}));
+$$('[data-number]').forEach(el=>{const key=el.dataset.number;el.value=state[key];const lbl=$('#'+key+'Label');if(lbl)lbl.textContent=state[key]+unitLabel(key);el.addEventListener('input',()=>{state[key]=+el.value;syncInterviewNumber(key);scheduleRender();});});
+$$('[data-number-input]').forEach(input=>{const key=input.dataset.numberInput;input.value=state[key];const range=$('#'+key);input.oninput=()=>{if(input.value==='')return;const v=clamp(+input.value,+input.min,+input.max);state[key]=v;syncInterviewNumber(key);scheduleRender();};input.onchange=()=>{input.value=state[key];};});
+function syncInterviewNumber(key){$$('[data-number]').filter(el=>el.dataset.number===key).forEach(el=>el.value=state[key]);$$('[data-number-input]').filter(el=>el.dataset.numberInput===key).forEach(el=>el.value=state[key]);const label=$('#'+key+'Label');if(label)label.textContent=state[key]+unitLabel(key);const manualLabel=$('#manual'+key[0].toUpperCase()+key.slice(1)+'Label');if(manualLabel)manualLabel.textContent=state[key]+unitLabel(key);}
+$$('[data-number]').forEach(range=>range.addEventListener('input',()=>syncInterviewNumber(range.dataset.number)));
 $('#footerText').value=state.footerText;$('#footerText').oninput=e=>{state.footerText=e.target.value;scheduleRender();};
 $('#photoSample').style.backgroundImage=`url('${state.photoSrc}')`;loadPhoto(state.photoSrc);
 function showDialog(selector){const d=$(selector);if(!d.open)d.showModal();}
@@ -172,7 +186,7 @@ $$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()
 function refreshLogoChoices(){const holder=$('#logoOptions');holder.replaceChildren();LOGOS.forEach(l=>{const b=document.createElement('button');b.type='button';b.className='logo-option'+(state.logo===l.id?' selected':'');b.innerHTML=`<img src="${l.src}" alt=""/><strong>${l.name}</strong><span class="check">✓</span>`;b.onclick=()=>{state.logo=l.id;$('#currentLogo').src=l.src;closeDialog('logoDialog');scheduleRender();};holder.append(b);});}
 $('#openLogoDialog').onclick=()=>{refreshLogoChoices();showDialog('#logoDialog');};
 // Font selector — all options are locally bundled site fonts.
-function refreshFontList(term=''){$('#fontOptions').replaceChildren();FONT_NAMES.filter(n=>n.toLowerCase().includes(term.toLowerCase())).forEach(f=>{const b=document.createElement('button');b.type='button';b.className='font-option'+(state[chosenFontTarget+'Font']===f?' selected':'');b.innerHTML=`<small>${f}</small><strong style="font-family:'${f}',Tahoma,sans-serif">مصاحبه با ووسو سنتر</strong>`;b.onclick=async()=>{state[chosenFontTarget+'Font']=f;$('#font'+chosenFontTarget[0].toUpperCase()+chosenFontTarget.slice(1)).textContent=f+' ▾';closeDialog('fontDialog');try{await document.fonts.load(`700 24px "${f}"`);}catch{}scheduleRender();};$('#fontOptions').append(b);});}
+function refreshFontList(term=''){$('#fontOptions').replaceChildren();FONT_NAMES.filter(n=>n.toLowerCase().includes(term.toLowerCase())).forEach(f=>{const b=document.createElement('button');b.type='button';b.className='font-option'+(state[chosenFontTarget+'Font']===f?' selected':'');b.innerHTML=`<small>${f}</small><strong style="font-family:'${f}',Tahoma,sans-serif">مصاحبه با ووسو سنتر</strong>`;b.onclick=async()=>{state[chosenFontTarget+'Font']=f;$$('[data-font]').filter(el=>el.dataset.font===chosenFontTarget).forEach(el=>el.textContent=f+' ▾');closeDialog('fontDialog');try{await document.fonts.load(`700 24px "${f}"`);}catch{}scheduleRender();};$('#fontOptions').append(b);});}
 $$('[data-font]').forEach(b=>b.onclick=()=>{chosenFontTarget=b.dataset.font;$('#fontSearch').value='';refreshFontList();showDialog('#fontDialog');});$('#fontSearch').oninput=e=>refreshFontList(e.target.value);
 // Color picker with adjustable hue and saturation/value.
 function hexToHSV(hex){let n=parseInt(hex.slice(1),16),r=((n>>16)&255)/255,g=((n>>8)&255)/255,b=(n&255)/255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0;if(d){if(max===r)h=((g-b)/d)%6;else if(max===g)h=(b-r)/d+2;else h=(r-g)/d+4;h=(h*60+360)%360;}return{h,s:max===0?0:d/max,v:max};}
@@ -195,7 +209,7 @@ const stripeHolder=$('#stripeColors');for(let i=0;i<6;i++){const wrap=document.c
 // Use existing ready palettes from lineup. Default colors intentionally match user's template.
 function paletteMap(p){return{questionColor:p.accent||'#f5d44e',answerColor:p.text||'#ffffff',footerColor:p.text||'#ffffff',telegramColor:p.accent||'#e4bd54',panelColor:p.lower||'#000000',stripes:[p.header,p.upper,p.accent,p.card1,p.card2,p.lower].map(x=>hexOK(x)?x:'#000000')};}
 const ORIGINAL_PALETTE={id:'ready:interview-original',name:'اصلی مصاحبه (پیش‌فرض)',header:'#123f6b',upper:'#d3a54a',accent:'#ff4a0a',card1:'#ec50af',card2:'#06bd65',lower:'#f33345',text:'#ffffff',interviewOriginal:true};
-function drawPalettes(){const holder=$('#paletteList');holder.replaceChildren();palettes.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='palette-choice'+(state.palette===p.id?' selected':'');const colors=[p.header,p.upper,p.accent,p.card1,p.card2,p.lower];const swatches=document.createElement('span');swatches.className='swatches';colors.forEach(x=>{const i=document.createElement('i');i.style.background=x;swatches.append(i);});const name=document.createElement('strong');name.textContent=p.name;b.append(swatches,name);b.onclick=()=>{Object.assign(state,p.interviewOriginal?{questionColor:DEFAULT.questionColor,answerColor:DEFAULT.answerColor,footerColor:DEFAULT.footerColor,telegramColor:DEFAULT.telegramColor,panelColor:DEFAULT.panelColor,panelOpacity:DEFAULT.panelOpacity,panelRadius:DEFAULT.panelRadius,stripes:[...DEFAULT_STRIPES]}:paletteMap(p));state.palette=p.id;updateColorButtons();drawPalettes();updateAlignButtons();$$('[data-number-input]').forEach(input=>input.value=state[input.dataset.numberInput]);scheduleRender();};holder.append(b);});}
+function drawPalettes(){const holder=$('#paletteList');holder.replaceChildren();palettes.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='palette-choice'+(state.palette===p.id?' selected':'');const colors=[p.header,p.upper,p.accent,p.card1,p.card2,p.lower];const swatches=document.createElement('span');swatches.className='swatches';colors.forEach(x=>{const i=document.createElement('i');i.style.background=x;swatches.append(i);});const name=document.createElement('strong');name.textContent=p.name;b.append(swatches,name);b.onclick=()=>{Object.assign(state,p.interviewOriginal?{questionColor:DEFAULT.questionColor,answerColor:DEFAULT.answerColor,footerColor:DEFAULT.footerColor,telegramColor:DEFAULT.telegramColor,panelColor:DEFAULT.panelColor,panelOpacity:DEFAULT.panelOpacity,panelRadius:DEFAULT.panelRadius,stripes:[...DEFAULT_STRIPES]}:paletteMap(p));state.palette=p.id;updateColorButtons();drawPalettes();updateAlignButtons();$$('[data-number-input]').forEach(input=>input.value=state[input.dataset.numberInput]);for(const key of ['questionSize','answerSize'])syncInterviewNumber(key);scheduleRender();};holder.append(b);});}
 fetch('data/lineup-ready-palettes.json').then(x=>x.ok?x.json():Promise.reject()).then(data=>{palettes=[ORIGINAL_PALETTE,...data];drawPalettes();}).catch(()=>{palettes=[ORIGINAL_PALETTE,{id:'ready:woso',name:'ووسو سنتر',header:'#050207',upper:'#320a3e',accent:'#ae5acf',card1:'#783695',card2:'#dfb6e7',lower:'#050207',text:'#fff4ff'}];drawPalettes();});
 // Photo crop, pixel-perfect coordinate system (1080 x 1350) shared by preview and export.
 const cropC=$('#cropCanvas'),cropCtx=cropC.getContext('2d');
@@ -237,7 +251,7 @@ $('#importProject').onclick=()=>$('#projectUpload').click();$('#projectUpload').
  const next={...DEFAULT,...data.state};for(const k of ['questionColor','answerColor','footerColor','telegramColor','panelColor'])if(!hexOK(next[k]))next[k]=DEFAULT[k];next.stripes=Array.isArray(next.stripes)&&next.stripes.length===6?next.stripes.map((v,i)=>hexOK(v)?v:DEFAULT_STRIPES[i]):[...DEFAULT_STRIPES];next.photo={zoom:clamp(next.photo?.zoom,1,5),x:clamp(next.photo?.x,-W,W),y:clamp(next.photo?.y,-H,H)};next.logo=LOGOS.some(l=>l.id===next.logo)?next.logo:'barca';for(const k of ['questionAlign','answerAlign'])if(!['right','left','center','justify'].includes(next[k]))next[k]='justify';next.manualPages=Array.isArray(next.manualPages)?next.manualPages.filter(m=>m&&typeof m.id==='string'&&Array.isArray(m.lines)).slice(0,70):[];next.pagePlan=Array.isArray(next.pagePlan)?next.pagePlan.filter(k=>typeof k==='string').slice(0,100):[];for(const k of ['questionFont','answerFont','footerFont'])next[k]=safeFont(next[k]);for(const k of ['questionSize','answerSize','footerSize','logoSize','panelRadius','panelOpacity','lineHeight'])next[k]=clamp(next[k],k==='lineHeight'?1.2:(k==='logoSize'?65:(k.endsWith('Size')?16:0)),k==='lineHeight'?2:(k==='panelOpacity'?100:(k==='logoSize'?175:(k==='panelRadius'?60:36))));
  state=next;$('#questionEditor').innerHTML=cleanRich(data.question);$('#answerEditor').innerHTML=cleanRich(data.answer);refreshControls();loadPhoto(typeof state.photoSrc==='string'&& (state.photoSrc.startsWith('data:image/')||state.photoSrc.startsWith('assets/interview/'))?state.photoSrc:DEFAULT.photoSrc);pageIndex=0;changed('فایل پروژه با موفقیت بازیابی شد.');
  }catch(err){changed('فایل پروژه معتبر نیست یا بسیار بزرگ است.');}};
-function refreshControls(){for(const el of $$('[data-number]')){const key=el.dataset.number;el.value=state[key];const lbl=$('#'+key+'Label');if(lbl)lbl.textContent=state[key]+unitLabel(key);}$('#footerText').value=state.footerText;$('#currentLogo').src=LOGOS.find(l=>l.id===state.logo).src;for(const kind of ['question','answer','footer'])$('#font'+kind[0].toUpperCase()+kind.slice(1)).textContent=state[kind+'Font']+' ▾';updateColorButtons();drawPalettes();updateAlignButtons();$$('[data-number-input]').forEach(input=>input.value=state[input.dataset.numberInput]);scheduleRender();}
+function refreshControls(){for(const el of $$('[data-number]')){const key=el.dataset.number;el.value=state[key];const lbl=$('#'+key+'Label');if(lbl)lbl.textContent=state[key]+unitLabel(key);}$('#footerText').value=state.footerText;$('#currentLogo').src=LOGOS.find(l=>l.id===state.logo).src;for(const kind of ['question','answer','footer'])$$('[data-font]').filter(el=>el.dataset.font===kind).forEach(el=>el.textContent=state[kind+'Font']+' ▾');updateColorButtons();drawPalettes();updateAlignButtons();$$('[data-number-input]').forEach(input=>input.value=state[input.dataset.numberInput]);for(const key of ['questionSize','answerSize'])syncInterviewNumber(key);scheduleRender();}
 
 
 // Shared WoSoCenter editor chrome: theme, undo/redo timeline and page gallery.
@@ -289,19 +303,29 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-font],[data-col
 
 function openInterviewTextTab(){const tab=$$('.tab').find(b=>b.dataset.tab==='content');if(tab&&!tab.classList.contains('active'))tab.click();}
 function manualTextFromLines(page,kind){return page.lines.filter(l=>l.kind===kind).map(l=>l.words.map(w=>w.text).join(' ')).join('\n');}
-function syncManualEditing(){const current=pages[pageIndex];const edit=$('#manualPageEditing');const isManual=!!current&&!current.isAuto;$$('[data-auto-content]').forEach(el=>el.classList.toggle('hidden',isManual));edit.classList.toggle('hidden',!isManual);if(!isManual)return;const manual=state.manualPages.find(m=>`manual:${m.id}`===current.key);if(!manual)return;
- $('#manualEditTitle').textContent=`ویرایش صفحهٔ دستی ${pageIndex+1}`;const q=manual.question??manualTextFromLines(current,'question'),a=manual.answer??manualTextFromLines(current,'answer');
- if($('#manualQuestion').value!==q)$('#manualQuestion').value=q;
- if($('#manualAnswer').value!==a)$('#manualAnswer').value=a;
+function safeManualHtml(raw){return cleanRich(raw);}
+function manualLegacyHTML(text){const el=document.createElement('div');el.textContent=String(text||'');return el.innerHTML.replace(/\n/g,'<br>');}
+function syncManualEditing(){const current=pages[pageIndex],edit=$('#manualPageEditing'),isManual=!!current&&!current.isAuto;
+ $$('[data-auto-content]').forEach(el=>el.classList.toggle('hidden',isManual));edit.classList.toggle('hidden',!isManual);if(!isManual){edit.dataset.pageKey='';return;}
+ const manual=state.manualPages.find(m=>`manual:${m.id}`===current.key);if(!manual)return;
+ $('#manualEditTitle').textContent=`ویرایش صفحهٔ دستی ${pageIndex+1}`;
+ if(edit.dataset.pageKey!==current.key){
+  const q=manual.question??manualTextFromLines(current,'question'),a=manual.answer??manualTextFromLines(current,'answer');
+  $('#manualQuestion').innerHTML=safeManualHtml(manual.questionHtml??manualLegacyHTML(q));
+  $('#manualAnswer').innerHTML=safeManualHtml(manual.answerHtml??manualLegacyHTML(a));
+  edit.dataset.pageKey=current.key;
+ }
+ updateAlignButtons();syncInterviewNumber('questionSize');syncInterviewNumber('answerSize');
  const total=(manual.lines||[]).reduce((n,l)=>n+l.height+(l.breakBefore||0),0);
- $('#manualPageWarning').textContent=total>865?'⚠ متن این صفحه از فضای پوستر بیشتر است؛ متن را کوتاه‌تر کنید.':'متن صفحهٔ دستی مستقل و قابل ویرایش است؛ صفحات خودکار دست‌نخورده می‌مانند.';}
+ $('#manualPageWarning').textContent=total>865?'⚠ متن این صفحه از فضای پوستر بیشتر است؛ متن را کوتاه‌تر کنید.':'تمام تنظیمات فونت، رنگ و تراز با صفحهٔ اول مشترک است.';}
 function updateManualText(){const current=pages[pageIndex];if(!current||current.isAuto)return;const manual=state.manualPages.find(m=>`manual:${m.id}`===current.key);if(!manual)return;
- historyLabel='ویرایش متن صفحهٔ دستی';manual.question=$('#manualQuestion').value;manual.answer=$('#manualAnswer').value;const q=document.createElement('div'),a=document.createElement('div');q.textContent=manual.question;a.textContent=manual.answer;
- const qlines=wrapRuns(q,'question'),alines=wrapRuns(a,'answer');const arr=[...qlines.filter(l=>l.words.length),...alines.filter(l=>l.words.length).map((l,i)=>({...l,breakBefore:i===0&&qlines.some(x=>x.words.length)?22:0}))];
- const used=arr.reduce((n,l)=>n+l.height+(l.breakBefore||0),0);manual.lines=arr;manual.height=Math.max(370,used+76);
+ historyLabel='ویرایش متن صفحهٔ دستی';
+ manual.questionHtml=cleanRich($('#manualQuestion').innerHTML);manual.answerHtml=cleanRich($('#manualAnswer').innerHTML);
+ const q=document.createElement('div'),a=document.createElement('div');q.innerHTML=manual.questionHtml;a.innerHTML=manual.answerHtml;
+ manual.question=q.textContent;manual.answer=a.textContent;
+ const used=reflowManualPage(manual);
  $('#manualPageWarning').textContent=used>865?'⚠ متن این صفحه بیش از فضای پوستر است؛ لطفاً متن را کوتاه‌تر کنید یا در متن اصلی مصاحبه قرار دهید.':'متن صفحهٔ دستی ثبت شد.';
  scheduleRender();}
-['manualQuestion','manualAnswer'].forEach(id=>$('#'+id).addEventListener('input',updateManualText));
 function refreshPageGallery(){if(!$('#pagesDialog').open)return;const gallery=$('#pageGallery');gallery.replaceChildren();
  pages.forEach((page,i)=>{const item=document.createElement('div');item.className='page-tile'+(i===pageIndex?' current':'');
  const pick=document.createElement('button');pick.type='button';pick.className='page-select';const thumb=document.createElement('canvas');thumb.width=162;thumb.height=202;
@@ -311,7 +335,7 @@ function refreshPageGallery(){if(!$('#pagesDialog').open)return;const gallery=$(
  const actions=document.createElement('div');actions.className='page-actions';
  function action(text,title,fn,disabled=false){const b=document.createElement('button');b.type='button';b.textContent=text;b.title=title;b.setAttribute('aria-label',title);b.disabled=disabled;b.onclick=fn;actions.append(b);}
  action('↓','دانلود همین صفحه',async()=>{await document.fonts.ready;downloadBlob(await toPNG(i),`WoSo-Interview-${String(i+1).padStart(2,'0')}.png`);});
- action('⧉','تکثیر صفحه',()=>{const id=String(Date.now())+Math.random().toString(36).slice(2,5);state.manualPages.push({id,lines:JSON.parse(JSON.stringify(page.lines)),height:page.height,question:manualTextFromLines(page,'question'),answer:manualTextFromLines(page,'answer')});state.pagePlan.splice(i+1,0,`manual:${id}`);pageIndex=i+1;closeDialog('pagesDialog');openInterviewTextTab();scheduleRender();document.querySelector('.sidebar').scrollIntoView({behavior:'smooth',block:'start'});});
+ action('⧉','تکثیر صفحه',()=>{const id=String(Date.now())+Math.random().toString(36).slice(2,5);const origin=state.manualPages.find(m=>`manual:${m.id}`===page.key);state.manualPages.push({id,lines:JSON.parse(JSON.stringify(page.lines)),height:page.height,question:origin?.question??manualTextFromLines(page,'question'),answer:origin?.answer??manualTextFromLines(page,'answer'),questionHtml:origin?.questionHtml,answerHtml:origin?.answerHtml});state.pagePlan.splice(i+1,0,`manual:${id}`);pageIndex=i+1;closeDialog('pagesDialog');openInterviewTextTab();scheduleRender();document.querySelector('.sidebar').scrollIntoView({behavior:'smooth',block:'start'});});
  action('→','جابجایی به راست',()=>{[state.pagePlan[i-1],state.pagePlan[i]]=[state.pagePlan[i],state.pagePlan[i-1]];pageIndex=i-1;scheduleRender();},i===0);
  action('←','جابجایی به چپ',()=>{[state.pagePlan[i],state.pagePlan[i+1]]=[state.pagePlan[i+1],state.pagePlan[i]];pageIndex=i+1;scheduleRender();},i===pages.length-1);
  action('×',page.isAuto?'برای حفظ متن اصلی، صفحهٔ خودکار حذف نمی‌شود':'حذف صفحهٔ دستی',()=>{state.manualPages=state.manualPages.filter(m=>`manual:${m.id}`!==page.key);state.pagePlan=state.pagePlan.filter(k=>k!==page.key);pageIndex=clamp(i-1,0,pages.length-2);scheduleRender();},page.isAuto);

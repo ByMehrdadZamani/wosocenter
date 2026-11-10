@@ -6,8 +6,8 @@
 <title>مصاحبه ووسو | WoSoCenter</title>
 <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"/>
-<link rel="stylesheet" href="interview.css?v=1.3"/>
-<script src="interview.js?v=1.2" defer></script>
+<link rel="stylesheet" href="interview.css?v=6.8.0"/>
+<script src="interview.js?v=6.8.0" defer></script>
 </head>
 <body>
 <header class="topbar woso-editor-topbar">
@@ -31,7 +31,25 @@
    <button class="tab" type="button" data-tab="history" aria-selected="false">تاریخچه</button>
   </nav>
   <div class="tab-panel hidden" id="tab-content">
-   <section id="manualPageEditing" class="setting manual-page-edit hidden" aria-labelledby="manualEditTitle"><h2 id="manualEditTitle">متن صفحهٔ دستی</h2><p class="help">سؤال و جواب این صفحه مستقل هستند و متن مصاحبهٔ اصلی تغییر نمی‌کند. برای بازگشت، صفحهٔ خودکار را از مدیریت صفحات انتخاب کنید.</p><label>سؤال این صفحه<textarea id="manualQuestion" rows="3" placeholder="سؤال این صفحه" dir="rtl"></textarea></label><label>جواب این صفحه<textarea id="manualAnswer" rows="7" placeholder="متن پاسخ این صفحه" dir="rtl"></textarea></label><p class="help" id="manualPageWarning" role="status"></p></section>
+   <section id="manualPageEditing" class="setting manual-page-edit hidden" aria-labelledby="manualEditTitle">
+    <h2 id="manualEditTitle">متن صفحهٔ دستی</h2>
+    <p class="help">این صفحه مستقل از متن اصلی است. تمام تنظیمات نوشتاری و ظاهری صفحهٔ اول در اینجا هم در دسترس‌اند.</p>
+    <div class="manual-editor-group"><h3>سؤال این صفحه</h3>
+     <div class="editor-toolbar" data-editor="manualQuestion"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="حذف قالب‌بندی">Tx</button><button type="button" data-align="right" title="راست‌چین">⇥</button><button type="button" data-align="center" title="وسط‌چین">≡</button><button type="button" data-align="left" title="چپ‌چین">⇤</button><button type="button" data-align="justify" title="دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
+     <div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" id="manualQuestion" dir="rtl" spellcheck="true" aria-label="سؤال صفحهٔ دستی"></div>
+     <div class="two-cols"><label>فونت سؤال<button type="button" class="select-btn" id="manualFontQuestion" data-font="question">آریو ▾</button></label><label>رنگ سؤال<button type="button" class="color-btn" data-color="questionColor" aria-label="رنگ سؤال صفحهٔ دستی"></button></label></div>
+     <div class="font-size-setting"><label>اندازهٔ سؤال <span class="live-number" id="manualQuestionSizeLabel"></span><input data-number="questionSize" type="range" min="16" max="36" step="1"></label><label>پیکسل<input class="numeric-setting" data-number-input="questionSize" type="number" min="16" max="36" step="1" dir="ltr"></label></div>
+     <button type="button" class="btn secondary reset-font" data-reset-font="question">↻ فونت و اندازهٔ پیش‌فرض سؤال</button>
+    </div>
+    <div class="manual-editor-group"><h3>جواب این صفحه</h3>
+     <div class="editor-toolbar" data-editor="manualAnswer"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="حذف قالب‌بندی">Tx</button><button type="button" data-align="right" title="راست‌چین">⇥</button><button type="button" data-align="center" title="وسط‌چین">≡</button><button type="button" data-align="left" title="چپ‌چین">⇤</button><button type="button" data-align="justify" title="دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
+     <div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" id="manualAnswer" dir="rtl" spellcheck="true" aria-label="جواب صفحهٔ دستی"></div>
+     <div class="two-cols"><label>فونت جواب<button type="button" class="select-btn" id="manualFontAnswer" data-font="answer">آریو ▾</button></label><label>رنگ جواب<button type="button" class="color-btn" data-color="answerColor" aria-label="رنگ جواب صفحهٔ دستی"></button></label></div>
+     <div class="font-size-setting"><label>اندازهٔ جواب <span class="live-number" id="manualAnswerSizeLabel"></span><input data-number="answerSize" type="range" min="16" max="36" step="1"></label><label>پیکسل<input class="numeric-setting" data-number-input="answerSize" type="number" min="16" max="36" step="1" dir="ltr"></label></div>
+     <button type="button" class="btn secondary reset-font" data-reset-font="answer">↻ فونت و اندازهٔ پیش‌فرض جواب</button>
+    </div>
+    <p class="help" id="manualPageWarning" role="status"></p>
+   </section>
    <section class="setting" data-auto-content="true"><h2>سؤال مصاحبه</h2><p class="help">متن زردرنگ قسمت اول. می‌توانید متن را انتخاب و قالب‌بندی کنید.</p>
      <div class="editor-toolbar" data-editor="questionEditor"><button type="button" data-cmd="bold" title="پررنگ"><b>B</b></button><button type="button" data-cmd="italic" title="کج"><i>I</i></button><button type="button" data-cmd="underline" title="زیرخط"><u>U</u></button><button type="button" data-cmd="removeFormat" title="پاک‌کردن قالب‌بندی">Tx</button><button type="button" data-align="right" title="راست‌چین">⇥</button><button type="button" data-align="center" title="وسط‌چین">≡</button><button type="button" data-align="left" title="چپ‌چین">⇤</button><button type="button" data-align="justify" title="تراز دوطرفه">☷</button><span class="toolbar-label">فرمت متن</span></div>
      <div class="rich-editor" id="questionEditor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="متن سؤال مصاحبه" dir="rtl" spellcheck="true">نینا پاتالون، سرمربی تیم ملی لهستان، گفته بود که تو در این فصل شایسته عنوان بهترین بازیکن جهان بوده‌ای. هم‌تیمی‌هایت نیز حمایت زیادی از تو نشان داده‌اند. این حمایت برایت چه معنایی دارد؟</div>

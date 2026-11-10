@@ -5,8 +5,8 @@
  <meta name="theme-color" content="#100b19"><meta name="description" content="شماتیک‌ساز و ترکیب‌ساز فوتبال WoSoCenter؛ طراحی با عکس بازیکنان و خروجی PNG">
  <title>شماتیک‌ساز با ۳۱ آرایش فوتبال | WoSoCenter</title>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.3.0">
- <script src="lineup.js?v=6.4.0" defer></script>
+ <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.8.0">
+ <script src="lineup.js?v=6.8.0" defer></script>
 </head>
 <body class="lineup-page">
 <header class="topbar woso-editor-topbar">
@@ -124,7 +124,7 @@
    <section class="lineup-player-library" aria-label="فهرست تصاویر بازیکنان">
     <div class="dialog-search"><input id="lineupPlayerSearch" type="search" placeholder="جست‌وجوی نام بازیکن…"></div>
     <div id="lineupPositionFilters" class="lineup-switch-tabs lineup-position-tabs"><button type="button" data-lpos="ALL">همه</button><button type="button" data-lpos="GK">دروازه‌بان</button><button type="button" data-lpos="DEF">مدافع</button><button type="button" data-lpos="MID">هافبک</button><button type="button" data-lpos="FWD">مهاجم</button></div>
-    <div id="lineupPlayerGrid" class="lineup-library-grid" aria-label="بازیکنان قابل انتخاب"></div>
+    <input type="file" accept="image/png" id="lineupCustomFile" hidden><div id="lineupPlayerGrid" class="lineup-library-grid" aria-label="بازیکنان قابل انتخاب"></div>
    </section>
    <section class="lineup-player-settings" aria-label="تنظیمات کارت انتخاب‌شده">
     <div class="lineup-player-settings-title"><strong>تنظیمات کارت</strong><small>بازیکن موردنظر را از فهرست انتخاب و تنظیمات را همین‌جا ویرایش کنید.</small></div>
@@ -137,7 +137,7 @@
       <label>اندازه به پیکسل<input id="lineupPopupScalePx" type="number" inputmode="numeric" min="126" max="261" step="1" value="180"></label>
      </div>
     </div>
-    <div class="lineup-popup-size-actions">
+    <button type="button" class="btn secondary lineup-custom-adjust" id="lineupCustomAdjust" hidden>⌗ تنظیم تصویر آپلودی روی کارت</button><div class="lineup-popup-size-actions">
      <button id="lineupScaleReset" type="button" class="btn secondary lineup-scale-reset" title="بازنشانی اندازه تصویر">اندازه پیش‌فرض</button>
      <button id="lineupPlayerRemove" type="button" class="btn danger-text lineup-popup-icon" title="حذف بازیکن" aria-label="حذف بازیکن">×</button>
      <button id="lineupPlayerConfirm" type="button" class="btn primary lineup-popup-icon" title="ثبت انتخاب و تنظیمات" aria-label="ثبت انتخاب">✓</button>
@@ -145,6 +145,22 @@
    </section>
   </div>
  </dialog>
+<dialog class="picker-dialog lineup-modal lineup-custom-crop-dialog" id="lineupCustomCropDialog" aria-labelledby="lineupCustomCropTitle">
+ <div class="dialog-head"><div><h2 id="lineupCustomCropTitle">تنظیم تصویر بازیکن</h2><p>پیش‌نمایش زندهٔ کارت با اندازهٔ واقعی آرایش انتخاب‌شده</p></div><button type="button" class="dialog-close" data-lclose="lineupCustomCropDialog">×</button></div>
+ <div class="lineup-custom-crop-body">
+  <div class="lineup-custom-preview"><canvas id="lineupCustomCanvas" width="360" height="450" aria-label="پیش‌نمایش زنده کارت بازیکن؛ بکشید یا با دو انگشت زوم کنید"></canvas><p>با لمس یا ماوس جابه‌جا کنید؛ با چرخ ماوس یا دو انگشت زوم کنید.</p></div>
+  <div class="lineup-custom-controls">
+   <label>بزرگ‌نمایی (%) <div class="lineup-custom-input-row"><input type="range" id="lineupCustomZoomRange" min="30" max="500" value="100"><input type="number" id="lineupCustomZoomNumber" min="30" max="500" value="100" inputmode="decimal"></div></label>
+   <div class="lineup-custom-input-grid"><label>افقی (px)<input type="number" id="lineupCustomXpx" min="-400" max="400"></label><label>افقی (%)<input type="number" id="lineupCustomXpercent" step="0.1"></label></div>
+   <input type="range" id="lineupCustomXrange" min="-400" max="400" value="0" aria-label="موقعیت افقی">
+   <div class="lineup-custom-input-grid"><label>عمودی (px)<input type="number" id="lineupCustomYpx" min="-400" max="400"></label><label>عمودی (%)<input type="number" id="lineupCustomYpercent" step="0.1"></label></div>
+   <input type="range" id="lineupCustomYrange" min="-400" max="400" value="0" aria-label="موقعیت عمودی">
+   <button type="button" class="btn secondary" id="lineupCustomReset">↻ تنظیمات پیش‌فرض تصویر</button>
+   <p class="hint compact">مختصات نسبت به کارت ۱۸۰×۲۴۰ محاسبه می‌شوند؛ صفر یعنی موقعیت اولیهٔ تصویر.</p>
+  </div>
+ </div>
+ <div class="lineup-custom-crop-actions"><button type="button" class="btn secondary" id="lineupCustomCancel">انصراف</button><button type="button" class="btn primary" id="lineupCustomSave">✓ ثبت تنظیم عکس</button></div>
+</dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupFontDialog"><div class="dialog-head"><div><h2>انتخاب فونت فارسی</h2><p>پیش‌نمایش واقعی با عبارت «بارسلونا»</p></div><button class="dialog-close" data-lclose="lineupFontDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupFontSearch" type="search" placeholder="جست‌وجوی فونت…"></div><div id="lineupFontGrid" class="lineup-font-grid"></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupLeagueDialog"><div class="dialog-head"><div><h2>انتخاب لیگ / تورنمنت</h2><p>نام انتخابی در فیلد هدر قرار می‌گیرد و قابل ویرایش است.</p></div><button type="button" class="dialog-close" data-lclose="lineupLeagueDialog">×</button></div><div class="dialog-search"><input id="lineupLeagueSearch" type="search" placeholder="جست‌وجوی لیگ…"></div><div id="lineupLeagueGrid" class="lineup-league-grid"></div></dialog>
 <dialog class="picker-dialog lineup-modal lineup-pages-dialog" id="lineupPagesDialog"><div class="dialog-head"><div><h2>مدیریت صفحات شماتیک</h2><p>برای بازکردن هر صفحه روی تصویرش بزنید؛ سایر صفحات هم ذخیره می‌مانند.</p></div><button class="dialog-close" type="button" data-lclose="lineupPagesDialog">×</button></div><div class="lineup-pages-actions"><button type="button" id="lineupPageAdd" class="btn primary">＋ صفحه جدید</button><button type="button" id="lineupPageDuplicate" class="btn secondary">⧉ تکثیر صفحه</button><button type="button" id="lineupPageDownloadAll" class="btn secondary">↓ دانلود همه</button></div><div class="lineup-pages-grid" id="lineupPagesGrid"></div><p class="hint compact">همه صفحات با کیفیت ۲۱۶۰×۲۷۰۰ و به‌صورت فایل‌های PNG جداگانه دانلود می‌شوند. مرورگر ممکن است مجوز چند دانلود درخواست کند.</p></dialog>
