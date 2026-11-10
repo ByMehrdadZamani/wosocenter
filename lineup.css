@@ -255,9 +255,6 @@
  font-size:8px;padding:2px 4px;border-radius:6px}}
 
 /* v6.8 — team logo frame recovery and user PNG WYSIWYG cropper */
-.lineup-page .lineup-team-frame-palette{border-style:dashed;border-color:var(--violet);min-height:80px}
-.lineup-team-frame-palette .lineup-palette-label{flex-wrap:wrap}
-.lineup-team-frame-palette .lineup-palette-label small{flex-basis:100%;font-size:10px;color:var(--muted);text-align:right}
 .lineup-upload-card-icon{position:relative;display:grid;place-items:center;height:120px;width:min(100%,104px);border-radius:13px;border:2px solid var(--violet);background:linear-gradient(110deg,var(--panel2),var(--input));color:var(--violet)}
 .lineup-upload-card-icon>b{font:700 52px/1 system-ui}.lineup-upload-card-icon .lineup-player-check{position:absolute;inset:auto 4px 4px auto}
 .lineup-custom-upload-option{border-style:dashed!important;border-color:var(--violet)!important}
@@ -275,3 +272,8 @@
 .lineup-custom-input-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.lineup-custom-input-row{display:grid;grid-template-columns:1fr 74px;gap:8px;align-items:center}
 .lineup-custom-crop-actions{position:sticky;bottom:0;z-index:3;flex:none;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--edge);padding:12px 0 0;background:var(--panel)}
 @media(max-width:690px){.lineup-custom-crop-dialog{padding:10px}.lineup-custom-crop-body{grid-template-columns:1fr;gap:12px}.lineup-custom-preview canvas{max-width:235px}.lineup-custom-upload-option .lineup-upload-card-icon{height:80px}.lineup-custom-crop-actions .btn{flex:1;font-size:11px;padding:9px 5px}}
+
+/* v6.9: compact circular add icon, centered within the existing player tile */
+.lineup-custom-upload-option .lineup-upload-card-icon{width:min(100%,104px);height:120px;display:grid;place-items:center;background:linear-gradient(110deg,var(--panel2),var(--input));}
+.lineup-custom-upload-option .lineup-upload-card-icon>b{width:49px;height:49px;display:grid;place-items:center;border:2px solid var(--violet);border-radius:50%;background:color-mix(in srgb,var(--violet) 11%,var(--input));font:600 29px/1 system-ui;color:var(--violet);box-shadow:0 3px 12px #0002}
+@media(max-width:740px){.lineup-custom-upload-option .lineup-upload-card-icon{height:80px}.lineup-custom-upload-option .lineup-upload-card-icon>b{width:42px;height:42px;font-size:25px}}

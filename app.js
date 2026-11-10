@@ -283,7 +283,22 @@ function restoreHistory(index){if(index<0||index>=history.length||index===histor
 function undo(){restoreHistory(historyIndex-1);}function redo(){restoreHistory(historyIndex+1);}
 function refreshHistoryList(){$('historyList').innerHTML=history.map((h,i)=>`<button type="button" class="history-item ${i===historyIndex?'selected':''} ${i>historyIndex?'future':''}" data-revision="${i}"><span class="history-num">${i}</span><span class="history-label">${esc(h.label)}</span><time>${new Date(h.time).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})}</time></button>`).reverse().join('');}
 function switchTab(name){activeTab=name;document.querySelectorAll('.tab').forEach(t=>{const chosen=t.dataset.tab===name;t.classList.toggle('active',chosen);t.setAttribute('aria-selected',String(chosen));});for(const n of ['games','header','design','history'])$(n+'Tab').classList.toggle('hidden',name!==n);if(name==='history')refreshHistoryList();}
-function refreshPalettes(){const recommended=findPattern(state.patternId)?.suggestedPalette;const chosenPalette=recommended?{...recommended,id:'suggested-'+state.patternId,recommended:true}:null;const options=chosenPalette?[chosenPalette,...PALETTES]:PALETTES;$('paletteList').innerHTML=options.map(p=>`<button type="button" data-palette="${p.id}" class="palette-option ${state.paletteId===p.id?'selected':''} ${p.recommended?'palette-recommended':''}"><span class="palette-dots">${p.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span><span>${esc(p.name)}</span>${p.recommended?'<em class="palette-tag">پالت پیشنهادی این پترن</em>':''}${state.paletteId===p.id?'<b>✓</b>':''}</button>`).join('');}
+function teamLogoPaletteColor(teamId,fallback){return safeHex(findTeam(teamId)?.color,fallback);}
+function teamLogoColorsActive(){return state.matches.length>0&&state.matches.every(m=>m.leftBg===teamLogoPaletteColor(m.leftTeam,m.leftBg)&&m.rightBg===teamLogoPaletteColor(m.rightTeam,m.rightBg));}
+function selectTeamLogoPalette(){
+ // This special option is an overlay: leave the chosen pattern and every other palette color untouched.
+ for(const match of state.matches){
+  match.leftBg=teamLogoPaletteColor(match.leftTeam,match.leftBg);
+  match.rightBg=teamLogoPaletteColor(match.rightTeam,match.rightBg);
+  match.leftBgInitialized=true;match.rightBgInitialized=true;
+  match.leftBgLocked=false;match.rightBgLocked=false;
+ }
+ refreshGames();refreshPalettes();commitHistory('رنگ لوگو تیم · رنگ اختصاصی قاب تیم‌ها');
+}
+function refreshPalettes(){const recommended=findPattern(state.patternId)?.suggestedPalette;const chosenPalette=recommended?{...recommended,id:'suggested-'+state.patternId,recommended:true}:null;const options=chosenPalette?[chosenPalette,...PALETTES]:PALETTES;const a=state.matches[0],left=a?teamLogoPaletteColor(a.leftTeam,'#783695'):'#783695',right=a?teamLogoPaletteColor(a.rightTeam,'#dfb6e7'):'#dfb6e7';
+ const active=teamLogoColorsActive();
+ const logoPalette=`<button type="button" data-team-logo-palette="1" class="palette-option team-logo-palette ${active?'selected':''}" aria-label="رنگ لوگو تیم" aria-pressed="${active}"><span class="palette-dots"><i style="background:${left}"></i><i style="background:${right}"></i></span><strong>رنگ لوگو تیم</strong><small>فقط رنگ قاب لوگوی تیم‌ها</small>${active?'<b>✓</b>':''}</button>`;
+ $('paletteList').innerHTML=logoPalette+options.map(p=>`<button type="button" data-palette="${p.id}" class="palette-option ${state.paletteId===p.id?'selected':''} ${p.recommended?'palette-recommended':''}"><span class="palette-dots">${p.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span><span>${esc(p.name)}</span>${p.recommended?'<em class="palette-tag">پالت پیشنهادی این پترن</em>':''}${state.paletteId===p.id?'<b>✓</b>':''}</button>`).join('');}
 function selectPalette(id){const p=findPattern(state.patternId);const suggested=p?.suggestedPalette?{...p.suggestedPalette,id:'suggested-'+p.id}:null;const palette=(suggested?.id===id?suggested:null)||PALETTES.find(x=>x.id===id);if(!palette)return;Object.assign(state,palette.settings);state.matches.forEach(m=>{Object.assign(m,palette.match);m.leftBgInitialized=true;m.rightBgInitialized=true;m.leftBgLocked=true;m.rightBgLocked=true;});state.paletteId=id;syncGlobals();refreshGames();refreshPalettes();commitHistory(`ترکیب رنگی «${palette.name}»`);}
 function setTheme(isLight){document.documentElement.dataset.theme=isLight?'light':'dark';$('themeToggle').textContent=isLight?'☾':'☀';$('themeToggle').title=isLight?'حالت تاریک':'حالت روشن';try{localStorage.setItem('wosocenter-ui-theme',isLight?'light':'dark');}catch{}}
 function openAsset(kind,index){pickContext={kind,index};const group=kind==='flag'?flags:kind==='patternId'?patterns:teams;$('assetDialogTitle').textContent=kind==='flag'?'انتخاب پرچم یا لوگوی لیگ':kind==='patternId'?'انتخاب پترن پس‌زمینه':'انتخاب تیم و لوگو';$('assetSearch').value='';renderAssetResults(group,'');$('assetDialog').showModal();
@@ -503,7 +518,7 @@ function attachEvents(){
   document.querySelectorAll('[data-global-color]').forEach(b=>b.addEventListener('click',()=>openColor('global',b.dataset.globalColor,null)));
   $('patternPick').addEventListener('click',()=>openAsset('patternId',null));
   $('patternTintToggle').addEventListener('change',e=>{state.patternTintEnabled=e.target.checked;syncPattern();commitHistory(state.patternTintEnabled?'فعال‌سازی تغییر رنگ پترن':'بازگشت به رنگ اصلی پترن');});
-  $('paletteList').addEventListener('click',e=>{const b=e.target.closest('[data-palette]');if(b)selectPalette(b.dataset.palette);});
+  $('paletteList').addEventListener('click',e=>{if(e.target.closest('[data-team-logo-palette]')){selectTeamLogoPalette();return;}const b=e.target.closest('[data-palette]');if(b)selectPalette(b.dataset.palette);});
   $('applyAllFonts').addEventListener('click',()=>{state.dayFont=state.dateFont=state.footerFont=state.globalFont;state.matches.forEach(m=>{m.leagueFont=state.globalFont;m.timeFont=state.globalFont;});syncGlobals();refreshGames();commitHistory('اعمال گروهی فونت');ensureFonts().then(queueRender);message('فونت جدید روی متن‌های قابل ویرایش اعمال شد.');});
   $('resetBtn').addEventListener('click',()=>{if(!confirm('تمام تنظیمات تصویر به حالت اولیه برگردند؟'))return;activePage().data=cleanState(null);displayPage();commitHistory('بازگردانی طرح اولیه');});
   $('exportProject').addEventListener('click',downloadJSON);$('importProjectBtn').addEventListener('click',()=>$('projectFile').click());

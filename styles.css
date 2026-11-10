@@ -211,3 +211,9 @@ label.pattern-toggle input[type="checkbox"]{position:absolute;opacity:0;top:50%;
  .woso-editor-topbar .woso-home-separated{font-size:10px;padding:8px 9px;gap:5px;min-height:34px}
  .woso-editor-topbar .top-actions{width:auto;max-width:calc(100% - 88px);gap:5px;flex-wrap:wrap}
 }
+
+/* v6.9: isolated team-logo-frame palette for the fixture builder */
+.palette-option.team-logo-palette{border-style:dashed;border-color:var(--violet)}
+.palette-option.team-logo-palette strong{font-size:11px}
+.palette-option.team-logo-palette small{font-size:9px;color:var(--muted);font-weight:500;line-height:1.6}
+.palette-option.team-logo-palette.selected small{color:#fff}
