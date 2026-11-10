@@ -771,9 +771,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-01.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -792,9 +793,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-02.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -813,9 +815,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-03.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -834,9 +837,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-04.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -855,9 +859,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-05.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -876,9 +881,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-06.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -897,9 +903,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-07.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -918,9 +925,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-08.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -939,9 +947,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-09.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -960,9 +969,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-10.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -981,9 +991,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-11.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1002,9 +1013,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-12.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1023,9 +1035,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-13.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1044,9 +1057,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-14.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1065,9 +1079,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-15.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1086,9 +1101,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-16.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
     "portraitWideHair": true
   },
@@ -1108,9 +1124,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-17.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1129,9 +1146,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-18.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
     "portraitWideHair": true
   },
@@ -1151,9 +1169,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-19.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
     "portraitWideHair": true
   },
@@ -1173,9 +1192,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-20.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1194,9 +1214,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-21.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1215,9 +1236,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-22.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1236,9 +1258,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-23.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1257,9 +1280,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-24.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1278,9 +1302,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-25.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1299,9 +1324,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-26.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   },
   {
@@ -1320,9 +1346,10 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-27.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 111,
-      "crownY": 63,
-      "method": "face-landmark 111px with crown-safe alignment"
+      "headWidth": 106.0,
+      "headHeight": 106.0,
+      "crownY": 64,
+      "method": "Barcelona-matched source portrait; face-width and crown alignment"
     }
   }
 ]

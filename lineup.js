@@ -119,7 +119,7 @@ const lFindTeam=id=>lTeams.find(x=>x.id===id);
 const lFindPlayer=id=>lPlayers.find(x=>x.id===id)||lCustomPlayers.find(x=>x.id===id);
 const lNotify=(msg,cls='')=>{const el=L('lineupFeedback');if(!el)return;el.textContent=msg;el.className='feedback '+cls;};
 const lFont=id=>LFONTS.has(id)?id:'Ario';
-let lCustomPlayers=[],lCustomSeq=0,lCustomTargetCategory='ALL';
+let lCustomPlayers=[],lCustomSeq=0,lCustomTargetCategory='ALL',lFirstTeamChoice=false;
 let lTeams=[],lPlayers=[],lLeagues=[],lPalettes=[],lReadyPalettes=[],lPatterns=[],lNationalFlags=[];
 let lPaletteType='team',lPatternType='logo',lPlayerCategory='ALL';
 let lPages=[],lPageIndex=0,lHistLog=[];
@@ -185,7 +185,7 @@ function lLoadJSON(path,fallback){return fetch(path,{cache:'default'}).then(r=>r
 function lImage(src){
  if(!src)return null;
  let o=lImgCache.get(src);if(o)return o.image;
- const im=new Image();im.decoding='async';lImgCache.set(src,{image:im,loaded:false});im.onload=()=>{lImgCache.get(src).loaded=true;lRender();if(L('lineupPagesDialog')?.open){clearTimeout(lThumbnailTimer);lThumbnailTimer=setTimeout(lPageDialogRender,250)}};im.onerror=()=>{lImgCache.get(src).error=true;};im.src=src;return im;
+ const im=new Image();im.decoding='async';lImgCache.set(src,{image:im,loaded:false});im.onload=()=>{lImgCache.get(src).loaded=true;lRender();if(L('lineupPagesDialog')?.open){clearTimeout(lThumbnailTimer);lThumbnailTimer=setTimeout(lPageDialogRender,250)}};im.onerror=()=>{lImgCache.get(src).error=true;};im.src=src.startsWith('assets/players/lineup-calibrated/arsenal-')?src+'?v=6.11':src;return im;
 }
 function lReady(src){const o=lImgCache.get(src);return o?.loaded?o.image:null;}
 function lPrepareImages(){
@@ -221,9 +221,12 @@ function lApplyPalette(id){const p=lPalette(id);lState.paletteId=p.id;for(const 
  lState.cardText=p.text||'#f2bc27';lState.watermarkCustom=false;}
 function lAutoMatch(){const a=lName(lFindTeam(lState.headerRightId)?.name||''),b=lName(lFindTeam(lState.headerLeftId)?.name||'');return [a,b].filter(Boolean).join(' - ');}
 function lTeamChoose(id){
- if(id===lState.teamId){lClose('lineupTeamDialog');return;}
- const editing=lState.slots.some(x=>x.imageKey||x.name);
- if(editing && id!==lState.teamId && !window.confirm('با تغییر تیم، کارت‌های بازیکنان فعلی با کارت‌های پیش‌فرض جایگزین می‌شوند. ادامه می‌دهید؟'))return;
+ if(id===lState.teamId){lFirstTeamChoice=false;lClose('lineupTeamDialog');return;}
+ // The starter Barcelona cards are placeholders, not work the newcomer chose
+ // to create. Do not warn on the initial, automatically opened team picker.
+ const editing=!lFirstTeamChoice&&lState.slots.some(x=>x.imageKey||x.name);
+ if(editing && !window.confirm('با تغییر تیم، کارت‌های بازیکنان فعلی با کارت‌های پیش‌فرض جایگزین می‌شوند. ادامه می‌دهید؟'))return;
+ lFirstTeamChoice=false;
  lChange(()=>{
  lState.teamId=id;lState.backgroundLogoId=id==='mixed'?'':id;lState.backgroundPatternType='logo';lState.backgroundPatternId='';
  lState.headerRightId=id==='mixed'?'barcelona':id;
@@ -343,8 +346,9 @@ function lTeamDialogRender(){const q=lFilterText(L('lineupTeamSearch').value);
    .sort((a,b)=>(a.id==='barcelona'?0:a.id==='arsnl'?1:2)-(b.id==='barcelona'?0:b.id==='arsnl'?1:2));
  const promotedIds=new Set(complete.map(t=>t.id));
  const ordered=[...complete,...lTeams.filter(t=>!promotedIds.has(t.id))].filter(t=>lFilterText(t.name).includes(q));
- let html=ordered.map(t=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${hasRoster(t)?'complete':''}"><img src="${lEscape(t.image)}" loading="lazy" decoding="async" alt=""><span>${lEscape(t.name)}</span>${hasRoster(t)?'<em>لیست بازیکنان کامل</em>':''}</button>`).join('');
- if(!q||lFilterText('ترکیب منتخب').includes(q))html+='<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>همه بازیکنان بانک</small></button>';
+ // Mixed is always the FIRST choice, before the completed Barcelona/Arsenal rosters.
+ let html=(!q||lFilterText('ترکیب منتخب').includes(q))?'<button type="button" class="lineup-team-option mixed" data-lteam="mixed"><strong>⚽</strong><strong>ترکیب منتخب</strong><small>همه بازیکنان بانک</small></button>':'';
+ html+=ordered.map(t=>`<button type="button" data-lteam="${lEscape(t.id)}" class="lineup-team-option ${hasRoster(t)?'complete':''}"><img src="${lEscape(t.image)}" loading="lazy" decoding="async" alt=""><span>${lEscape(t.name)}</span>${hasRoster(t)?'<em>لیست بازیکنان کامل</em>':''}</button>`).join('');
  L('lineupTeamGrid').innerHTML=html||'<div class="lineup-empty">تیمی با این نام پیدا نشد.</div>';
 }
 function lLogoDialogRender(){const q=lFilterText(L('lineupLogoSearch').value);L('lineupLogoGrid').innerHTML=lTeams.filter(t=>lFilterText(t.name).includes(q)).map(t=>`<button type="button" class="lineup-logo-option" data-llogo="${lEscape(t.id)}"><img src="${lEscape(t.image)}" loading="lazy" alt=""><span>${lEscape(t.name)}</span></button>`).join('')||'<div class="lineup-empty">نتیجه‌ای پیدا نشد.</div>';}
@@ -397,9 +401,19 @@ function lSetupCustomCrop(){const surface=L('lineupCustomCanvas');
  L('lineupCustomSave').onclick=async()=>{const btn=L('lineupCustomSave');btn.disabled=true;try{
  let media;
  if(lCustomCropFile){media=await lPutMedia(lCustomCropFile);}else if(lPendingCustom){media={key:lPendingCustom.key,url:lPendingCustom.url};}else throw Error('عکس انتخاب نشده');
- lPendingCustom={...media,crop:lSafeCustomCrop(lCustomCropDraft),customId:lPendingCustom?.customId||null};lPendingPlayerId=lPendingCustom.customId;if(lCustomCropFile){L('lineupPopupScale').value='100';L('lineupPopupScalePx').value='180';}L('lineupCustomAdjust').hidden=false;
- if(!L('lineupPopupName').value.trim())L('lineupPopupName').value='بازیکن دلخواه';lPlayersDialogRender();lClose('lineupCustomCropDialog');lCustomCropFile=null;
- lNotify('جای‌گیری عکس تنظیم شد؛ برای ثبت روی کارت، تیک انتخاب بازیکن را بزنید.');
+ // Saving the crop is the ONLY requirement for adding a session player.
+ // Do not modify the selected poster card; it is a separate, later action.
+ const customId=lPendingCustom?.customId||'session-custom-'+Date.now().toString(36)+'-'+(++lCustomSeq);
+ const crop=lSafeCustomCrop(lCustomCropDraft);
+ const category=['GK','DEF','MID','FWD'].includes(lCustomTargetCategory)?lCustomTargetCategory:lPositionCategory(lSpotList()[lSelected]?.position);
+ if(!L('lineupPopupName').value.trim())L('lineupPopupName').value='بازیکن دلخواه';
+ const entry={id:customId,name:L('lineupPopupName').value.trim(),teamId:lState.teamId,positionGroup:category,flag:lPendingFlagId||'es',image:media.url,imageKey:media.key,customCrop:crop,photoScale:1};
+ const previous=lCustomPlayers.findIndex(p=>p.id===customId);
+ if(previous<0)lCustomPlayers.unshift(entry);else lCustomPlayers[previous]={...lCustomPlayers[previous],...entry};
+ lPendingCustom={...media,crop,customId};lPendingPlayerId=customId;
+ if(lCustomCropFile){L('lineupPopupScale').value='100';L('lineupPopupScalePx').value='180';}L('lineupCustomAdjust').hidden=false;
+ lPlayersDialogRender();lClose('lineupCustomCropDialog');lCustomCropFile=null;
+ lNotify('بازیکن دلخواه در فهرست موقت همین تب ذخیره شد؛ برای قرار دادن روی پوستر، کارت او را انتخاب کنید.');
  }catch(err){lNotify('ذخیره عکس انجام نشد: '+err.message,'error')}finally{btn.disabled=false;}};
  const rectPoint=e=>lCustomPoint(e);
  surface.addEventListener('pointerdown',e=>{if(!lCustomCropDraft)return;e.preventDefault();lCustomCropPointers.set(e.pointerId,rectPoint(e));try{surface.setPointerCapture(e.pointerId)}catch{}lCustomBeginGesture();});
@@ -840,12 +854,13 @@ async function lImport(e){const file=e.target.files?.[0];if(!file)return;try{if(
 async function lInit(){
  const themesafe=(()=>{try{return localStorage.getItem('wosocenter-ui-theme')==='light'}catch{return false}})();document.documentElement.dataset.theme=themesafe?'light':'dark';
  [lTeams,lPlayers,lLeagues,lPalettes,lNationalFlags,lReadyPalettes,lPatterns]=await Promise.all([
- lLoadJSON('data/teams.json',[]),lLoadJSON('data/players.json',[]),lLoadJSON('data/flags.json',[]),lLoadJSON('data/lineup-palettes.json',[]),lLoadJSON('data/national-flags.json',[]),lLoadJSON('data/lineup-ready-palettes.json',[]),lLoadJSON('data/patterns.json',[])]);
+ lLoadJSON('data/teams.json',[]),lLoadJSON('data/players.json?v=6.11',[]),lLoadJSON('data/flags.json',[]),lLoadJSON('data/lineup-palettes.json',[]),lLoadJSON('data/national-flags.json',[]),lLoadJSON('data/lineup-ready-palettes.json',[]),lLoadJSON('data/patterns.json',[])]);
  let persisted=null;try{persisted=JSON.parse(localStorage.getItem(LSTORE)||'null')}catch{}
  let savedPages=null;try{savedPages=JSON.parse(localStorage.getItem(LPAGES_STORE)||'null')}catch{}
  if(savedPages?.pages?.length){lPages=savedPages.pages.map((p,i)=>({id:String(p.id||'p'+i),name:String(p.name||'صفحه '+(i+1)),data:lValidate(p.data||lFresh())}));lPageIndex=Math.max(0,Math.min(lPages.length-1,Number(savedPages.active)||0));lState=lClone(lPages[lPageIndex].data);}
  else{lState=lValidate(persisted||lFresh());lPages=[{id:'p1',name:'صفحه ۱',data:lClone(lState)}];lPageIndex=0;}
  if(!persisted&&!savedPages){lApplyPalette('barcelona');lState.matchup=lAutoMatch();}
+ lFirstTeamChoice=!persisted&&!savedPages?.pages?.length;
  lLoaded=true;
  lDialogEvents();lSetInputs();lSync();lRender();lHistoryButtons();lLoadFont('Ario');await lRestoreMedia();lWarmPlayerImages();
  if(!persisted){lTeamDialogRender();lOpen('lineupTeamDialog');}
