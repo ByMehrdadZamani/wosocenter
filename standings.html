@@ -1,65 +1,114 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#100c19">
-  <meta name="description" content="جدول‌ساز ووسو سنتر؛ دریافت جدول آنلاین لیگ اف اسپانیا و دانلود PNG">
-  <title>جدول‌ساز ووسو | WoSoCenter</title>
-  <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1">
-  <link rel="stylesheet" href="standings.css?v=2">
-  <script src="standings.js?v=2" defer></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100b19"><meta name="description" content="جدول‌ساز ووسو؛ جدول آنلاین لیگ اف و پوستر گرافیکی دلخواه با خروجی PNG">
+<title>جدول‌ساز ووسو | WoSoCenter</title>
+<link rel="preload" href="assets/fonts/files/Mikhak-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=6.9"><link rel="stylesheet" href="standings.css?v=3.0.0">
+<script defer src="standings.js?v=3.0.0"></script>
 </head>
-<body>
-  <div class="page">
-    <header class="topbar">
-      <a href="index.html" class="brand" aria-label="بازگشت به صفحه اصلی">WOSO<span>CENTER</span></a>
-      <a href="index.html" class="back">← صفحه اصلی</a>
-    </header>
-    <main>
-      <div class="intro">
-        <div class="tag">STANDINGS STUDIO</div>
-        <h1>جدول‌ساز <em>ووسو</em></h1>
-        <p>جدول به‌روز لیگ فوتبال زنان اسپانیا را دریافت و به یک پوستر PNG تبدیل کن.</p>
-      </div>
-      <div class="workspace">
-        <section class="controls" aria-labelledby="control-title">
-          <h2 id="control-title">تنظیمات جدول</h2>
-          <label for="league">لیگ</label>
-          <select id="league" disabled><option value="ligaf">لیگ اف اسپانیا (Liga F)</option></select>
-          <p class="hint">در نسخه اول تنها Liga F پشتیبانی می‌شود.</p>
-          <label for="season">فصل</label>
-          <select id="season">
-            <option value="2026">۲۰۲۶/۲۷</option>
-            <option value="2025">۲۰۲۵/۲۶</option>
-            <option value="2024">۲۰۲۴/۲۵</option>
-          </select>
-          <label for="posterTitle">عنوان روی پوستر</label>
-          <input id="posterTitle" type="text" maxlength="55" value="جدول لیگ فوتبال زنان اسپانیا" autocomplete="off">
-          <label for="posterTheme">رنگ‌بندی پوستر</label>
-          <select id="posterTheme">
-            <option value="purple">بنفش و طلایی ووسو</option>
-            <option value="navy">سرمه‌ای و فیروزه‌ای</option>
-            <option value="rose">ارغوانی و صورتی</option>
-          </select>
-          <button type="button" id="fetchBtn" class="primary">دریافت اطلاعات آنلاین</button>
-          <button type="button" id="downloadBtn" class="secondary" disabled>دانلود جدول PNG</button>
-          <p id="status" class="status" role="status" aria-live="polite">برای شروع «دریافت اطلاعات آنلاین» را بزن.</p>
-          <div class="tips">
-            <strong>جزئیات خروجی</strong>
-            <p>پوستر ۱۰۸۰ × ۱۳۵۰ پیکسل، شامل تمام تیم‌های دریافت‌شده، آمار کامل و اعتبار منبع داده.</p>
-          </div>
-        </section>
-        <section class="preview-wrap" aria-labelledby="preview-title">
-          <div class="preview-heading"><h2 id="preview-title">پیش‌نمایش جدول</h2><span>PNG · 1080×1350</span></div>
-          <div class="canvas-shell">
-            <canvas id="poster" width="1080" height="1350" aria-label="پیش‌نمایش گرافیکی جدول لیگ"></canvas>
-          </div>
-          <p class="footnote">خروجی جدول با نام و مخفف تیم‌ها ساخته می‌شود. API Ninjas لوگوها را برنمی‌گرداند؛ امکان افزودن لوگوها در نسخه بعدی وجود دارد.</p>
-        </section>
-      </div>
-    </main>
-    <footer>© WoSoCenter · ساخته‌شده برای گرافیک فوتبال</footer>
-  </div>
+<body class="standings-page">
+<header class="topbar woso-editor-topbar">
+ <div class="identity"><span class="appmark woso-appmark" aria-hidden="true"><span class="appmark-icon"></span></span><div><strong>جدول‌ساز فوتبال</strong><small>WoSoCenter · قالب لیگ اف ۰۱</small></div></div>
+ <a class="btn secondary woso-home-separated standings-home" href="index.html" aria-label="خانه">⌂ <span>خانه</span></a>
+ <div class="top-actions"><button id="historyOpen" type="button" class="tool-btn" title="فهرست تغییرات" aria-label="تاریخچه">◴</button><button id="undoBtn" type="button" class="tool-btn" title="واگرد (Ctrl+Z)">↶</button><button id="redoBtn" type="button" class="tool-btn" title="بازانجام (Ctrl+Y)">↷</button><button id="themeToggle" type="button" class="tool-btn theme-btn" title="تغییر تم سایت">☀</button><span class="saved" id="saveIndicator" aria-live="polite">ذخیره خودکار</span><button id="downloadBtn" type="button" class="btn primary">↓ دریافت PNG</button></div>
+</header>
+<main class="workspace standings-workspace">
+ <aside class="editor standings-editor" aria-label="تنظیمات جدول ساز">
+  <div class="section-head"><div><h1>طراحی جدول لیگ</h1><p>اطلاعات، تصویر، متن‌ها و ظاهر تیم‌ها را شخصی‌سازی کنید.</p></div><span class="template-tag">طرح ۰۱</span></div>
+  <nav class="tabs standings-tabs" aria-label="بخش‌های تنظیمات">
+   <button class="tab active" data-tab="data" type="button" aria-selected="true">دریافت اطلاعات</button>
+   <button class="tab" data-tab="photo" type="button">تصویر بک‌گراند</button>
+   <button class="tab" data-tab="header" type="button">هدر</button>
+   <button class="tab" data-tab="table" type="button">جدول</button>
+   <button class="tab" data-tab="pattern" type="button">پترن</button>
+   <button class="tab" data-tab="history" type="button">تغییرات</button>
+  </nav>
+  <section id="tab-data" class="tab-content" aria-label="دریافت اطلاعات">
+   <div class="settings-group"><h2>دریافت جدول آنلاین</h2>
+    <label>لیگ<select id="leagueSelect"><option value="ligaf">لیگا اف · اسپانیا</option><option disabled>لیگ برتر انگلیس — به‌زودی</option><option disabled>بوندس‌لیگا آلمان — به‌زودی</option><option disabled>سری آ ایتالیا — به‌زودی</option><option disabled>لیگ یک فرانسه — به‌زودی</option><option disabled>سوپرلیگ زنان انگلیس — به‌زودی</option></select></label>
+    <label>فصل<select id="seasonSelect"><option value="2026">۲۰۲۶/۲۷</option></select></label>
+    <button id="fetchBtn" type="button" class="btn primary full">↻ دریافت اطلاعات آنلاین</button>
+    <div id="fetchStatus" role="status" aria-live="polite" class="standings-message">برای دریافت جدول فصل جاری، دکمه بالا را بزنید.</div>
+    <p class="hint compact">منبع: API Ninjas از طریق Cloudflare Worker. کلید API فقط در Worker قرار دارد.</p>
+   </div>
+   <div class="settings-group"><h2>مقایسه جایگاه با هفته قبل</h2><p class="hint compact">API فقط جدول فعلی را برمی‌گرداند. برای فلش‌های صعود و سقوط، باید رتبه‌های هفته قبل یک‌بار ذخیره شوند.</p>
+     <div class="two-col"><button id="saveBaseline" type="button" class="btn secondary">ثبت جدول فعلی به‌عنوان هفته قبل</button><button id="clearBaseline" type="button" class="btn secondary">حذف مرجع</button></div>
+     <div class="two-col"><button id="importBaselineBtn" type="button" class="btn secondary full">بارگذاری JSON هفته قبل</button><input type="file" id="baselineFile" hidden accept=".json,application/json"></div>
+     <p class="hint compact" id="baselineStatus">هنوز مرجعی ثبت نشده است؛ تغییر رتبه‌ها نامشخص نمایش داده می‌شود.</p>
+   </div>
+  </section>
+  <section id="tab-photo" class="tab-content hidden" aria-label="تنظیمات تصویر پس زمینه">
+   <div class="settings-group"><h2>تصویر پس‌زمینه جدول</h2><div class="standings-photo-thumb" id="photoThumb"><span>تصویر دلخواه انتخاب نشده است</span></div>
+    <div class="two-col"><button type="button" class="btn secondary" id="uploadPhoto">↑ آپلود تصویر</button><button type="button" class="btn primary" id="adjustPhoto">⌗ تنظیم عکس بک‌گراند</button></div>
+    <input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
+    <p class="hint compact">بعد از آپلود، کادر تنظیم تصویر باز می‌شود. جابه‌جایی با کشیدن عکس، زوم و تغییر تصویر امکان‌پذیر است.</p>
+   </div>
+   <div class="settings-group"><h2>محو شدن تصویر (Fade)</h2>
+    <label>رنگ محوشدگی <button class="s-color-button" type="button" data-color="fadeColor"></button></label>
+    <label class="range-label">شدت پوشش رنگ <output id="fadeOpacityValue"></output><input id="fadeOpacity" data-range="fadeOpacity" type="range" min="0" max="100"></label>
+    <label class="range-label">درصد محدوده تصویر <output id="fadeCoverageValue"></output><input id="fadeCoverage" data-range="fadeCoverage" type="range" min="15" max="100"></label>
+    <label class="range-label">محو شدن تدریجی از سمت چپ <output id="fadeSoftnessValue"></output><input id="fadeSoftness" data-range="fadeSoftness" type="range" min="0" max="100"></label>
+    <p class="hint compact">مثلاً «۸۵٪ محدوده تصویر» یعنی ۱۵٪ سمت چپ رنگ خالص باقی می‌ماند.</p>
+   </div>
+  </section>
+  <section id="tab-header" class="tab-content hidden" aria-label="تنظیمات هدر">
+   <div class="settings-group"><h2>نام لیگ و هفته جدول</h2>
+    <label>متن هدر<input id="titleText" data-field="titleText" maxlength="90" type="text" value="جدول لیگا اف | هفته ۱۰"></label>
+    <div class="two-col"><label>فونت<button type="button" class="font-pick" data-font="titleFont"></button></label><label>رنگ<button type="button" class="s-color-button" data-color="titleColor"></button></label></div>
+    <label class="range-label">اندازه متن <output id="titleSizeValue"></output><input type="range" id="titleSize" data-range="titleSize" min="24" max="66"></label>
+    <label class="range-label">جابه‌جایی افقی <output id="titleXValue"></output><input type="range" id="titleX" data-range="titleX" min="-100" max="100"></label>
+    <label class="range-label">جابه‌جایی عمودی <output id="titleYValue"></output><input type="range" id="titleY" data-range="titleY" min="-55" max="55"></label>
+   </div>
+   <div class="settings-group"><h2>نام کانال</h2>
+    <label>متن کانال<input id="brandText" data-field="brandText" maxlength="60" type="text" value="WoSoCenter" dir="auto"></label>
+    <div class="two-col"><label>فونت<button type="button" class="font-pick" data-font="brandFont"></button></label><label>رنگ<button type="button" class="s-color-button" data-color="brandColor"></button></label></div>
+    <label class="range-label">اندازه متن <output id="brandSizeValue"></output><input type="range" id="brandSize" data-range="brandSize" min="20" max="90"></label>
+    <label class="range-label">جابه‌جایی افقی <output id="brandXValue"></output><input type="range" id="brandX" data-range="brandX" min="-150" max="150"></label>
+    <label class="range-label">جابه‌جایی عمودی <output id="brandYValue"></output><input type="range" id="brandY" data-range="brandY" min="-55" max="55"></label>
+   </div>
+  </section>
+  <section id="tab-table" class="tab-content hidden" aria-label="تنظیمات جدول">
+   <div class="settings-group"><h2>استایل کلی جدول</h2>
+    <div class="two-col"><label>فونت جدول<button type="button" class="font-pick" data-font="tableFont"></button></label><label>رنگ متن جدول<button type="button" class="s-color-button" data-color="tableText"></button></label></div>
+    <label class="range-label">اندازه نوشته تیم‌ها <output id="teamSizeValue"></output><input id="teamSize" data-range="teamSize" type="range" min="17" max="29"></label>
+    <label class="range-label">اندازه اعداد <output id="numberSizeValue"></output><input id="numberSize" data-range="numberSize" type="range" min="18" max="31"></label>
+    <div class="two-col"><label>رنگ ستون امتیاز عمومی<button type="button" class="s-color-button" data-color="pointsColor"></button></label><label>رنگ باکس صدرنشین<button type="button" class="s-color-button" data-color="firstBox"></button></label></div>
+    <div class="two-col"><label>رنگ باکس رتبه ۲ و ۳<button type="button" class="s-color-button" data-color="championsBox"></button></label><label>رنگ باکس سقوط<button type="button" class="s-color-button" data-color="relegationBox"></button></label></div>
+    <div class="two-col"><label>رنگ زمینه سایر امتیازها<button type="button" class="s-color-button" data-color="regularBox"></button></label><label>رنگ متن عنوان ستون‌ها<button type="button" class="s-color-button" data-color="columnColor"></button></label></div>
+    <div class="two-col"><label>رنگ فلش صعود<button type="button" class="s-color-button" data-color="arrowUp"></button></label><label>رنگ فلش سقوط<button type="button" class="s-color-button" data-color="arrowDown"></button></label></div>
+    <label class="range-label">شفافیت ردیف‌ها <output id="rowOpacityValue"></output><input type="range" id="rowOpacity" data-range="rowOpacity" min="0" max="60"></label>
+   </div>
+   <div class="settings-group"><h2>تیم‌های جدول</h2><p class="hint compact">با انتخاب هر تیم، تنظیمات اختصاصی نام، لوگو، فونت، رنگ امتیاز و اعداد باز می‌شود. ✓ ثبت، − بستن و ↺ بازگشت به حالت اولیه است.</p><div id="teamEditors" class="team-editors"></div></div>
+  </section>
+  <section id="tab-pattern" class="tab-content hidden" aria-label="پترن و پالت">
+   <div class="settings-group"><h2>پترن پس‌زمینه</h2><button id="openPattern" type="button" class="s-pattern-trigger"><span id="patternThumb" class="s-pattern-thumb"></span><span><strong>انتخاب پس‌زمینه</strong><small id="patternName">رنگ زمینه</small></span><b>تغییر ›</b></button><p class="hint compact">تصاویر استفاده‌شده فقط در مرورگر خودت ذخیره می‌شوند؛ پترن‌های آماده از بانک سایت دریافت می‌شوند.</p></div>
+   <div class="settings-group"><h2>پالت‌های رنگی</h2><div id="paletteGrid" class="s-palettes"></div></div>
+   <div class="settings-group"><h2>رنگ‌های زمینه و شکل‌ها</h2><div class="two-col"><label>رنگ اصلی زمینه<button type="button" class="s-color-button" data-color="bgColor"></button></label><label>رنگ خطوط تزئینی<button type="button" class="s-color-button" data-color="accentColor"></button></label></div>
+    <label class="range-label">شفافیت پترن آماده <output id="patternOpacityValue"></output><input id="patternOpacity" data-range="patternOpacity" type="range" min="0" max="100"></label>
+   </div>
+   <div class="settings-group"><h2>فونت کلی پوستر</h2><button type="button" class="font-pick" data-font="allFont"></button><button type="button" id="applyAllFont" class="btn secondary full">اعمال روی همه متن‌ها (به‌جز نام کانال)</button></div>
+  </section>
+  <section id="tab-history" class="tab-content hidden" aria-label="تغییرات">
+    <div class="settings-group"><h2>لیست تغییرات</h2><div class="two-col"><button id="historyUndo" class="btn secondary" type="button">↶ واگرد</button><button id="historyRedo" class="btn secondary" type="button">↷ بازانجام</button></div><div id="historyList" class="s-history-list"></div></div>
+    <div class="settings-group"><h2>مدیریت صفحات</h2><button id="pagesOpen2" class="btn secondary full" type="button">▦ مشاهده و مدیریت صفحات</button><p class="hint compact">می‌توانی چند پوستر مستقل بسازی، تکثیر یا حذف کنی و بین آن‌ها جابه‌جا شوی.</p></div>
+    <div class="settings-group"><h2>پروژه</h2><button id="exportProject" class="btn secondary full" type="button">↓ خروجی تنظیمات JSON</button><button id="importProject" class="btn secondary full" type="button">↑ بارگذاری تنظیمات JSON</button><input type="file" id="importProjectFile" hidden accept=".json,application/json"><button id="resetProject" class="btn danger-text full" type="button">شروع پروژه جدید</button></div>
+  </section>
+  <div id="editorNotice" role="status" aria-live="polite" class="s-editor-notice" hidden></div>
+ </aside>
+ <section class="preview-area standings-preview" aria-label="پیش نمایش جدول">
+  <div class="preview-head"><div><h2>پیش‌نمایش جدول</h2><p>همه تغییرات با یک کلیک روی پوستر اعمال می‌شوند.</p></div><div class="s-preview-actions"><span class="resolution">۱۰۸۰ × ۱۳۵۰ · خروجی ۲×</span><button class="btn secondary" id="pagesOpen" type="button">▦ مدیریت صفحات <small id="pageCount">۱ صفحه</small></button></div></div>
+  <div class="s-canvas-wrap"><canvas id="poster" width="1080" height="1350" aria-label="پوستر گرافیکی جدول لیگ"></canvas></div>
+  <div class="s-preview-footer"><span id="dataBadge">جدول پس از دریافت آنلاین نمایش داده می‌شود.</span><span>PNG باکیفیت ۲۱۶۰ × ۲۷۰۰</span></div>
+ </section>
+</main>
+<footer class="site-footer">WoSoCenter · <a href="index.html">بازگشت به صفحه اصلی</a></footer>
+
+<dialog id="colorDialog" class="picker-dialog s-dialog"><div class="dialog-head"><div><h2>انتخاب رنگ</h2><p>همان سبک انتخاب رنگ ابزارهای ووسو</p></div><button class="dialog-close" data-close="colorDialog" aria-label="بستن">×</button></div><div class="s-color-preview"><input type="color" id="nativeColor" aria-label="انتخاب رنگ"><input id="hexColor" maxlength="7" dir="ltr" placeholder="#FFFFFF" aria-label="کد رنگ"><button id="colorApply" class="btn primary" type="button">✓ ثبت رنگ</button></div><div id="colorSwatches" class="s-swatches"></div></dialog>
+<dialog id="fontDialog" class="picker-dialog s-dialog"><div class="dialog-head"><div><h2>انتخاب فونت</h2><p>فونت‌های نصب‌شده در بانک فونت WoSoCenter</p></div><button class="dialog-close" data-close="fontDialog" aria-label="بستن">×</button></div><div id="fontGrid" class="s-font-grid"></div></dialog>
+<dialog id="patternDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>انتخاب پس‌زمینه</h2><p>تصاویر دلخواه و طرح‌های گرافیکی آماده</p></div><button class="dialog-close" data-close="patternDialog" aria-label="بستن">×</button></div><div class="s-modal-tabs"><button class="active" type="button" data-ptab="my">تصویر دلخواه</button><button type="button" data-ptab="ready">طرح گرافیکی</button></div><div id="patternMy" class="s-library-grid"></div><div id="patternReady" class="s-library-grid" hidden></div><button type="button" id="patternUpload" class="btn secondary full">↑ آپلود تصویر جدید</button></dialog>
+<dialog id="cropDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>تنظیم تصویر پس‌زمینه</h2><p>روی تصویر بکشید تا محل قرارگیری تغییر کند.</p></div><button class="dialog-close" data-close="cropDialog" aria-label="بستن">×</button></div><div class="s-crop-frame"><canvas id="cropCanvas" width="432" height="540" aria-label="پیش نمایش برش تصویر"></canvas></div><div class="s-crop-controls"><label>بزرگ‌نمایی <output id="cropZoomVal">۱۰۰٪</output><input id="cropZoom" type="range" min="100" max="350" value="100"></label><div class="two-col"><label>جابجایی افقی <input type="range" id="cropX" min="-100" max="100" value="0"></label><label>جابجایی عمودی <input type="range" id="cropY" min="-100" max="100" value="0"></label></div></div><div class="s-dialog-actions"><button id="cropCancel" type="button" class="btn secondary">انصراف</button><button id="cropSave" type="button" class="btn primary">✓ ثبت تصویر</button></div></dialog>
+<dialog id="pagesDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>مدیریت صفحات</h2><p>هر صفحه تنظیمات و پوستر مستقل دارد.</p></div><button class="dialog-close" data-close="pagesDialog" aria-label="بستن">×</button></div><div class="s-dialog-actions"><button class="btn primary" type="button" id="addPage">＋ صفحه جدید</button><button class="btn secondary" type="button" id="duplicatePage">⧉ تکثیر صفحه</button></div><div id="pagesGrid" class="s-pages-grid"></div></dialog>
 </body>
 </html>
