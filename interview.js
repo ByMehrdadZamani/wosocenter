@@ -4,10 +4,10 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const W=1080, H=1350, PANEL_BOTTOM=1272, TEXT_X=94, TEXT_W=892;
-const FONT_NAMES=['Ario','Mikhak','DinArabic','Sahel','GraphikArabic','Tehran','YekanBoom','Lalezar','Hayat','Titr','ShahGosh','Shokoh','Paeez','Matin','Soltan','Sepahbod','Cinema','Casablanca','Haftad','DastNevis'];
+const FONT_NAMES=['Mikhak','Ario','DinArabic','Sahel','GraphikArabic','Tehran','YekanBoom','Lalezar','Hayat','Titr','ShahGosh','Shokoh','Paeez','Matin','Soltan','Sepahbod','Cinema','Casablanca','Haftad','DastNevis'];
 const LOGOS=[{id:'barca',name:'Barca Femeni',src:'assets/interview/logo-barca.jpg'},{id:'woso',name:'WoSo Center',src:'assets/interview/logo-woso.jpg'}];
 const DEFAULT_STRIPES=['#123f6b','#d3a54a','#ff4a0a','#ec50af','#06bd65','#f33345'];
-const DEFAULT={logo:'barca',questionFont:'Ario',answerFont:'Ario',footerFont:'Ario',questionSize:24,answerSize:23,footerSize:24,lineHeight:1.43,questionColor:'#f5d44e',answerColor:'#ffffff',footerColor:'#ffffff',telegramColor:'#ffe277',panelColor:'#000000',panelOpacity:90,panelRadius:0,logoSize:102,footerText:'Barca_Femenino',stripes:[...DEFAULT_STRIPES],photo:{zoom:1,x:0,y:0},questionAlign:'justify',answerAlign:'justify',manualPages:[],pagePlan:[],palette:'ready:interview-original',photoSrc:'assets/interview/sample-photo.webp'};
+const DEFAULT={logo:'barca',questionFont:'Mikhak',answerFont:'Mikhak',footerFont:'Mikhak',questionSize:24,answerSize:23,footerSize:24,lineHeight:1.43,questionColor:'#f5d44e',answerColor:'#ffffff',footerColor:'#ffffff',telegramColor:'#ffe277',panelColor:'#000000',panelOpacity:90,panelRadius:0,logoSize:102,footerText:'Barca_Femenino',stripes:[...DEFAULT_STRIPES],photo:{zoom:1,x:0,y:0},questionAlign:'justify',answerAlign:'justify',manualPages:[],pagePlan:[],palette:'ready:interview-original',photoSrc:'assets/interview/sample-photo.webp'};
 let state={...DEFAULT,photo:{...DEFAULT.photo},stripes:[...DEFAULT.stripes]};
 const poster=$('#poster'), ctx=poster.getContext('2d');
 let photo=new Image(), logoImages={}, cropImage=null, cropDraft=null, cropIsNew=false, pageIndex=0, pages=[{lines:[],height:370}];
@@ -18,7 +18,7 @@ const changed = (message) => {if(message){status.textContent=message;clearTimeou
 const clamp=(x,min,max)=>Math.max(min,Math.min(max,Number.isFinite(+x)?+x:min));
 const hexOK=(s)=>/^#[0-9a-f]{6}$/i.test(s||'');
 function rgba(h,a){const n=parseInt((hexOK(h)?h:'#000000').slice(1),16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${clamp(a,0,1)})`;}
-function safeFont(name){return FONT_NAMES.includes(name)||name==='Arial'?name:'Ario';}
+function safeFont(name){return FONT_NAMES.includes(name)||name==='Arial'?name:'Mikhak';}
 function loadPhoto(src){const img=new Image();img.onload=()=>{photo=img;$('#photoSample').style.backgroundImage=`url("${src.replace(/"/g,'')}")`;scheduleRender();};img.onerror=()=>changed('بارگذاری تصویر پس‌زمینه انجام نشد.');img.src=src;}
 LOGOS.forEach(l=>{const im=new Image();im.onload=scheduleRender;im.src=l.src;logoImages[l.id]=im;});
 const fontCss=(kind,bold=false,italic=false)=>`${italic?'italic ':''}${bold?'900':'700'} ${state[kind+'Size']}px "${safeFont(state[kind+'Font'])}", Tahoma, sans-serif`;
@@ -169,7 +169,7 @@ $$('.editor-toolbar button').forEach(b=>b.onclick=()=>{const target=$('#'+b.clos
  if(b.dataset.align){const kind=target.id.toLowerCase().includes('question')?'question':'answer';state[kind+'Align']=b.dataset.align;updateAlignButtons();scheduleRender();return;}
  target.focus();document.execCommand(b.dataset.cmd,false,null);if(target.id.startsWith('manual'))updateManualText();else scheduleRender();});
 function updateAlignButtons(){$$('.editor-toolbar [data-align]').forEach(b=>{const kind=b.closest('.editor-toolbar').dataset.editor.toLowerCase().includes('question')?'question':'answer';const selected=(state[kind+'Align']||'justify')===b.dataset.align;b.classList.toggle('active',selected);b.setAttribute('aria-pressed',String(selected));});$$('.rich-editor').forEach(el=>{el.style.textAlign=state[el.id.toLowerCase().includes('question')?'questionAlign':'answerAlign']||'justify';});}
-$$('[data-reset-font]').forEach(b=>b.onclick=()=>{const kind=b.dataset.resetFont;state[kind+'Font']=DEFAULT[kind+'Font'];state[kind+'Size']=DEFAULT[kind+'Size'];refreshControls();changed(`تنظیمات پیش‌فرض ${kind==='question'?'سؤال':'جواب'} (آریو) بازیابی شد.`);});
+$$('[data-reset-font]').forEach(b=>b.onclick=()=>{const kind=b.dataset.resetFont;state[kind+'Font']=DEFAULT[kind+'Font'];state[kind+'Size']=DEFAULT[kind+'Size'];refreshControls();changed(`تنظیمات پیش‌فرض ${kind==='question'?'سؤال':'جواب'} (میخک) بازیابی شد.`);});
 $$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-selected',String(x===b));});$$('.tab-panel').forEach(x=>x.classList.toggle('hidden',x.id!=='tab-'+b.dataset.tab));if(b.dataset.tab==='history')refreshHistoryUI();});
 const unitLabel=(key)=>({questionSize:'px',answerSize:'px',footerSize:'px',logoSize:'px',panelOpacity:'%',panelRadius:'px',lineHeight:'×'})[key];
 $$('[data-number]').forEach(el=>{const key=el.dataset.number;el.value=state[key];const lbl=$('#'+key+'Label');if(lbl)lbl.textContent=state[key]+unitLabel(key);el.addEventListener('input',()=>{state[key]=+el.value;syncInterviewNumber(key);scheduleRender();});});
