@@ -78,5 +78,10 @@
     "id": "ca",
     "name": "کانادا",
     "image": "assets/national-flags/ca.png"
+  },
+  {
+    "id": "ma",
+    "name": "مراکش",
+    "image": "assets/national-flags/ma.png"
   }
 ]
