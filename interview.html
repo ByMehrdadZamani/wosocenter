@@ -8,6 +8,23 @@
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"/>
 <link rel="stylesheet" href="interview.css?v=6.8.0"/>
 <script src="interview.js?v=6.8.1" defer></script>
+<style>
+/* A meaningful first frame while the deferred editor code and poster images load. */
+.woso-firstpaint-host{position:relative;isolation:isolate}
+.woso-firstpaint-host>canvas{position:relative;z-index:1;display:block}
+.woso-firstpaint{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+ background:linear-gradient(160deg,#12345e 0%,#15416f 47%,#971539 48%,#9b163b 100%);
+ color:#f4d36b;text-align:center;font:700 clamp(13px,2.5vw,21px) Tahoma,sans-serif}
+.woso-firstpaint::before{content:"";position:absolute;top:4%;left:4%;right:4%;bottom:4%;border:3px solid #d7ad45;border-radius:12px;opacity:.65}
+.woso-firstpaint .woso-fp-mark{position:relative;letter-spacing:1px;font-size:clamp(22px,4vw,37px);font-weight:900}
+.woso-firstpaint .woso-fp-sub{position:relative;max-width:75%;line-height:1.9;color:#fff8e7}
+.woso-firstpaint .woso-fp-dots{position:relative;display:flex;gap:10px;direction:ltr}
+.woso-firstpaint .woso-fp-dots i{display:block;width:10px;height:10px;background:#f4d36b;border-radius:50%;opacity:.48;animation:woso-fp-pulse 1.25s infinite alternate}
+.woso-firstpaint .woso-fp-dots i:nth-child(2){animation-delay:.2s}.woso-firstpaint .woso-fp-dots i:nth-child(3){animation-delay:.4s}
+@keyframes woso-fp-pulse{to{opacity:1;transform:scale(1.22)}}
+@media(prefers-reduced-motion:reduce){.woso-firstpaint .woso-fp-dots i{animation:none}}
+</style>
 </head>
 <body>
 <header class="topbar woso-editor-topbar">
@@ -101,7 +118,7 @@
  </aside>
  <section class="preview-section preview-area" aria-label="پیش‌نمایش مصاحبه">
   <div class="preview-heading preview-head"><div class="preview-title-text"><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><div class="head-side preview-head-tools"><button type="button" id="openPagesBtn" class="btn secondary page-manage-trigger" aria-haspopup="dialog" aria-controls="pagesDialog">▦ مدیریت صفحات <span id="pageTotal">۱ صفحه</span></button><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span></div></div>
-  <div class="poster-wrapper"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش پوستر مصاحبه"></canvas></div>
+  <div class="woso-firstpaint-host poster-wrapper"><div class="woso-firstpaint" aria-hidden="true"><span class="woso-fp-mark">WoSoCenter</span><span class="woso-fp-sub">در حال آماده‌سازی پیش‌نمایش پوستر</span><span class="woso-fp-dots"><i></i><i></i><i></i></span></div><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش پوستر مصاحبه"></canvas></div>
   <div class="preview-bottom"><button type="button" id="previousPage" class="btn secondary">→ صفحه قبل</button><div id="pageDots" class="page-dots"></div><button type="button" id="nextPage" class="btn secondary">صفحه بعد ←</button><span class="page-tag" id="pageCounter">صفحه ۱ از ۱</span></div>
   <div class="preview-hint"><span>✦</span> متن و قالب صفحه‌های بعدی خودکار تنظیم می‌شوند؛ هیچ قسمتی از مصاحبه حذف نمی‌شود.</div>
  </section>

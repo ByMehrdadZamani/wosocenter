@@ -6,6 +6,7 @@
  <title>WoSoCenter | خانه</title>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="home.css?v=6.5">
+<style>html{background:#1a1027;color:#f5dfb1}body{margin:0;min-height:100vh;background:linear-gradient(135deg,#281237,#15101f)}</style>
 </head>
 <body>
  <div class="home-orbit orbit-one"></div><div class="home-orbit orbit-two"></div>
@@ -35,5 +36,13 @@
   </main>
   <footer class="home-footer"><span>© WoSoCenter</span><a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" aria-label="تلگرام ByMehrdad"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 3-8 18-4-7-6-4z"/><path d="M9 14 21 3"/></svg><b dir="ltr">@ByMehrdad</b></a></footer>
  </div>
+<script>
+/* Intent-based warm navigation: no downloads compete with the homepage on load. */
+(()=>{const link=document.querySelector('a[href="lineup.html"]');if(!link)return;
+let started=false;const warm=()=>{if(started)return;started=true;
+for(const href of ['lineup.html','lineup.js?v=6.13.0']){const l=document.createElement('link');l.rel='prefetch';l.href=href;document.head.append(l);}};
+link.addEventListener('pointerenter',warm,{once:true,passive:true});link.addEventListener('focus',warm,{once:true});
+link.addEventListener('touchstart',warm,{once:true,passive:true});})();
+</script>
 </body>
 </html>

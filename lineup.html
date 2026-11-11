@@ -4,104 +4,26 @@
  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
  <meta name="theme-color" content="#100b19"><meta name="description" content="شماتیک‌ساز و ترکیب‌ساز فوتبال WoSoCenter؛ طراحی با عکس بازیکنان و خروجی PNG">
  <title>شماتیک‌ساز با ۳۱ آرایش فوتبال | WoSoCenter</title>
- <script>
-/* Fast path: start necessary JSON and the current lineup portraits during HTML parsing. */
-(() => {
-  'use strict';
-  if (!window.fetch || !window.Image) return;
-  const nativeFetch = window.fetch.bind(window);
-  const paths = [
-    'data/teams.json',
-    'data/players.json?v=6.13',
-    'data/lineup-palettes.json',
-    'data/national-flags.json',
-    'data/flags.json',
-    'data/lineup-ready-palettes.json',
-    'data/patterns.json'
-  ];
-  const responses = new Map();
-  const images = new Map();
-  const boot = { images };
-  window.__wosoLineupBoot = boot;
-  // Keep original Responses unconsumed. Each application fetch receives a clone.
-  for (const path of paths) {
-    responses.set(path, nativeFetch(path, { cache: 'default' }).catch(() => null));
-  }
-  window.fetch = function (input, init) {
-    const key = typeof input === 'string' ? input : '';
-    const requested = responses.get(key);
-    const method = String(init?.method || 'GET').toUpperCase();
-    if (requested && method === 'GET' && (!init?.cache || init.cache === 'default')) {
-      return requested.then(response => response?.ok ? response.clone() : nativeFetch(input, init));
-    }
-    return nativeFetch(input, init);
-  };
-
-  function restoredState() {
-    try {
-      const pages = JSON.parse(localStorage.getItem('wosocenter-lineup-pages-v1') || 'null');
-      if (pages?.pages?.length) {
-        const index = Math.max(0, Math.min(pages.pages.length - 1, Number(pages.active) || 0));
-        return pages.pages[index]?.data || null;
-      }
-      return JSON.parse(localStorage.getItem('wosocenter-lineup-v1') || 'null');
-    } catch { return null; }
-  }
-
-  const initial = restoredState();
-  // Mirrors the initial 4-3-3 Barcelona starter lineup in lineup.js.
-  const freshIds = ['barca-16','barca-17','barca-19','barca-21','barca-24',
-    'barca-23','barca-07','barca-09','barca-11','barca-12','barca-05'];
-  responses.get('data/players.json?v=6.13')?.then(async response => {
-    if (!response?.ok) return;
-    const players = await response.clone().json();
-    if (!Array.isArray(players)) return;
-    const byId = new Map(players.map(player => [player.id, player]));
-    const slots = initial?.slots?.length ? initial.slots : freshIds.map(playerId => ({ playerId }));
-    // On a fresh visit, avoid fetching all 11 Barcelona portraits before the
-    // user has chosen a team. Saved compositions can use all 11.
-    const max = initial ? 11 : 5;
-    for (const slot of slots.slice(0, max)) {
-      const player = byId.get(slot?.playerId);
-      if (!player) continue;
-      const source = slot.image || player.image;
-      if (slot?.imageKey) continue;
-      const standardized = player.lineupPortrait && source === player.image;
-      const path = standardized ? player.lineupPortrait : source;
-      if (typeof path !== 'string' || !path.startsWith('assets/') || images.has(path)) continue;
-      const image = new Image();
-      image.decoding = 'async';
-      image.fetchPriority = images.size < 4 ? 'high' : 'auto';
-      images.set(path, image);
-      image.src = path.startsWith('assets/players/lineup-calibrated/arsenal-')
-        ? path + '?v=6.11' : path;
-      // Decode ahead of the first Canvas draw when the browser supports it.
-      image.addEventListener('load', () => { image.decode?.().catch(() => {}); }, { once: true });
-    }
-    // The flags are small assets, but their request starts late in the old app.
-    // Prefetch only flags actually used by the active composition.
-    const flagsResponse = await responses.get('data/national-flags.json');
-    if (flagsResponse?.ok) {
-      const flags = await flagsResponse.clone().json();
-      const byFlag = new Map(flags.map(flag => [flag.id, flag.image]));
-      for (const slot of slots.slice(0, max)) {
-        const player = byId.get(slot?.playerId);
-        const path = byFlag.get(slot.flag || player?.flag);
-        if (typeof path !== 'string' || !path.startsWith('assets/') || images.has(path)) continue;
-        const image = new Image();
-        image.decoding = 'async';
-        image.fetchPriority = 'low';
-        images.set(path, image);
-        image.src = path;
-      }
-    }
-  }).catch(() => {/* original loader displays its own fallback */});
-})();
- </script>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.12.0">
  <script src="lineup.js?v=6.13.0" defer></script>
- <script src="lineup-speed.js?v=1.0" defer></script>
+<style>
+/* A meaningful first frame while the deferred editor code and poster images load. */
+.woso-firstpaint-host{position:relative;isolation:isolate}
+.woso-firstpaint-host>canvas{position:relative;z-index:1;display:block}
+.woso-firstpaint{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+ background:linear-gradient(160deg,#12345e 0%,#15416f 47%,#971539 48%,#9b163b 100%);
+ color:#f4d36b;text-align:center;font:700 clamp(13px,2.5vw,21px) Tahoma,sans-serif}
+.woso-firstpaint::before{content:"";position:absolute;top:4%;left:4%;right:4%;bottom:4%;border:3px solid #d7ad45;border-radius:12px;opacity:.65}
+.woso-firstpaint .woso-fp-mark{position:relative;letter-spacing:1px;font-size:clamp(22px,4vw,37px);font-weight:900}
+.woso-firstpaint .woso-fp-sub{position:relative;max-width:75%;line-height:1.9;color:#fff8e7}
+.woso-firstpaint .woso-fp-dots{position:relative;display:flex;gap:10px;direction:ltr}
+.woso-firstpaint .woso-fp-dots i{display:block;width:10px;height:10px;background:#f4d36b;border-radius:50%;opacity:.48;animation:woso-fp-pulse 1.25s infinite alternate}
+.woso-firstpaint .woso-fp-dots i:nth-child(2){animation-delay:.2s}.woso-firstpaint .woso-fp-dots i:nth-child(3){animation-delay:.4s}
+@keyframes woso-fp-pulse{to{opacity:1;transform:scale(1.22)}}
+@media(prefers-reduced-motion:reduce){.woso-firstpaint .woso-fp-dots i{animation:none}}
+</style>
 </head>
 <body class="lineup-page">
 <header class="topbar woso-editor-topbar">
@@ -201,7 +123,7 @@
   </div>
   <div id="lineupFeedback" class="feedback" role="status" aria-live="polite" hidden></div>
  </aside>
- <section class="preview-area lineup-preview" aria-label="پیش‌نمایش شماتیک"><div class="preview-head"><div><h2>پیش‌نمایش شماتیک</h2><p>کارت بازیکن رو لمس کن تا بتونی ویرایشش کنی.</p></div><div class="lineup-preview-tools"><span class="resolution">پوستر ۱۰۸۰ × ۱۳۵۰ · خروجی ۲×</span><button id="lineupPagesOpen" type="button" class="btn secondary">▦ مدیریت صفحات <span id="lineupPageCount">۱ صفحه</span></button></div></div><div class="canvas-holder lineup-canvas-holder"><canvas id="lineupCanvas" width="1080" height="1350" role="img" aria-label="پوستر ترکیب فوتبالی"></canvas></div><div class="lineup-preview-foot"><span id="lineupPreviewHint">پیش‌نمایش لحظه‌ای · بازیکن را از طریق لمس کارت انتخاب کنید</span><span>دانلود باکیفیت ۲۱۶۰ × ۲۷۰۰ از دکمه بالای صفحه</span></div></section>
+ <section class="preview-area lineup-preview" aria-label="پیش‌نمایش شماتیک"><div class="preview-head"><div><h2>پیش‌نمایش شماتیک</h2><p>کارت بازیکن رو لمس کن تا بتونی ویرایشش کنی.</p></div><div class="lineup-preview-tools"><span class="resolution">پوستر ۱۰۸۰ × ۱۳۵۰ · خروجی ۲×</span><button id="lineupPagesOpen" type="button" class="btn secondary">▦ مدیریت صفحات <span id="lineupPageCount">۱ صفحه</span></button></div></div><div class="woso-firstpaint-host canvas-holder lineup-canvas-holder"><div class="woso-firstpaint" aria-hidden="true"><span class="woso-fp-mark">WoSoCenter</span><span class="woso-fp-sub">در حال آماده‌سازی پیش‌نمایش پوستر</span><span class="woso-fp-dots"><i></i><i></i><i></i></span></div><canvas id="lineupCanvas" width="1080" height="1350" role="img" aria-label="پوستر ترکیب فوتبالی"></canvas></div><div class="lineup-preview-foot"><span id="lineupPreviewHint">پیش‌نمایش لحظه‌ای · بازیکن را از طریق لمس کارت انتخاب کنید</span><span>دانلود باکیفیت ۲۱۶۰ × ۲۷۰۰ از دکمه بالای صفحه</span></div></section>
 </main>
 <footer class="site-footer">WoSoCenter · <a href="index.html">خانه</a> · <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer">@ByMehrdad</a></footer>
 <dialog class="picker-dialog lineup-modal" id="lineupTeamDialog"><div class="dialog-head"><div><h2>شماتیک کدام تیم را می‌سازید؟</h2><p>تمام تیم‌ها قابل انتخاب‌اند؛ بازیکنان هر تیم فقط از بانک ثبت‌شده بارگذاری می‌شوند.</p></div><button class="dialog-close" data-lclose="lineupTeamDialog" type="button" aria-label="بستن">×</button></div><div class="dialog-search"><input id="lineupTeamSearch" type="search" placeholder="جست‌وجوی نام تیم…"></div><div class="lineup-team-grid" id="lineupTeamGrid"></div></dialog>

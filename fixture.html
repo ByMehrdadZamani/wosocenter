@@ -10,6 +10,23 @@
   <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1" />
   <link rel="stylesheet" href="styles.css?v=6.9" />
   <script src="app.js?v=6.9" defer></script>
+<style>
+/* A meaningful first frame while the deferred editor code and poster images load. */
+.woso-firstpaint-host{position:relative;isolation:isolate}
+.woso-firstpaint-host>canvas{position:relative;z-index:1;display:block}
+.woso-firstpaint{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+ background:linear-gradient(160deg,#12345e 0%,#15416f 47%,#971539 48%,#9b163b 100%);
+ color:#f4d36b;text-align:center;font:700 clamp(13px,2.5vw,21px) Tahoma,sans-serif}
+.woso-firstpaint::before{content:"";position:absolute;top:4%;left:4%;right:4%;bottom:4%;border:3px solid #d7ad45;border-radius:12px;opacity:.65}
+.woso-firstpaint .woso-fp-mark{position:relative;letter-spacing:1px;font-size:clamp(22px,4vw,37px);font-weight:900}
+.woso-firstpaint .woso-fp-sub{position:relative;max-width:75%;line-height:1.9;color:#fff8e7}
+.woso-firstpaint .woso-fp-dots{position:relative;display:flex;gap:10px;direction:ltr}
+.woso-firstpaint .woso-fp-dots i{display:block;width:10px;height:10px;background:#f4d36b;border-radius:50%;opacity:.48;animation:woso-fp-pulse 1.25s infinite alternate}
+.woso-firstpaint .woso-fp-dots i:nth-child(2){animation-delay:.2s}.woso-firstpaint .woso-fp-dots i:nth-child(3){animation-delay:.4s}
+@keyframes woso-fp-pulse{to{opacity:1;transform:scale(1.22)}}
+@media(prefers-reduced-motion:reduce){.woso-firstpaint .woso-fp-dots i{animation:none}}
+</style>
 </head>
 <body>
   <header class="topbar woso-editor-topbar">
@@ -77,7 +94,7 @@
     <section class="preview-area" aria-label="پیش‌نمایش خروجی">
       <div class="preview-head"><div><h2>پیش‌نمایش زنده</h2><p>هر تغییری بلافاصله در تصویر اعمال می‌شود.</p></div><div class="preview-head-tools"><span class="resolution">۱۰۸۰ × ۱۳۵۰ px</span><button type="button" id="openPagesBtn" class="btn secondary page-manage-trigger" aria-haspopup="dialog" aria-controls="pagesDialog">▦ مدیریت صفحات <span id="pageTotal">۱ صفحه</span></button></div></div>
 
-      <div class="canvas-holder"><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش برنامه بازی‌های فوتبال"></canvas></div>
+      <div class="woso-firstpaint-host canvas-holder"><div class="woso-firstpaint" aria-hidden="true"><span class="woso-fp-mark">WoSoCenter</span><span class="woso-fp-sub">در حال آماده‌سازی پیش‌نمایش پوستر</span><span class="woso-fp-dots"><i></i><i></i><i></i></span></div><canvas id="poster" width="1080" height="1350" role="img" aria-label="پیش‌نمایش برنامه بازی‌های فوتبال"></canvas></div>
       <div class="preview-foot"><span>تصویر خروجی ۱۰۸۰ × ۱۳۵۰ پیکسل است.</span><button class="btn secondary" id="downloadBtnBottom" type="button">↓ دانلود تصویر</button></div>
     </section>
   </main>
@@ -95,15 +112,15 @@
   </dialog>
   <dialog class="picker-dialog font-dialog" id="fontDialog" tabindex="-1" aria-labelledby="fontDialogTitle">
     <div class="dialog-head"><div><h2 id="fontDialogTitle">انتخاب فونت فارسی</h2><p id="fontCount">پیش‌نمایش فونت‌ها با واژه بارسلونا</p></div><button type="button" class="dialog-close" data-close-dialog="fontDialog" aria-label="بستن">×</button></div>
-    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="fontSearch" type="search" autocomplete="off" inputmode="search" placeholder="جست‌وجوی نام فونت…" aria-label="جست‌وجوی فونت" /></div>
+    <div class="dialog-search"><span aria-hidden="true">⌕</span><input id="fontSearch" type="search" autocomplete="off" placeholder="جست‌وجوی فونت…" aria-label="جست‌وجوی فونت" /></div>
     <div class="font-results" id="fontResults"></div>
   </dialog>
   <dialog class="picker-dialog color-dialog" id="colorDialog" aria-labelledby="colorDialogTitle">
     <div class="dialog-head"><div><h2 id="colorDialogTitle">انتخاب رنگ</h2><p>رنگ دلخواه یا کد HEX را وارد کنید.</p></div><button type="button" class="dialog-close" data-close-dialog="colorDialog" aria-label="بستن">×</button></div>
-    <div class="color-preview-row"><div id="colorPreview" class="color-preview"></div><label>کد رنگ HEX<input type="text" id="colorHex" maxlength="7" dir="ltr" inputmode="text" spellcheck="false" value="#FFFFFF" /></label><input type="color" id="colorNative" title="انتخابگر رنگ گوشی" aria-label="انتخابگر رنگ دستگاه" /></div>
+    <div class="color-preview-row"><div id="colorPreview" class="color-preview"></div><label>کد رنگ HEX<input type="text" id="colorHex" maxlength="7" dir="ltr" inputmode="text" spellcheck="false" value="#FFFFFF" /></label><input type="color" id="colorNative" title="انتخابگر رنگ دستگاه" aria-label="انتخابگر رنگ دستگاه" /></div>
     <div class="picker-sv" id="pickerSV" aria-label="روشنایی و غلظت رنگ"><span class="picker-target" id="pickerTarget"></span></div>
     <label class="hue-label">طیف رنگ<input id="pickerHue" type="range" min="0" max="360" value="270" /></label>
-    <div id="colorSwatches" class="color-swatches" aria-label="رنگ‌های پیشنهادی"></div>
+    <div id="colorSwatches" class="color-swatches"></div>
     <button class="btn primary full" id="colorDone" type="button">تأیید رنگ</button>
   </dialog>
 </body>
