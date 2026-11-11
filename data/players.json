@@ -915,15 +915,15 @@
     "sourceHeight": 2876,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-32.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-32-v2.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-32-v4.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
-      "headWidth": 105.1,
-      "headHeight": 117.4,
+      "headWidth": 119.8,
+      "headHeight": 133.8,
       "crownY": 64,
-      "eyeLineY": 121.7,
-      "sourceToCardFactorRelativeToV1": 1.03,
-      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
+      "eyeLineY": 129.8,
+      "sourceToCardFactorRelativeToV1": 1.174,
+      "method": "Card-only optical correction: uniform 1.14x enlargement anchored at (150,64); matched against Vicky Lopez, shoulder remains inside card clipping; original and picker unaffected. Jersey badges remain in original source and fall behind the card nameband."
     },
     "pickerPortrait": "assets/players/picker/barca-32.webp"
   },
