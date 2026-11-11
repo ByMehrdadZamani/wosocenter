@@ -789,13 +789,15 @@
     "sourceHeight": 2877,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-27.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-27.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-27-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 115.3,
+      "headHeight": 131.1,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 123.9,
+      "sourceToCardFactorRelativeToV1": 1.13,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-27.webp"
   },
@@ -812,13 +814,15 @@
     "sourceHeight": 2877,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-28.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-28.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-28-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 110.2,
+      "headHeight": 132.8,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 131.7,
+      "sourceToCardFactorRelativeToV1": 1.08,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-28.webp"
   },
@@ -835,13 +839,15 @@
     "sourceHeight": 2880,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-29.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-29.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-29-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
       "headWidth": 102.0,
-      "headHeight": 102.0,
+      "headHeight": 132.0,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 134.0,
+      "sourceToCardFactorRelativeToV1": 1.0,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-29.webp",
     "portraitWideHair": true
@@ -859,13 +865,15 @@
     "sourceHeight": 2876,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-30.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-30.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-30-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 116.3,
+      "headHeight": 126.5,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 121.0,
+      "sourceToCardFactorRelativeToV1": 1.14,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-30.webp"
   },
@@ -882,13 +890,15 @@
     "sourceHeight": 2878,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-31.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-31.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-31-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 117.3,
+      "headHeight": 136.8,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 127.2,
+      "sourceToCardFactorRelativeToV1": 1.15,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-31.webp"
   },
@@ -905,13 +915,15 @@
     "sourceHeight": 2876,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-32.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-32.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-32-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 105.1,
+      "headHeight": 117.4,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 121.7,
+      "sourceToCardFactorRelativeToV1": 1.03,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-32.webp",
     "portraitWideHair": true
@@ -929,13 +941,15 @@
     "sourceHeight": 2878,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-33.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-33.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-33-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 106.1,
+      "headHeight": 125.8,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 126.8,
+      "sourceToCardFactorRelativeToV1": 1.04,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-33.webp"
   },
@@ -952,13 +966,15 @@
     "sourceHeight": 2876,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-34.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-34.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-34-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 98.9,
+      "headHeight": 136.8,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 139.9,
+      "sourceToCardFactorRelativeToV1": 0.97,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-34.webp",
     "portraitWideHair": true
@@ -976,13 +992,15 @@
     "sourceHeight": 2878,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-35.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-35.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-35-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 114.2,
+      "headHeight": 132.2,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 129.7,
+      "sourceToCardFactorRelativeToV1": 1.12,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-35.webp"
   },
@@ -999,13 +1017,15 @@
     "sourceHeight": 2875,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-36.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-36.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-36-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 104.0,
+      "headHeight": 128.5,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 130.3,
+      "sourceToCardFactorRelativeToV1": 1.02,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-36.webp"
   },
@@ -1022,13 +1042,15 @@
     "sourceHeight": 1080,
     "sourceFormat": "WEBP",
     "thumb": "assets/players/thumbs/barca-37.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-37.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-37-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 117.3,
+      "headHeight": 131.1,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 122.1,
+      "sourceToCardFactorRelativeToV1": 1.15,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-37.webp"
   },
@@ -1045,13 +1067,15 @@
     "sourceHeight": 1080,
     "sourceFormat": "WEBP",
     "thumb": "assets/players/thumbs/barca-38.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-38.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-38-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
       "headWidth": 102.0,
-      "headHeight": 102.0,
+      "headHeight": 119.0,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 120.6,
+      "sourceToCardFactorRelativeToV1": 1.0,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-38.webp"
   },
@@ -1068,13 +1092,15 @@
     "sourceHeight": 1080,
     "sourceFormat": "WEBP",
     "thumb": "assets/players/thumbs/barca-39.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-39.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-39-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 119.3,
+      "headHeight": 128.7,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 122.3,
+      "sourceToCardFactorRelativeToV1": 1.17,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-39.webp"
   },
@@ -1091,13 +1117,15 @@
     "sourceHeight": 2880,
     "sourceFormat": "PNG",
     "thumb": "assets/players/thumbs/barca-40.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-40.png",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-40-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3",
-      "headWidth": 102.0,
-      "headHeight": 102.0,
+      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
+      "headWidth": 103.0,
+      "headHeight": 134.3,
       "crownY": 64,
-      "method": "Visual calibration with face box as initial guide; constant crown alignment; individual source crop and uniform scale"
+      "eyeLineY": 135.1,
+      "sourceToCardFactorRelativeToV1": 1.01,
+      "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-40.webp"
   },
