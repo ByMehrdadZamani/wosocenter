@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100c19">
+  <meta name="description" content="جدول‌ساز ووسو سنتر؛ دریافت جدول آنلاین لیگ اف اسپانیا و دانلود PNG">
+  <title>جدول‌ساز ووسو | WoSoCenter</title>
+  <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1">
+  <link rel="stylesheet" href="standings.css?v=2">
+  <script src="standings.js?v=2" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a href="index.html" class="brand" aria-label="بازگشت به صفحه اصلی">WOSO<span>CENTER</span></a>
+      <a href="index.html" class="back">← صفحه اصلی</a>
+    </header>
+    <main>
+      <div class="intro">
+        <div class="tag">STANDINGS STUDIO</div>
+        <h1>جدول‌ساز <em>ووسو</em></h1>
+        <p>جدول به‌روز لیگ فوتبال زنان اسپانیا را دریافت و به یک پوستر PNG تبدیل کن.</p>
+      </div>
+      <div class="workspace">
+        <section class="controls" aria-labelledby="control-title">
+          <h2 id="control-title">تنظیمات جدول</h2>
+          <label for="league">لیگ</label>
+          <select id="league" disabled><option value="ligaf">لیگ اف اسپانیا (Liga F)</option></select>
+          <p class="hint">در نسخه اول تنها Liga F پشتیبانی می‌شود.</p>
+          <label for="season">فصل</label>
+          <select id="season">
+            <option value="2026">۲۰۲۶/۲۷</option>
+            <option value="2025">۲۰۲۵/۲۶</option>
+            <option value="2024">۲۰۲۴/۲۵</option>
+          </select>
+          <label for="posterTitle">عنوان روی پوستر</label>
+          <input id="posterTitle" type="text" maxlength="55" value="جدول لیگ فوتبال زنان اسپانیا" autocomplete="off">
+          <label for="posterTheme">رنگ‌بندی پوستر</label>
+          <select id="posterTheme">
+            <option value="purple">بنفش و طلایی ووسو</option>
+            <option value="navy">سرمه‌ای و فیروزه‌ای</option>
+            <option value="rose">ارغوانی و صورتی</option>
+          </select>
+          <button type="button" id="fetchBtn" class="primary">دریافت اطلاعات آنلاین</button>
+          <button type="button" id="downloadBtn" class="secondary" disabled>دانلود جدول PNG</button>
+          <p id="status" class="status" role="status" aria-live="polite">برای شروع «دریافت اطلاعات آنلاین» را بزن.</p>
+          <div class="tips">
+            <strong>جزئیات خروجی</strong>
+            <p>پوستر ۱۰۸۰ × ۱۳۵۰ پیکسل، شامل تمام تیم‌های دریافت‌شده، آمار کامل و اعتبار منبع داده.</p>
+          </div>
+        </section>
+        <section class="preview-wrap" aria-labelledby="preview-title">
+          <div class="preview-heading"><h2 id="preview-title">پیش‌نمایش جدول</h2><span>PNG · 1080×1350</span></div>
+          <div class="canvas-shell">
+            <canvas id="poster" width="1080" height="1350" aria-label="پیش‌نمایش گرافیکی جدول لیگ"></canvas>
+          </div>
+          <p class="footnote">خروجی جدول با نام و مخفف تیم‌ها ساخته می‌شود. API Ninjas لوگوها را برنمی‌گرداند؛ امکان افزودن لوگوها در نسخه بعدی وجود دارد.</p>
+        </section>
+      </div>
+    </main>
+    <footer>© WoSoCenter · ساخته‌شده برای گرافیک فوتبال</footer>
+  </div>
+</body>
+</html>
