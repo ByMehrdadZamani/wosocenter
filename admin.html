@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b0820">
+<title>مدیریت آمار | WoSoCenter</title>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="admin.css?v=1">
+<script defer src="woso-analytics.js?v=1"></script>
+<script defer src="admin.js?v=1"></script>
+</head>
+<body>
+<header class="app-head">
+ <div class="brand"><div class="brand-mark">W</div><div><strong>WoSoCenter</strong><span>داشبورد خصوصی مدیریت آمار</span></div></div>
+ <a href="index.html" class="home-link">↗ بازگشت به سایت</a>
+</header>
+<main class="shell">
+ <section class="auth-panel" id="loginPanel">
+  <div class="auth-symbol">✦</div>
+  <h1>ورود مدیر سایت</h1>
+  <p>آمار بازدید و دانلودهای WoSoCenter فقط برای مدیر قابل مشاهده است.</p>
+  <form id="loginForm">
+   <label for="adminPassword">رمز ورود مدیریت</label>
+   <input id="adminPassword" type="password" minlength="12" maxlength="256" autocomplete="current-password" required placeholder="رمز خصوصی Cloudflare" spellcheck="false">
+   <button type="submit" id="loginButton" class="btn main">ورود به پنل <span aria-hidden="true">←</span></button>
+  </form>
+  <p id="loginStatus" role="alert" class="status"></p>
+  <small class="privacy-note">رمز در مرورگر ذخیره نمی‌شود؛ فقط یک نشست موقت و قابل خروج ایجاد می‌شود.</small>
+ </section>
+ <section id="dashboard" hidden>
+  <div class="heading-row">
+   <div><h1>آمار سایت</h1><p>بازدیدهای واقعی صفحات و درخواست‌های شروع دانلود PNG</p></div>
+   <div class="heading-actions"><label for="rangeSelect">بازه آماری</label><select id="rangeSelect" aria-label="بازه زمانی"><option value="7">۷ روز اخیر</option><option value="30" selected>۳۰ روز اخیر</option><option value="90">۹۰ روز اخیر</option></select><button type="button" id="refreshButton" class="btn soft">↻ به‌روزرسانی</button><button type="button" id="logoutButton" class="btn outline">خروج</button></div>
+  </div>
+  <p id="dashboardStatus" class="status" role="status" aria-live="polite"></p>
+  <div class="metrics">
+   <article class="metric"><span class="metric-label">بازدید امروز</span><strong id="todayViews">—</strong><small>تعداد باز شدن صفحات</small></article>
+   <article class="metric"><span class="metric-label">دانلود امروز</span><strong id="todayDownloads">—</strong><small>شروع دانلودهای PNG</small></article>
+   <article class="metric"><span class="metric-label">بازدید این بازه</span><strong id="rangeViews">—</strong><small id="periodCaption">۳۰ روز گذشته</small></article>
+   <article class="metric"><span class="metric-label">دانلود این بازه</span><strong id="rangeDownloads">—</strong><small>همه ابزارها و صفحات</small></article>
+  </div>
+  <div class="sub-metrics"><span>نشست‌های تقریبی امروز: <b id="todaySessions">—</b></span><span>کل نشست‌های روزانه در بازه: <b id="periodSessions">—</b></span><span>دانلود با کیفیت بالا: <b id="highDownloads">—</b></span><span>دانلود با حجم بهینه: <b id="compactDownloads">—</b></span></div>
+  <section class="panel" aria-labelledby="trendsTitle"><div class="panel-head"><div><h2 id="trendsTitle">روند استفاده روزانه</h2><p>هر ستون میزان استفاده در یک روز را نشان می‌دهد.</p></div><div class="legend"><span><i class="view-dot"></i> بازدید</span><span><i class="download-dot"></i> دانلود</span></div></div><div class="chart-scroll"><div class="chart" id="trendChart"></div></div><p id="emptyChart" class="empty" hidden>هنوز آماری ثبت نشده. پس از نصب اسکریپت آمارگیری در صفحات، اطلاعات اینجا نمایش داده می‌شوند.</p></section>
+  <section class="panel" aria-labelledby="toolsTitle"><div class="panel-head"><div><h2 id="toolsTitle">عملکرد ابزارها</h2><p>مقایسه محبوبیت ابزارهای ووسو سنتر</p></div></div><div class="table-wrap"><table><thead><tr><th scope="col">صفحه / ابزار</th><th scope="col">بازدید</th><th scope="col">دانلود PNG</th><th scope="col">کیفیت بالا</th><th scope="col">حجم بهینه</th></tr></thead><tbody id="toolRows"></tbody></table></div></section>
+  <footer class="dashboard-foot"><span id="updatedTime">—</span><span id="zoneLabel">—</span><span>آمار تجمیعی و بدون ذخیره محتوای پوستر یا IP کاربران</span></footer>
+ </section>
+</main>
+</body>
+</html>

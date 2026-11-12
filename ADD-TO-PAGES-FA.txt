@@ -1,0 +1,18 @@
+برای فعال کردن آمارگیری در کل WoSoCenter، بعد از آپلود ۴ فایل این بسته در ریشه GitHub:
+
+در انتهای بخش <head> این ۵ فایل، درست قبل از </head>، خط زیر را اضافه کن:
+
+<script defer src="woso-analytics.js?v=1"></script>
+
+فایل‌ها:
+1. index.html
+2. fixture.html
+3. lineup.html
+4. interview.html
+5. standings.html
+
+بعد Commit changes بزن.
+آمار گذشته قبل از نصب قابل بازیابی نیست.
+
+نکته: admin.html را لازم نیست در صفحه اصلی لینک بدهی؛ آدرسش را فقط خودت باز کن.
+برای راه‌اندازی آمار به Cloudflare Worker و D1 هم نیاز داری؛ فایل Cloudflare و راهنما در ZIP کامل موجود است.
