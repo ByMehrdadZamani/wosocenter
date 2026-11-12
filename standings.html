@@ -5,8 +5,8 @@
 <meta name="theme-color" content="#100b19"><meta name="description" content="جدول‌ساز ووسو؛ جدول آنلاین لیگ اف و پوستر گرافیکی دلخواه با خروجی PNG">
 <title>جدول‌ساز ووسو | WoSoCenter</title>
 <link rel="preload" href="assets/fonts/files/Mikhak-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=6.9"><link rel="stylesheet" href="standings.css?v=4.0.0">
-<script defer src="standings.js?v=4.0.0"></script>
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=6.9"><link rel="stylesheet" href="standings.css?v=5.0.0">
+<script defer src="standings.js?v=5.0.0"></script>
 </head>
 <body class="standings-page">
 <header class="topbar woso-editor-topbar">
@@ -26,16 +26,16 @@
    <button class="tab" data-tab="history" type="button">تغییرات</button>
   </nav>
   <section id="tab-data" class="tab-content" aria-label="دریافت اطلاعات">
-   <div class="settings-group"><h2>دریافت جدول آنلاین</h2>
+   <div class="settings-group s-fetch-card"><h2>✦ دریافت جدول آنلاین</h2>
     <label>لیگ انتخابی <button type="button" class="asset-pick large" id="leaguePick" aria-haspopup="dialog"><span class="asset-sample"><img id="leaguePickImage" alt="" src="assets/leagues/liga-af-spain.webp"></span><span id="leaguePickName" class="asset-pick-name">لیگا اف · اسپانیا</span><span class="pick-arrow">⌄</span></button></label>
     <p class="hint compact">لیگا اف فعال است؛ سایر لیگ‌ها بعد از اضافه شدن API قابل انتخاب می‌شوند.</p>
-    <button id="fetchBtn" type="button" class="btn primary full">↻ دریافت اطلاعات آنلاین</button>
+    <button id="fetchBtn" type="button" class="btn primary full s-super-fetch"><span class="s-sparkle" aria-hidden="true">✦</span><span>ساخت خودکار جدول</span><span class="s-sparkle" aria-hidden="true">✧</span></button>
     <div id="fetchStatus" role="status" aria-live="polite" class="standings-message">برای دریافت جدول فصل جاری، دکمه بالا را بزنید.</div>
-    <p class="hint compact">منبع: API Ninjas از طریق Cloudflare Worker. کلید API فقط در Worker قرار دارد.</p>
+    
    </div>
   </section>
   <section id="tab-photo" class="tab-content hidden" aria-label="تنظیمات تصویر پس زمینه">
-   <div class="settings-group"><h2>تصویر پس‌زمینه جدول</h2><div class="standings-photo-thumb" id="photoThumb"><span>تصویر دلخواه انتخاب نشده است</span></div>
+   <div class="settings-group"><h2>تصویر پس‌زمینه جدول</h2><div class="standings-photo-thumb" id="photoThumb"><span>تصویر پیش‌فرض جدول</span></div>
     <div class="two-col"><button type="button" class="btn secondary" id="uploadPhoto">↑ آپلود تصویر</button><button type="button" class="btn primary" id="adjustPhoto">⌗ تنظیم عکس بک‌گراند</button></div>
     <input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
     <p class="hint compact">بعد از آپلود، کادر تنظیم تصویر باز می‌شود. جابه‌جایی با کشیدن عکس، زوم و تغییر تصویر امکان‌پذیر است.</p>
@@ -45,14 +45,14 @@
     <label class="range-label">شدت پوشش رنگ <output id="fadeOpacityValue"></output><input id="fadeOpacity" data-range="fadeOpacity" type="range" min="0" max="100"></label>
     <label class="range-label">درصد محدوده تصویر <output id="fadeCoverageValue"></output><input id="fadeCoverage" data-range="fadeCoverage" type="range" min="15" max="100"></label>
     <label class="range-label">محو شدن تدریجی از سمت چپ <output id="fadeSoftnessValue"></output><input id="fadeSoftness" data-range="fadeSoftness" type="range" min="0" max="100"></label>
-    <p class="hint compact">«۸۵٪ محدوده تصویر» یعنی ۱۵٪ سمت چپ رنگ خالص باقی می‌ماند.</p>
+    <p class="hint compact">«۸۰٪ محدوده تصویر» یعنی ۲۰٪ سمت چپ رنگ خالص باقی می‌ماند.</p>
    </div>
   </section>
   <section id="tab-header" class="tab-content hidden" aria-label="تنظیمات هدر">
    <div class="settings-group"><h2>نام لیگ و هفته جدول</h2>
     <p class="hint compact">عنوان به‌طور خودکار از لیگ انتخاب‌شده و شماره هفته ساخته می‌شود. برای تغییر دستی، متن اختصاصی وارد کن.</p>
     <label>عنوان اختصاصی (اختیاری)<input id="titleText" data-field="titleText" maxlength="90" type="text" value="" placeholder="عنوان خودکار لیگ و هفته"></label>
-    <div class="two-col"><label>شماره هفته (اختیاری)<input id="weekOverride" data-field="weekOverride" type="number" min="1" max="40" placeholder="محاسبه خودکار"></label><label>عنوان خودکار<button type="button" id="resetAutoTitle" class="btn secondary full">↺ عنوان خودکار</button></label></div>
+    <div class="two-col"><label>شماره هفته (در صورت نیاز به اصلاح)<input id="weekOverride" data-field="weekOverride" type="number" min="1" max="40" placeholder="محاسبه خودکار"></label><label>عنوان خودکار<button type="button" id="resetAutoTitle" class="btn secondary full">↺ عنوان خودکار</button></label></div>
     <p id="weekNote" class="hint compact">خروجی Worker فعلاً شماره هفته مستقل ندارد؛ عدد از بیشترین بازی انجام‌شده برآورد می‌شود و قابل اصلاح است.</p>
     <div class="two-col"><label>فونت<button type="button" class="font-pick" data-font="titleFont"></button></label><label>رنگ<button type="button" class="s-color-button" data-color="titleColor"></button></label></div>
     <label class="range-label">اندازه متن <output id="titleSizeValue"></output><input type="range" id="titleSize" data-range="titleSize" min="24" max="66"></label>
@@ -61,8 +61,8 @@
    </div>
    <div class="settings-group"><h2>نام کانال و لوگوی هدر</h2>
     <label>لوگوی کانال <button type="button" id="headerLogoPick" class="asset-pick large"><span class="asset-sample"><img id="headerLogoPreview" alt="" src="assets/interview/logo-woso.jpg"></span><span id="headerLogoName" class="asset-pick-name">لوگوی ووسو سنتر</span><span class="pick-arrow">⌄</span></button></label>
-    <label>متن کانال<input id="brandText" data-field="brandText" maxlength="60" type="text" value="WoSoCenter" dir="auto"></label>
-    <div class="two-col"><label>فونت<button type="button" class="font-pick" data-font="brandFont"></button></label><label>رنگ<button type="button" class="s-color-button" data-color="brandColor"></button></label></div>
+    <p class="hint compact">نوشته اصلی WoSoCenter از فایل تصویری اختصاصی استفاده می‌کند و همیشه ثابت است؛ فقط اندازه، رنگ و موقعیت آن قابل تغییر است.</p>
+    <label>رنگ نوشته WoSoCenter<button type="button" class="s-color-button" data-color="brandColor"></button></label>
     <label class="range-label">اندازه متن <output id="brandSizeValue"></output><input type="range" id="brandSize" data-range="brandSize" min="20" max="90"></label>
     <label class="range-label">جابه‌جایی افقی <output id="brandXValue"></output><input type="range" id="brandX" data-range="brandX" min="-150" max="150"></label>
     <label class="range-label">جابه‌جایی عمودی <output id="brandYValue"></output><input type="range" id="brandY" data-range="brandY" min="-55" max="55"></label>
@@ -78,7 +78,7 @@
     <div class="two-col"><label>فونت جدول<button type="button" class="font-pick" data-font="tableFont"></button></label><label>رنگ متن جدول<button type="button" class="s-color-button" data-color="tableText"></button></label></div>
     <label class="range-label">اندازه نوشته تیم‌ها <output id="teamSizeValue"></output><input id="teamSize" data-range="teamSize" type="range" min="17" max="29"></label>
     <label class="range-label">اندازه اعداد <output id="numberSizeValue"></output><input id="numberSize" data-range="numberSize" type="range" min="18" max="31"></label>
-    <div class="two-col"><label>رنگ ستون امتیاز عمومی<button type="button" class="s-color-button" data-color="pointsColor"></button></label><label>رنگ باکس صدرنشین<button type="button" class="s-color-button" data-color="firstBox"></button></label></div>
+    <div class="two-col"><label>رنگ طرح ستاره‌ای امتیازهای برتر<button type="button" class="s-color-button" data-color="starsColor"></button></label><label>رنگ ستون امتیاز عمومی<button type="button" class="s-color-button" data-color="pointsColor"></button></label><label>رنگ باکس صدرنشین<button type="button" class="s-color-button" data-color="firstBox"></button></label></div>
     <div class="two-col"><label>رنگ باکس رتبه ۲ و ۳<button type="button" class="s-color-button" data-color="championsBox"></button></label><label>رنگ باکس سقوط<button type="button" class="s-color-button" data-color="relegationBox"></button></label></div>
     <div class="two-col"><label>رنگ زمینه سایر امتیازها<button type="button" class="s-color-button" data-color="regularBox"></button></label><label>رنگ متن عنوان ستون‌ها<button type="button" class="s-color-button" data-color="columnColor"></button></label></div>
     <label class="range-label">شفافیت ردیف‌ها <output id="rowOpacityValue"></output><input type="range" id="rowOpacity" data-range="rowOpacity" min="0" max="60"></label>
@@ -87,7 +87,8 @@
   </section>
   <section id="tab-pattern" class="tab-content hidden" aria-label="پترن و پالت">
    <div class="settings-group"><h2>پترن پس‌زمینه</h2><button id="openPattern" type="button" class="s-pattern-trigger"><span id="patternThumb" class="s-pattern-thumb"></span><span><strong>انتخاب پس‌زمینه</strong><small id="patternName">رنگ زمینه</small></span><b>تغییر ›</b></button><p class="hint compact">تصاویر استفاده‌شده فقط در مرورگر خودت ذخیره می‌شوند؛ پترن‌های آماده از بانک سایت دریافت می‌شوند.</p></div>
-   <div class="settings-group"><h2>پالت‌های رنگی</h2><div id="paletteGrid" class="s-palettes"></div></div>
+   <div class="settings-group" id="patternSuggestedBox" hidden><h2>پالت پیشنهادی این طرح</h2><p class="hint compact">این پالت برای پترن انتخابی آماده شده است و فقط با انتخاب شما اعمال می‌شود.</p><div id="patternSuggestedPalette" class="s-palettes"></div></div>
+   <div class="settings-group"><h2>پالت‌های رنگی</h2><p class="hint compact">۱۰ پالت برتر در دسترس‌اند؛ برای مشاهده تمام رنگ‌بندی‌های بانک ووسو، دکمه پایین را بزن.</p><div id="paletteGrid" class="s-palettes"></div><button type="button" class="btn secondary full" id="allPalettes">نمایش همه پالت‌ها</button></div>
    <div class="settings-group"><h2>رنگ‌های زمینه و شکل‌ها</h2><div class="two-col"><label>رنگ اصلی زمینه<button type="button" class="s-color-button" data-color="bgColor"></button></label><label>رنگ خطوط تزئینی<button type="button" class="s-color-button" data-color="accentColor"></button></label></div>
     <label class="range-label">شفافیت پترن آماده <output id="patternOpacityValue"></output><input id="patternOpacity" data-range="patternOpacity" type="range" min="0" max="100"></label>
    </div>
@@ -106,14 +107,16 @@
   <div class="s-preview-footer"><span id="dataBadge">جدول پس از دریافت آنلاین نمایش داده می‌شود.</span><span>PNG باکیفیت ۲۱۶۰ × ۲۷۰۰</span></div>
  </section>
 </main>
-<footer class="site-footer">WoSoCenter · <a href="index.html">بازگشت به صفحه اصلی</a></footer>
+<footer class="site-footer">WoSoCenter · <a href="index.html">خانه</a> · <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" dir="ltr">@ByMehrdad</a></footer>
 
-<dialog id="leagueDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>انتخاب لیگ</h2><p>لیگ‌های ثبت‌شده در بانک سایت؛ فقط لیگا اف فعال است.</p></div><button class="dialog-close" data-close="leagueDialog" aria-label="بستن">×</button></div><div class="s-library-grid" id="leagueGrid"></div></dialog>
+<dialog id="leagueDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>انتخاب لیگ</h2><p>لیگ‌های ثبت‌شده در بانک سایت؛ فقط لیگا اف فعال است.</p></div><button class="dialog-close" data-close="leagueDialog" aria-label="بستن">×</button></div><div class="s-league-list" id="leagueGrid"></div></dialog>
+<dialog id="paletteDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>انتخاب پالت رنگی</h2><p>پالت‌های آماده از بانک رنگ WoSoCenter</p></div><button type="button" class="dialog-close" data-close="paletteDialog" aria-label="بستن">×</button></div><label class="s-palette-search-label">جست‌وجوی پالت<input id="paletteSearch" type="search" placeholder="نام رنگ‌بندی را بنویسید…" autocomplete="off"></label><div id="allPaletteGrid" class="s-palettes s-all-palettes"></div></dialog>
 <dialog id="headerLogoDialog" class="picker-dialog s-dialog"><div class="dialog-head"><div><h2>انتخاب لوگوی کانال</h2><p>لوگوها از بخش مصاحبه‌ساز WoSoCenter خوانده می‌شوند.</p></div><button class="dialog-close" data-close="headerLogoDialog" aria-label="بستن">×</button></div><div class="s-logo-options" id="headerLogoGrid"><button type="button" class="s-logo-option" data-header-logo="woso"><img src="assets/interview/logo-woso.jpg" alt="ووسو سنتر"><strong>ووسو سنتر</strong></button><button type="button" class="s-logo-option" data-header-logo="barca"><img src="assets/interview/logo-barca.jpg" alt="بارسلونا"><strong>بارسلونا</strong></button><button type="button" class="s-logo-option" data-header-logo="none"><span class="s-logo-none">بدون لوگو</span><strong>بدون لوگو</strong></button></div></dialog>
 <dialog id="colorDialog" class="picker-dialog color-dialog s-dialog"><div class="dialog-head"><div><h2 id="colorTitle">انتخاب رنگ</h2><p>انتخابگر رنگ اختصاصی WoSoCenter</p></div><button type="button" class="dialog-close" data-close="colorDialog">×</button></div><div class="color-preview-row"><div id="colorPreview" class="color-preview"></div><label>کد رنگ HEX<input type="text" id="hexColor" maxlength="7" dir="ltr" spellcheck="false" placeholder="#FFFFFF"></label></div><div class="picker-sv" id="colorSV"><span class="picker-target" id="colorTarget"></span></div><label class="hue-label">طیف رنگ<input id="colorHue" type="range" min="0" max="360" value="270"></label><div id="colorSwatches" class="color-swatches"></div><button id="colorApply" type="button" class="btn primary full">✓ تأیید رنگ</button></dialog>
 <dialog id="fontDialog" class="picker-dialog s-dialog"><div class="dialog-head"><div><h2>انتخاب فونت</h2><p>فونت‌های نصب‌شده در بانک فونت WoSoCenter</p></div><button class="dialog-close" data-close="fontDialog" aria-label="بستن">×</button></div><div id="fontGrid" class="s-font-grid"></div></dialog>
 <dialog id="patternDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>انتخاب پس‌زمینه</h2><p>تصاویر دلخواه و طرح‌های گرافیکی آماده</p></div><button class="dialog-close" data-close="patternDialog" aria-label="بستن">×</button></div><div class="s-modal-tabs"><button class="active" type="button" data-ptab="my">تصویر دلخواه</button><button type="button" data-ptab="ready">طرح گرافیکی</button></div><div id="patternMy" class="s-library-grid"></div><div id="patternReady" class="s-library-grid" hidden></div><button type="button" id="patternUpload" class="btn secondary full">↑ آپلود تصویر جدید</button></dialog>
 <dialog id="cropDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>تنظیم تصویر پس‌زمینه</h2><p>مانند مصاحبه‌ساز: کشیدن آزاد با موس/لمس، اسکرول موس برای زوم، دو انگشت برای جابه‌جایی و زوم.</p></div><button class="dialog-close" data-close="cropDialog" aria-label="بستن">×</button></div><div class="s-crop-frame"><canvas id="cropCanvas" width="432" height="540" aria-label="پیش نمایش برش تصویر"></canvas><div class="s-crop-grid" aria-hidden="true"></div></div><div class="s-crop-controls"><label>بزرگ‌نمایی <output id="cropZoomVal">۱۰۰٪</output><input id="cropZoom" type="range" min="60" max="500" value="100"></label><div class="two-col"><label>جابجایی افقی <input type="range" id="cropX" min="-180" max="180" value="0"></label><label>جابجایی عمودی <input type="range" id="cropY" min="-180" max="180" value="0"></label></div></div><div class="s-dialog-actions"><button id="cropCancel" type="button" class="btn secondary">انصراف</button><button id="cropSave" type="button" class="btn primary">✓ ثبت تصویر</button></div></dialog>
+<dialog id="downloadDialog" class="picker-dialog s-dialog s-download-dialog"><div class="dialog-head"><div><h2>کیفیت خروجی پوستر</h2><p>همان تصویر با دو وضوح مختلف؛ حجم واقعی PNG پس از آماده‌سازی نمایش داده می‌شود.</p></div><button type="button" class="dialog-close" data-close="downloadDialog" aria-label="بستن">×</button></div><div class="s-download-options"><button class="s-download-choice recommended" type="button" data-download-scale="2" disabled><span class="s-download-badge">✦ پیشنهادی</span><strong>دانلود با کیفیت بالا</strong><span dir="ltr">2160 × 2700 px</span><small id="downloadSizeHigh">در حال محاسبه حجم…</small></button><button class="s-download-choice" type="button" data-download-scale="1" disabled><span class="s-download-badge compact">حجم کمتر</span><strong>دانلود با حجم بهینه</strong><span dir="ltr">1080 × 1350 px</span><small id="downloadSizeLow">در حال محاسبه حجم…</small></button></div><p id="downloadHint" class="hint compact" aria-live="polite">هر دو خروجی فرمت PNG دارند و بدون افت کیفیت فشرده‌سازی JPG ساخته می‌شوند.</p></dialog>
 <dialog id="pagesDialog" class="picker-dialog s-dialog s-wide-dialog"><div class="dialog-head"><div><h2>مدیریت صفحات</h2><p>هر صفحه تنظیمات و پوستر مستقل دارد.</p></div><button class="dialog-close" data-close="pagesDialog" aria-label="بستن">×</button></div><div class="s-dialog-actions"><button class="btn primary" type="button" id="addPage">＋ صفحه جدید</button><button class="btn secondary" type="button" id="duplicatePage">⧉ تکثیر صفحه</button><button class="btn secondary" type="button" id="downloadAllPages">↓ دانلود تک‌تک صفحات</button></div><div id="pagesGrid" class="s-pages-grid"></div></dialog>
 </body>
 </html>
