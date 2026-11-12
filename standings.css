@@ -95,3 +95,8 @@
 .standings-photo-thumb img{object-fit:cover;object-position:50% 36%}
 @media(max-width:540px){.s-download-choice{min-height:135px}.s-download-choice strong{font-size:14px}.s-league-row{padding:9px;gap:9px}.s-league-row img{width:44px;height:44px}.s-all-palettes{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.s-fetch-card::before,.standings-page .s-super-fetch:before,.standings-page .s-super-fetch .s-sparkle{animation:none}.s-download-choice{transition:none}}
+
+/* v5.1: fixed champion gold and in-editor explanation. */
+.s-gold-locked{display:flex;align-items:center;min-height:42px;padding:8px 10px;margin-top:5px;border:1px solid #b38b3290;border-radius:10px;background:linear-gradient(115deg,#b38b322d,var(--input));color:var(--text);font-size:11px;font-weight:700}
+.standings-editor .s-gold-note{padding:9px 11px;margin:10px 0;background:linear-gradient(125deg,#b38b3220,var(--panel2));border-color:#b38b3260}
+.standings-editor .s-gold-note strong{font-size:11px;color:#cba560}

@@ -5,8 +5,8 @@
 <meta name="theme-color" content="#100b19"><meta name="description" content="جدول‌ساز ووسو؛ جدول آنلاین لیگ اف و پوستر گرافیکی دلخواه با خروجی PNG">
 <title>جدول‌ساز ووسو | WoSoCenter</title>
 <link rel="preload" href="assets/fonts/files/Mikhak-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=6.9"><link rel="stylesheet" href="standings.css?v=5.0.0">
-<script defer src="standings.js?v=5.0.0"></script>
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=6.9"><link rel="stylesheet" href="standings.css?v=5.1.0">
+<script defer src="standings.js?v=5.1.0"></script>
 </head>
 <body class="standings-page">
 <header class="topbar woso-editor-topbar">
@@ -30,7 +30,7 @@
     <label>لیگ انتخابی <button type="button" class="asset-pick large" id="leaguePick" aria-haspopup="dialog"><span class="asset-sample"><img id="leaguePickImage" alt="" src="assets/leagues/liga-af-spain.webp"></span><span id="leaguePickName" class="asset-pick-name">لیگا اف · اسپانیا</span><span class="pick-arrow">⌄</span></button></label>
     <p class="hint compact">لیگا اف فعال است؛ سایر لیگ‌ها بعد از اضافه شدن API قابل انتخاب می‌شوند.</p>
     <button id="fetchBtn" type="button" class="btn primary full s-super-fetch"><span class="s-sparkle" aria-hidden="true">✦</span><span>ساخت خودکار جدول</span><span class="s-sparkle" aria-hidden="true">✧</span></button>
-    <div id="fetchStatus" role="status" aria-live="polite" class="standings-message">برای دریافت جدول فصل جاری، دکمه بالا را بزنید.</div>
+    <div id="fetchStatus" role="status" aria-live="polite" class="standings-message">پیش‌نمایش نمونه نمایش داده می‌شود؛ برای اطلاعات تازه دکمه بالا را بزنید.</div>
     
    </div>
   </section>
@@ -78,7 +78,7 @@
     <div class="two-col"><label>فونت جدول<button type="button" class="font-pick" data-font="tableFont"></button></label><label>رنگ متن جدول<button type="button" class="s-color-button" data-color="tableText"></button></label></div>
     <label class="range-label">اندازه نوشته تیم‌ها <output id="teamSizeValue"></output><input id="teamSize" data-range="teamSize" type="range" min="17" max="29"></label>
     <label class="range-label">اندازه اعداد <output id="numberSizeValue"></output><input id="numberSize" data-range="numberSize" type="range" min="18" max="31"></label>
-    <div class="two-col"><label>رنگ طرح ستاره‌ای امتیازهای برتر<button type="button" class="s-color-button" data-color="starsColor"></button></label><label>رنگ ستون امتیاز عمومی<button type="button" class="s-color-button" data-color="pointsColor"></button></label><label>رنگ باکس صدرنشین<button type="button" class="s-color-button" data-color="firstBox"></button></label></div>
+    <div class="settings-group s-gold-note"><strong>امتیاز تیم اول همیشه طلایی است</strong><p class="hint compact">با انتخاب هر پالت یا پترن، سایه طلایی متناسب با همان طرح تنظیم می‌شود.</p></div><label>رنگ عددهای ستون امتیاز<button type="button" class="s-color-button" data-color="pointsColor"></button></label>
     <div class="two-col"><label>رنگ باکس رتبه ۲ و ۳<button type="button" class="s-color-button" data-color="championsBox"></button></label><label>رنگ باکس سقوط<button type="button" class="s-color-button" data-color="relegationBox"></button></label></div>
     <div class="two-col"><label>رنگ زمینه سایر امتیازها<button type="button" class="s-color-button" data-color="regularBox"></button></label><label>رنگ متن عنوان ستون‌ها<button type="button" class="s-color-button" data-color="columnColor"></button></label></div>
     <label class="range-label">شفافیت ردیف‌ها <output id="rowOpacityValue"></output><input type="range" id="rowOpacity" data-range="rowOpacity" min="0" max="60"></label>
@@ -104,7 +104,7 @@
  <section class="preview-area standings-preview" aria-label="پیش نمایش جدول">
   <div class="preview-head"><div><h2>پیش‌نمایش جدول</h2><p>پیش‌نمایش لحظه‌ای · خروجی ۲ برابر وضوح پوستر</p></div><div class="s-preview-actions"><span class="resolution">۱۰۸۰ × ۱۳۵۰ · خروجی ۲×</span><button class="btn secondary" id="pagesOpen" type="button">▦ مدیریت صفحات <small id="pageCount">۱ صفحه</small></button></div></div>
   <div class="s-canvas-wrap"><canvas id="poster" width="1080" height="1350" aria-label="پوستر گرافیکی جدول لیگ"></canvas></div>
-  <div class="s-preview-footer"><span id="dataBadge">جدول پس از دریافت آنلاین نمایش داده می‌شود.</span><span>PNG باکیفیت ۲۱۶۰ × ۲۷۰۰</span></div>
+  <div class="s-preview-footer"><span id="dataBadge">پیش‌نمایش نمونه · داده‌ها آنلاین نیستند</span><span>PNG باکیفیت ۲۱۶۰ × ۲۷۰۰</span></div>
  </section>
 </main>
 <footer class="site-footer">WoSoCenter · <a href="index.html">خانه</a> · <a href="https://t.me/ByMehrdad" target="_blank" rel="noopener noreferrer" dir="ltr">@ByMehrdad</a></footer>

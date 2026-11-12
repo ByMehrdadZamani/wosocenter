@@ -1,10 +1,9 @@
-/* WoSoCenter Standings Maker 5.0 — no API key or personal files are sent to GitHub. */
+/* WoSoCenter Standings Maker 5.1 — no API key or personal files are sent to GitHub. */
 (() => {
 'use strict';
 const API = 'https://wosocenter-standings.mr-mehrdadzamani1382.workers.dev/api/standings';
 const DEFAULT_PHOTO='assets/standings/ewa-pajor-default.webp';
 const WORDMARK='assets/standings/wosocenter-wordmark.webp';
-const STAR_RING='assets/standings/uefa-stars.webp';
 const W=1080,H=1350, STORE='woso-standings-studio-v3', DATA_STORE='woso-standings-last-success-v3';
 const $=id=>document.getElementById(id), $$=(s,scope=document)=>Array.from(scope.querySelectorAll(s));
 const deep=v=>JSON.parse(JSON.stringify(v));
@@ -34,6 +33,29 @@ const TEAM_MAP={
  'soccer-fc-badalona-women':['بادالونا','lwnth-bdlwn'],
  'soccer-valencia-women':['والنسیا','wlnsy']
 };
+// Read-only example preview. These figures are a historical snapshot from 11 Nov 2026,
+// not live standings; they never enter state.data or the API cache.
+const PREVIEW_ROWS=[
+ ['soccer-barcelona-women','Barcelona','BAR',10,9,0,1,41,5,27],
+ ['soccer-real-madrid-women','Real Madrid','RMA',10,7,2,1,23,18,23],
+ ['soccer-atletico-madrid-women','Atlético Madrid','ATL',10,6,1,3,22,12,19],
+ ['soccer-madrid-cff-women','Madrid CFF','MCF',10,5,2,3,16,21,17],
+ ['soccer-athletic-club-women','Athletic Club','ATH',10,4,4,2,13,11,16],
+ ['soccer-espanyol-women','Espanyol','ESP',10,4,3,3,14,11,15],
+ ['soccer-cd-tenerife-women','CD Tenerife','TEN',9,4,2,3,14,14,14],
+ ['soccer-real-sociedad-women','Real Sociedad','RSO',10,3,4,3,13,15,13],
+ ['soccer-eibar-women','Eibar','EIB',10,3,3,4,10,13,12],
+ ['soccer-deportivo-women','Deportivo','DEP',10,3,2,5,11,13,11],
+ ['soccer-granada-women','Granada','GRA',10,3,2,5,9,16,11],
+ ['soccer-dux-logrono-women','Dux Logroño','DUX',10,3,1,6,11,14,10],
+ ['soccer-sevilla-women','Sevilla','SEV',10,2,4,4,11,16,10],
+ ['soccer-alaves-women','Alavés','ALA',9,2,2,5,6,13,8],
+ ['soccer-fc-badalona-women','FC Badalona','BAD',10,2,2,6,9,20,8],
+ ['soccer-valencia-women','Valencia','VAL',10,2,0,8,8,19,6]
+].map(([id,team,abbreviation,played,win,draw,loss,goalsFor,goalsAgainst,points],i)=>({
+ id,team,abbreviation,rank:i+1,played,win,draw,loss,goalsFor,goalsAgainst,
+ goalDifference:goalsFor-goalsAgainst,points
+}));
 const NAME_TO_ID={Barcelona:'soccer-barcelona-women','Real Madrid':'soccer-real-madrid-women','Atlético Madrid':'soccer-atletico-madrid-women','Atletico Madrid':'soccer-atletico-madrid-women','Madrid CFF':'soccer-madrid-cff-women','Athletic Club':'soccer-athletic-club-women',Espanyol:'soccer-espanyol-women','CD Tenerife':'soccer-cd-tenerife-women','Real Sociedad':'soccer-real-sociedad-women',Eibar:'soccer-eibar-women',Deportivo:'soccer-deportivo-women',Granada:'soccer-granada-women','Dux Logroño':'soccer-dux-logrono-women',Sevilla:'soccer-sevilla-women','Alavés':'soccer-alaves-women','FC Badalona':'soccer-fc-badalona-women',Valencia:'soccer-valencia-women'};
 const BASE_COLORS={bgColor:'#082a65',fadeColor:'#071b52',fadeOpacity:10,fadeCoverage:80,fadeSoftness:100,titleColor:'#ffffff',brandColor:'#8c47bb',starsColor:'#ffffff',tableText:'#ffffff',columnColor:'#ffffff',pointsColor:'#ffffff',firstBox:'#bc9b24',championsBox:'#0aa6d2',regularBox:'#307bd7',relegationBox:'#a73757',accentColor:'#44b1ed'};
 const DEFAULT=()=>({...BASE_COLORS,
@@ -81,9 +103,9 @@ function commit(label,fn,{sync=true,editors=false}={}){const before=deep(state);
 function undo(){if(!past.length)return;future.push(deep(state));state=past.pop();hist.push({label:'واگرد',time:Date.now(),snapshot:deep(state)});renderAll({sync:true,editors:true});saveStored()}
 function redo(){if(!future.length)return;past.push(deep(state));state=future.pop();hist.push({label:'بازانجام',time:Date.now(),snapshot:deep(state)});renderAll({sync:true,editors:true});saveStored()}
 function restore(){try{const raw=JSON.parse(localStorage.getItem(STORE)||'null');if(raw?.pages?.length){pages=raw.pages.filter(x=>x&&x.state&&x.id).slice(0,30);for(const p of pages){if(p.state.titleText==='جدول لیگا اف | هفته ۱۰')p.state.titleText='';if(p.state.brandSize===58&&p.state.brandText==='WoSoCenter')p.state.brandSize=41;if(p.state.fadeOpacity===67&&p.state.fadeCoverage===85&&p.state.fadeSoftness===58){p.state.fadeOpacity=10;p.state.fadeCoverage=80;p.state.fadeSoftness=100};if(p.state.photoPosition&&p.state.photoPosition.x===0&&p.state.photoPosition.y===0&&p.state.photoPosition.zoom===1&&!p.state.imageId)p.state.photoPosition={x:19,y:0,zoom:1}}if(pages.length){pageIndex=clamp(Number(raw.pageIndex)||0,0,pages.length-1);state={...DEFAULT(),...pages[pageIndex].state,overrides:pages[pageIndex].state.overrides||{}};past=(raw.past||[]).slice(-28);future=(raw.future||[]).slice(-28);hist=(raw.hist||[]).slice(-28);return}}}catch(e){console.warn(e)}
- try{const cache=JSON.parse(localStorage.getItem(DATA_STORE)||'null');if(cache?.data?.teams?.length)state.data=cache.data}catch{}}
+ try{const cache=JSON.parse(localStorage.getItem(DATA_STORE)||'null');if(cache?.data?.teams?.length){state.data=cache.data;state.dataFetchedAt=new Date(cache.at||Date.now()).toISOString()}}catch{}}
 const teamInfo=t=>{const key=t?.id||NAME_TO_ID[t?.team]||t?.team;const map=TEAM_MAP[key]||[t?.team||'تیم',null];const bank=map[1]?teamBank.get(map[1]):null;return {key,name:map[0],bank,logo:bank?.image||null,abbreviation:t?.abbreviation||''}}
-function currentRows(){return Array.isArray(state.data?.teams)?state.data.teams.slice().sort((a,b)=>a.rank-b.rank):[]}
+function currentRows(){return (Array.isArray(state.data?.teams)?state.data.teams:PREVIEW_ROWS).slice().sort((a,b)=>a.rank-b.rank)}
 const LEAGUES=[
  {id:'ligaf',name:'لیگا اف',label:'لیگا اف · اسپانیا',image:'assets/leagues/liga-af-spain.webp',enabled:true},
  {id:'wsl',name:'سوپرلیگ زنان انگلیس',label:'سوپرلیگ زنان انگلیس',image:'assets/leagues/wsl-england.webp',enabled:false},
@@ -93,13 +115,21 @@ const LEAGUES=[
  {id:'ucl',name:'لیگ قهرمانان اروپا',label:'لیگ قهرمانان اروپا',image:'assets/leagues/champions-league-europe.webp',enabled:false}
 ];
 function currentLeague(){return LEAGUES.find(x=>x.id===state.league)||LEAGUES[0]}
-function getWeek(){const d=state.data;const overridden=Number(state.weekOverride);if(overridden>0)return {number:overridden,source:'دستی'};const apiNum=Number(d?.week??d?.matchweek??d?.round);if(Number.isInteger(apiNum)&&apiNum>0)return {number:apiNum,source:'API'};const rows=Array.isArray(d?.teams)?d.teams:[];const max=Math.max(0,...rows.map(x=>Number(x.played)||0));return {number:max,source:max?'برآوردی':'نامشخص'}}
+function getWeek(){const d=state.data;const overridden=Number(state.weekOverride);if(overridden>0)return {number:overridden,source:'دستی'};const apiNum=Number(d?.week??d?.matchweek??d?.round);if(Number.isInteger(apiNum)&&apiNum>0)return {number:apiNum,source:'API'};const rows=Array.isArray(d?.teams)?d.teams:PREVIEW_ROWS;const max=Math.max(0,...rows.map(x=>Number(x.played)||0));return {number:max,source:max?'برآوردی':'نامشخص'}}
 function weekOrdinal(n){const values=['','اول','دوم','سوم','چهارم','پنجم','ششم','هفتم','هشتم','نهم','دهم','یازدهم','دوازدهم','سیزدهم','چهاردهم','پانزدهم','شانزدهم','هفدهم','هجدهم','نوزدهم','بیستم'];if(values[n])return values[n];if(n<30){const suffix=['','یکم','دوم','سوم','چهارم','پنجم','ششم','هفتم','هشتم','نهم'];return 'بیست‌و'+suffix[n-20]}if(n===30)return 'سی‌ام';return persian(n)+'ام'}
 function computedTitle(){if(String(state.titleText||'').trim())return state.titleText.trim();const w=getWeek();return w.number?`جدول هفته ${weekOrdinal(w.number)} ${currentLeague().name}`:`جدول ${currentLeague().name}`;}
 function renderLeagueDialog(){$('leagueGrid').innerHTML=LEAGUES.map(l=>`<button class="s-league-row" type="button" data-league-choice="${l.id}" ${l.enabled?'':'disabled'}><img src="${l.image}" alt=""><strong>${safe(l.label)}</strong><small>${l.enabled?'قابل انتخاب':'به‌زودی'}</small><span aria-hidden="true">${l.enabled?'‹':'•'}</span></button>`).join('')}
 async function fetchTable(){const btn=$('fetchBtn');btn.disabled=true;status('در حال دریافت جدول آنلاین…');try{const season=new Date().getUTCFullYear()-(new Date().getUTCMonth()<6?1:0);const url=`${API}?league=${encodeURIComponent(state.league||'ligaf')}&season=${season}`;const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),14000);let res;try{res=await fetch(url,{signal:controller.signal,cache:'no-store'})}finally{clearTimeout(timeout)};const data=await res.json();if(!res.ok||data.success!==true||!Array.isArray(data.teams)||data.teams.length<10)throw Error(data.error||data.detail||'جدول معتبر دریافت نشد.');const teams=data.teams.map(t=>({...t,id:t.id||NAME_TO_ID[t.team],rank:Number(t.rank)||0}));if(teams.some(t=>!t.id||t.rank<1))throw Error('شناسه یا رتبه برخی تیم‌ها نامعتبر است.');
- commit('دریافت جدول لیگ اف',()=>{state.data={...data,teams};state.dataFetchedAt=new Date().toISOString()},{sync:true,editors:true});try{localStorage.setItem(DATA_STORE,JSON.stringify({data:state.data,at:Date.now()}))}catch{}status(`${persian(teams.length)} تیم فصل ${persian(data.season)} دریافت شد.`, 'ok');$('dataBadge').textContent=`${persian(teams.length)} تیم · ${persian(data.season)} · ${data.source||'API Ninjas'}`;
+ commit('دریافت جدول لیگ اف',()=>{state.data={...data,teams};state.dataFetchedAt=new Date().toISOString()},{sync:true,editors:true});try{localStorage.setItem(DATA_STORE,JSON.stringify({data:state.data,at:Date.now()}))}catch{}status(`${persian(teams.length)} تیم دریافت شد. ${lastFetchLabel(state.dataFetchedAt)}`, 'ok');$('dataBadge').textContent=`${persian(teams.length)} تیم · ${persian(data.season)} · ${data.source||'API Ninjas'}`;
  }catch(e){status('دریافت ناموفق: '+(e.name==='AbortError'?'مهلت پاسخ‌گویی تمام شد':e.message),'error')}finally{btn.disabled=false}}
+function lastFetchLabel(value){
+ if(!value)return '';
+ const d=new Date(value);if(Number.isNaN(d.getTime()))return '';
+ const today=d.toDateString()===new Date().toDateString();
+ const date=today?'امروز':d.toLocaleDateString('fa-IR',{day:'numeric',month:'long'});
+ const time=d.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+ return `آخرین دریافت اطلاعات: ${date} ${time}`;
+}
 function imageRecord(src){if(!src)return null;let r=imgCache.get(src);if(r)return r;r={status:'loading',img:new Image()};r.img.onload=()=>{r.status='ok';drawSoon();if($('pagesDialog')?.open)renderPages()};r.img.onerror=()=>{r.status='error';drawSoon()};r.img.decoding='async';r.img.src=src;imgCache.set(src,r);return r}
 function imageFor(src){const r=imageRecord(src);return r?.status==='ok'?r.img:null}
 function imageURL(id){return mediaUrls.get(id)||null}
@@ -108,7 +138,6 @@ function tintedAsset(src,color){const img=imageFor(src);if(!img)return null;cons
 function drawCover(ctx,img,x,y,w,h,pos={x:0,y:0,zoom:1}){if(!img?.naturalWidth)return;const ratio=Math.max(w/img.naturalWidth,h/img.naturalHeight)*clamp(Number(pos.zoom)||1,.6,5);const dw=img.naturalWidth*ratio,dh=img.naturalHeight*ratio;const dx=x+(w-dw)/2+(Number(pos.x)||0)/100*w,dy=y+(h-dh)/2+(Number(pos.y)||0)/100*h;ctx.drawImage(img,dx,dy,dw,dh)}
 function fontName(value){return value==='Georgia'?'Georgia,serif':`"${value||'Mikhak'}",Tahoma,sans-serif`}
 function write(ctx,value,x,y,size,color,font='Mikhak',weight='bold',align='right',max=null){ctx.font=`${font==='Georgia'?'italic ':''}${weight} ${Math.round(size)}px ${fontName(font)}`;ctx.textBaseline='middle';ctx.textAlign=align;ctx.direction='rtl';ctx.fillStyle=color;let content=persian(value);if(max){while(content.length>1&&ctx.measureText(content).width>max)content=content.slice(0,-2)+'…'}ctx.fillText(content,x,y)}
-function drawStars(ctx,cx,cy,color,count=7,outer=29){ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.globalAlpha=.5;for(let i=0;i<count;i++){const a=Math.PI*2*i/count-.4;const x=cx+Math.cos(a)*outer,y=cy+Math.sin(a)*outer;ctx.beginPath();for(let j=0;j<5;j++){const b=j*Math.PI*4/5-Math.PI/2;const xx=x+Math.cos(b)*6,yy=y+Math.sin(b)*6;j?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.closePath();ctx.stroke()}ctx.restore()}
 function drawBackground(ctx){
  ctx.fillStyle=state.bgColor;ctx.fillRect(0,0,W,H);
  const wash=ctx.createLinearGradient(0,0,W,H);wash.addColorStop(0,rgba(state.fadeColor,.44));wash.addColorStop(1,rgba(state.bgColor,.13));ctx.fillStyle=wash;ctx.fillRect(0,0,W,H);
@@ -122,12 +151,20 @@ function drawBackground(ctx){
   ctx.fillStyle=grad;ctx.fillRect(start,0,W-start,H);ctx.fillStyle=state.fadeColor;ctx.fillRect(0,0,start,H);
  }else if(!p||state.noBackgroundPhoto){const grad=ctx.createLinearGradient(0,0,W,0);grad.addColorStop(0,rgba(state.fadeColor,.75));grad.addColorStop(1,rgba(state.fadeColor,.08));ctx.fillStyle=grad;ctx.fillRect(0,0,W,H)}
 }
+function championGold(){
+ // Always a mid/deep golden shade; palette/pattern choice only changes its shade.
+ if(state.paletteId==='ligaf'&&!state.patternId)return '#b58b32';
+ const shades=['#af842a','#b6943d','#a98230','#bd9943','#b18b36','#c09b4a','#aa8230','#b6923d'];
+ const name=String(state.paletteId||'ligaf')+'|'+String(state.patternId||'');
+ let hash=0;for(const c of name)hash=(hash*31+c.charCodeAt(0))>>>0;
+ return shades[hash%shades.length];
+}
 function drawPoster(ctx){ctx.save();ctx.clearRect(0,0,W,H);drawBackground(ctx);
  const logoPaths={woso:'assets/interview/logo-woso.jpg',barca:'assets/interview/logo-barca.jpg'};
  const headerLogo=logoPaths[state.headerLogo];
  if(headerLogo){const im=imageFor(headerLogo);if(im){ctx.save();ctx.beginPath();ctx.roundRect(25,31,64,64,15);ctx.clip();ctx.drawImage(im,25,31,64,64);ctx.restore()}}
  const wordmark=tintedAsset(WORDMARK,state.brandColor||'#8c47bb');
- if(wordmark){const hh=clamp(Number(state.brandSize)||41,20,90),ww=Math.min(370,wordmark.width*hh/wordmark.height);ctx.drawImage(wordmark,107+state.brandX,75-hh/2+state.brandY,ww,hh)}
+ if(wordmark){const hh=clamp(Number(state.brandSize)||41,20,90),ww=Math.min(370,wordmark.width*hh/wordmark.height);ctx.drawImage(wordmark,107+state.brandX,63-hh/2+state.brandY,ww,hh)}
  write(ctx,computedTitle(),1049+state.titleX,73+state.titleY,state.titleSize,state.titleColor,state.titleFont,'bold','right',640);
  const col=[1030,884,696,612,530,451,375,274,158,63];
  const headings=['رتبه','تیم','بازی','برد','تساوی','باخت','گل زده','گل خورده','تفاضل گل','امتیاز'];
@@ -147,19 +184,31 @@ function drawPoster(ctx){ctx.save();ctx.clearRect(0,0,W,H);drawBackground(ctx);
    if(gd!==0)write(ctx,gd>0?'+':'−',138,cy,fs,fg,ov.font||state.tableFont,'bold','center');
   }else write(ctx,t.goalDifference,col[8],cy,state.numberSize,ov.numberColor||state.tableText,ov.font||state.tableFont,'bold','center');
   const boxX=34,boxY=y+10,boxW=58,boxH=49,isFirst=t.rank===1,isTop=t.rank<=3,isBottom=t.rank>=15;
-  ctx.save();ctx.fillStyle=ov.boxColor||(isFirst?state.firstBox:isTop?state.championsBox:isBottom?state.relegationBox:state.regularBox);ctx.shadowColor='#03133e55';ctx.shadowBlur=7;ctx.fillRect(boxX,boxY,boxW,boxH);ctx.restore();
+  ctx.save();ctx.fillStyle=isFirst?championGold():(ov.boxColor||(isTop?state.championsBox:isBottom?state.relegationBox:state.regularBox));ctx.shadowColor='#03133e55';ctx.shadowBlur=7;ctx.fillRect(boxX,boxY,boxW,boxH);ctx.restore();
   ctx.save();ctx.strokeStyle='rgba(255,255,255,.23)';ctx.lineWidth=1;ctx.strokeRect(boxX+.5,boxY+.5,boxW-1,boxH-1);ctx.restore();
-  if(isTop){const ring=tintedAsset(STAR_RING,state.starsColor||'#ffffff');if(ring){ctx.drawImage(ring,boxX-2,boxY+1,boxW+4,boxH-1)}}
   write(ctx,t.points,boxX+boxW/2,cy,26,ov.pointsColor||state.pointsColor,ov.font||state.tableFont,'bold','center');
-  if(isFirst){ctx.save();ctx.translate(20,boxY-1);ctx.rotate(-.2);ctx.fillStyle='#ffe42e';ctx.strokeStyle='#06173f';ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(-10,12);ctx.lineTo(-16,-9);ctx.lineTo(-2,0);ctx.lineTo(5,-16);ctx.lineTo(13,-1);ctx.lineTo(25,-8);ctx.lineTo(20,15);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
  });
  const footer=String(state.footerText??'').trim();
- if(footer){const fs=state.footerSize||19;ctx.save();ctx.font=`bold ${fs}px ${fontName(state.footerFont||'Mikhak')}`;const fullText=persian(footer),textW=ctx.measureText(fullText).width,iconX=540-textW/2-25;ctx.translate(iconX,1315);ctx.strokeStyle='#12eddf';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(-2,1);ctx.lineTo(16,-8);ctx.lineTo(10,12);ctx.lineTo(6,4);ctx.closePath();ctx.stroke();ctx.beginPath();ctx.moveTo(6,4);ctx.lineTo(15,-7);ctx.stroke();ctx.restore();ctx.save();ctx.font=`bold ${fs}px ${fontName(state.footerFont||'Mikhak')}`;ctx.fillStyle=state.footerColor||'#fff';ctx.textBaseline='middle';ctx.textAlign='center';ctx.direction=/[\u0600-\u06FF]/.test(fullText)?'rtl':'ltr';ctx.fillText(fullText,546,1315);ctx.restore()}
+ if(footer){
+  const fs=state.footerSize||19,fullText=persian(footer),iconWidth=20,gap=8;
+  const lastRowBottom=start+Math.min(rows.length,16)*rowH;
+  const footerY=(lastRowBottom+H)/2;
+  ctx.save();ctx.font=`bold ${fs}px ${fontName(state.footerFont||'Mikhak')}`;
+  const textW=ctx.measureText(fullText).width,groupW=iconWidth+gap+textW;
+  const left=(W-groupW)/2;
+  ctx.save();ctx.translate(left+3,footerY);ctx.strokeStyle='#12eddf';ctx.lineWidth=2.4;
+  ctx.beginPath();ctx.moveTo(-2,1);ctx.lineTo(16,-8);ctx.lineTo(10,12);ctx.lineTo(6,4);ctx.closePath();ctx.stroke();
+  ctx.beginPath();ctx.moveTo(6,4);ctx.lineTo(15,-7);ctx.stroke();ctx.restore();
+  ctx.fillStyle=state.footerColor||'#fff';ctx.textBaseline='middle';ctx.textAlign='center';
+  ctx.direction=/[\u0600-\u06FF]/.test(fullText)?'rtl':'ltr';
+  ctx.fillText(fullText,left+iconWidth+gap+textW/2,footerY);
+  ctx.restore();
+ }
  ctx.restore();
 }
 function drawSoon(){if(renderPending)return;renderPending=true;requestAnimationFrame(()=>{renderPending=false;const canvas=$('poster');const ctx=canvas.getContext('2d',{alpha:false});drawPoster(ctx)})}
 const humanSize=bytes=>bytes>=1024*1024?(bytes/(1024*1024)).toLocaleString('fa-IR',{maximumFractionDigits:2})+' مگابایت':Math.ceil(bytes/1024).toLocaleString('fa-IR')+' کیلوبایت';
-function sourcesForCurrentPage(){return [...currentRows().map(t=>{const v=teamInfo(t),ov=state.overrides[v.key]||{};return imageURL(ov.logoId)||v.logo}),photoSource(),patterns.find(p=>p.id===state.patternId)?.image,WORDMARK,STAR_RING, ...['woso','barca'].includes(state.headerLogo)?['assets/interview/logo-'+(state.headerLogo==='woso'?'woso':'barca')+'.jpg']:[]].filter(Boolean)}
+function sourcesForCurrentPage(){return [...currentRows().map(t=>{const v=teamInfo(t),ov=state.overrides[v.key]||{};return imageURL(ov.logoId)||v.logo}),photoSource(),patterns.find(p=>p.id===state.patternId)?.image,WORDMARK, ...['woso','barca'].includes(state.headerLogo)?['assets/interview/logo-'+(state.headerLogo==='woso'?'woso':'barca')+'.jpg']:[]].filter(Boolean)}
 async function readyForExport(){await document.fonts.ready;const sources=sourcesForCurrentPage();await Promise.all(sources.map(src=>new Promise(resolve=>{const r=imageRecord(src);if(r.status!=='loading')return resolve();r.img.addEventListener('load',resolve,{once:true});r.img.addEventListener('error',resolve,{once:true})})));}
 async function posterBlob(scale){const c=document.createElement('canvas');c.width=W*scale;c.height=H*scale;const cx=c.getContext('2d',{alpha:false});cx.scale(scale,scale);drawPoster(cx);const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));c.width=c.height=1;if(!blob)throw Error('مرورگر نتوانست فایل PNG تولید کند.');return blob;}
 function saveBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)}
@@ -187,7 +236,7 @@ function buildTeamEditors(){const panel=$('teamEditors');const rows=currentRows(
  <div class="s-team-content"><div class="s-team-head"><button data-team-done="${safe(info.key)}" title="ثبت">✓</button><button data-team-close="${safe(info.key)}" title="بستن">−</button><button data-team-reset="${safe(info.key)}" title="حالت پیش‌فرض">↺</button></div>
  <label>نام تیم<input type="text" maxlength="38" data-team-field="name" data-team-key="${safe(info.key)}" value="${safe(ov.name??info.name)}"></label>
  <div class="two-col"><label>رنگ نام<button type="button" class="s-color-button" data-team-color="nameColor" data-team-key="${safe(info.key)}"><span class="s-color-dot" style="background:${safe(ov.nameColor||state.tableText)}"></span><span class="s-color-hex">${safe(ov.nameColor||state.tableText)}</span>⌄</button></label><label>رنگ عددها<button type="button" class="s-color-button" data-team-color="numberColor" data-team-key="${safe(info.key)}"><span class="s-color-dot" style="background:${safe(ov.numberColor||state.tableText)}"></span><span class="s-color-hex">${safe(ov.numberColor||state.tableText)}</span>⌄</button></label></div>
- <div class="two-col"><label>رنگ باکس امتیاز<button type="button" class="s-color-button" data-team-color="boxColor" data-team-key="${safe(info.key)}"><span class="s-color-dot" style="background:${safe(ov.boxColor||((t.rank===1)?state.firstBox:(t.rank<=3)?state.championsBox:(t.rank>=15)?state.relegationBox:state.regularBox))}"></span>⌄</button></label><label>رنگ عدد امتیاز<button type="button" class="s-color-button" data-team-color="pointsColor" data-team-key="${safe(info.key)}"><span class="s-color-dot" style="background:${safe(ov.pointsColor||state.pointsColor)}"></span>⌄</button></label></div>
+ <div class="two-col"><label>رنگ باکس امتیاز${t.rank===1?`<span class="s-gold-locked">طلایی ثابت با سایه هماهنگ پالت</span>`:`<button type="button" class="s-color-button" data-team-color="boxColor" data-team-key="${safe(info.key)}"><span class="s-color-dot" style="background:${safe(ov.boxColor||((t.rank<=3)?state.championsBox:(t.rank>=15)?state.relegationBox:state.regularBox))}"></span>⌄</button>`}</label><label>رنگ عدد امتیاز<button type="button" class="s-color-button" data-team-color="pointsColor" data-team-key="${safe(info.key)}"><span class="s-color-dot" style="background:${safe(ov.pointsColor||state.pointsColor)}"></span>⌄</button></label></div>
  <div class="two-col"><label>فونت تیم<select data-team-field="font" data-team-key="${safe(info.key)}">${FONTS.map(f=>`<option value="${f}" ${f===(ov.font||state.tableFont)?'selected':''}>${safe(FONT_LABELS[f]||f)}</option>`).join('')}</select></label><label>اندازه نام تیم<select data-team-field="teamSize" data-team-key="${safe(info.key)}">${[18,20,21,22,23,24,25,26,27,28,29].map(n=>`<option value="${n}" ${Number(ov.teamSize||state.teamSize)===n?'selected':''}>${persian(n)}</option>`).join('')}</select></label></div>
  <label>لوگوی اختصاصی<input type="file" accept="image/png,image/jpeg,image/webp" data-logo-file="${safe(info.key)}"></label>
  <div class="s-team-logo-row">${avatar}<button type="button" class="btn secondary" data-logo-reset="${safe(info.key)}">استفاده از لوگوی بانک سایت</button></div>
@@ -203,7 +252,7 @@ function buildPatternLibrary(){const my=$('patternMy'),ready=$('patternReady');m
  ready.innerHTML=patterns.map(p=>`<button type="button" class="s-library-card ${state.patternId===p.id?'selected':''}" data-pattern-id="${safe(p.id)}"><img src="${safe(p.thumb||p.image)}" alt=""><strong>${safe(p.name)}</strong></button>`).join('');}
 function renderHistory(){const items=hist.slice().reverse();$('historyList').innerHTML=items.length?items.map((h,i)=>`<button type="button" class="s-history-item" data-history-i="${hist.length-1-i}"><span>◴</span><span>${safe(h.label)}</span><small>${new Date(h.time).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})}</small></button>`).join(''):'<p class="hint">هنوز تغییری ثبت نشده است.</p>'}
 function renderPages(){const grid=$('pagesGrid');activePage().state=deep(state);grid.innerHTML=pages.map((p,i)=>`<div class="s-page ${i===pageIndex?'active':''}" data-page-i="${i}"><button type="button" class="s-page-open" data-page-go="${i}"><canvas width="216" height="270" class="s-page-thumb" data-page-thumb="${i}" aria-label="پیش‌نمایش صفحه"></canvas><strong>${safe(p.name)}</strong></button><div class="s-page-tools"><button type="button" data-page-go="${i}">باز کردن</button><button type="button" data-page-duplicate="${i}">تکثیر</button><button type="button" data-page-rename="${i}">تغییر نام</button><button type="button" data-page-delete="${i}" ${pages.length<=1?'disabled':''}>حذف</button></div></div>`).join('');const prior=state;for(const el of $$('[data-page-thumb]',grid)){const p=pages[Number(el.dataset.pageThumb)];if(!p)continue;const cx=el.getContext('2d');cx.setTransform(.2,0,0,.2,0,0);state={...DEFAULT(),...p.state};drawPoster(cx)}state=prior;}
-function updateWeekNote(){const w=getWeek(),note=$('weekNote');if(note)note.textContent=w.source==='برآوردی'?`هفته ${persian(w.number)} بر اساس بیشترین تعداد بازی انجام‌شده برآورد شده؛ اگر با هفته رسمی فرق دارد، آن را اصلاح کن.`:w.source==='API'?`شماره هفته ${persian(w.number)} از داده API دریافت شد.`:w.source==='دستی'?`هفته ${persian(w.number)} به‌صورت دستی تنظیم شده است.`:'تا دریافت جدول، شماره هفته مشخص نیست.';}
+function updateWeekNote(){const w=getWeek(),note=$('weekNote');if(!state.data?.teams?.length&&!state.weekOverride){if(note)note.textContent='پیش‌نمایش نمونه هفته ۱۰ است؛ با دریافت آنلاین شماره هفته از داده‌های جدید برآورد می‌شود.';return}if(note)note.textContent=w.source==='برآوردی'?`هفته ${persian(w.number)} بر اساس بیشترین تعداد بازی انجام‌شده برآورد شده؛ اگر با هفته رسمی فرق دارد، آن را اصلاح کن.`:w.source==='API'?`شماره هفته ${persian(w.number)} از داده API دریافت شد.`:w.source==='دستی'?`هفته ${persian(w.number)} به‌صورت دستی تنظیم شده است.`:'تا دریافت جدول، شماره هفته مشخص نیست.';}
 function updateHeaderLogoControls(){const l=({woso:['لوگوی ووسو سنتر','assets/interview/logo-woso.jpg'],barca:['لوگوی بارسلونا','assets/interview/logo-barca.jpg'],none:['بدون لوگو','']})[state.headerLogo||'woso'];if(!l)return;$('headerLogoName').textContent=l[0];$('headerLogoPreview').src=l[1]||'assets/brand/logo-alpha.webp';$('headerLogoPreview').style.opacity=l[1]?'1':'.3'}
 function addPage(copy=false){activePage().state=deep(state);if(pages.length>=30){notify('حداکثر ۳۰ صفحه قابل نگهداری است.',true);return}const id='page-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),number=pages.length+1;const s=copy?deep(state):{...DEFAULT(),data:deep(state.data),dataFetchedAt:state.dataFetchedAt};pages.push({id,name:(copy?'کپی صفحه ':'صفحه ')+persian(number),state:deep(s)});switchPage(pages.length-1);renderPages()}
 function switchPage(n){activePage().state=deep(state);pageIndex=n;state={...DEFAULT(),...deep(pages[n].state)};past=[];future=[];hist=[];openTeamId=null;buildPalettes();renderAll({sync:true,editors:true});saveStored();renderPages()}
@@ -303,13 +352,13 @@ function attachEvents(){
  cropCanvas.addEventListener('wheel',e=>{e.preventDefault();const delta=Math.exp(-e.deltaY*.002);cropPosition.zoom=clamp(cropPosition.zoom*delta,.6,5);syncCropControls();drawCrop()},{passive:false});
  $('cropCancel').addEventListener('click',()=>{if(pendingPhoto?.file)URL.revokeObjectURL(pendingPhoto.url);pendingPhoto=null;closeDialog('cropDialog')});$('cropSave').addEventListener('click',saveCrop);
  $('applyAllFont').addEventListener('click',()=>commit('فونت کلی پوستر',()=>{state.titleFont=state.tableFont=state.footerFont=state.allFont;for(const k of Object.keys(state.overrides))delete state.overrides[k].font},{editors:true}));
- $('pagesOpen').addEventListener('click',()=>{renderPages();openDialog('pagesDialog')});$('pagesOpen2').addEventListener('click',()=>{renderPages();openDialog('pagesDialog')}); $('downloadAllPages').addEventListener('click',async()=>{activePage().state=deep(state);const btn=$('downloadAllPages');btn.disabled=true;try{await document.fonts.ready;const original=state;for(let i=0;i<pages.length;i++){state={...DEFAULT(),...pages[i].state};const sources=[...currentRows().map(t=>{const v=teamInfo(t),ov=state.overrides[v.key]||{};return imageURL(ov.logoId)||v.logo}),photoSource(),WORDMARK,STAR_RING,patterns.find(p=>p.id===state.patternId)?.image,state.headerLogo==='barca'?'assets/interview/logo-barca.jpg':'assets/interview/logo-woso.jpg'].filter(Boolean);await Promise.all(sources.map(src=>new Promise(resolve=>{const r=imageRecord(src);if(r.status!=='loading')return resolve();r.img.addEventListener('load',resolve,{once:true});r.img.addEventListener('error',resolve,{once:true})})));const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const cx=c.getContext('2d');cx.scale(2,2);drawPoster(cx);const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));if(blob){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='WoSoCenter-'+String(i+1).padStart(2,'0')+'-'+pages[i].name.replace(/[\\/:*?"<>|]/g,'')+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)}await new Promise(resolve=>setTimeout(resolve,350))}state=original;drawSoon();notify('دریافت جداگانه تصاویر آغاز شد؛ اگر مرورگر پرسید، اجازه دانلود چند فایل را بده.')}catch(err){notify('دانلود صفحات ناموفق: '+err.message,true)}finally{state={...DEFAULT(),...pages[pageIndex].state};btn.disabled=false;drawSoon()}});
+ $('pagesOpen').addEventListener('click',()=>{renderPages();openDialog('pagesDialog')});$('pagesOpen2').addEventListener('click',()=>{renderPages();openDialog('pagesDialog')}); $('downloadAllPages').addEventListener('click',async()=>{activePage().state=deep(state);const btn=$('downloadAllPages');btn.disabled=true;try{await document.fonts.ready;const original=state;for(let i=0;i<pages.length;i++){state={...DEFAULT(),...pages[i].state};const sources=[...currentRows().map(t=>{const v=teamInfo(t),ov=state.overrides[v.key]||{};return imageURL(ov.logoId)||v.logo}),photoSource(),WORDMARK,patterns.find(p=>p.id===state.patternId)?.image,state.headerLogo==='barca'?'assets/interview/logo-barca.jpg':'assets/interview/logo-woso.jpg'].filter(Boolean);await Promise.all(sources.map(src=>new Promise(resolve=>{const r=imageRecord(src);if(r.status!=='loading')return resolve();r.img.addEventListener('load',resolve,{once:true});r.img.addEventListener('error',resolve,{once:true})})));const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const cx=c.getContext('2d');cx.scale(2,2);drawPoster(cx);const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));if(blob){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='WoSoCenter-'+String(i+1).padStart(2,'0')+'-'+pages[i].name.replace(/[\\/:*?"<>|]/g,'')+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)}await new Promise(resolve=>setTimeout(resolve,350))}state=original;drawSoon();notify('دریافت جداگانه تصاویر آغاز شد؛ اگر مرورگر پرسید، اجازه دانلود چند فایل را بده.')}catch(err){notify('دانلود صفحات ناموفق: '+err.message,true)}finally{state={...DEFAULT(),...pages[pageIndex].state};btn.disabled=false;drawSoon()}});
 $('addPage').addEventListener('click',()=>addPage(false));$('duplicatePage').addEventListener('click',()=>addPage(true));
  $('exportProject').addEventListener('click',()=>{activePage().state=deep(state);const content=JSON.stringify({schema:'woso-standings-v3',pages,pageIndex},null,2);const blob=new Blob([content],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='WoSoCenter-standings-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('فایل تنظیمات ذخیره شد. تصاویر جداگانه در مرورگر نگهداری می‌شوند.')});
  $('importProject').addEventListener('click',()=>$('importProjectFile').click());$('importProjectFile').addEventListener('change',async e=>{try{const f=e.target.files?.[0];if(!f)return;const value=JSON.parse(await f.text());if(value.schema!=='woso-standings-v3'||!Array.isArray(value.pages)||!value.pages.length)throw Error('فرمت فایل تنظیمات قابل پشتیبانی نیست.');if(!confirm('پروژه فعلی با تنظیمات واردشده جایگزین شود؟'))return;pages=value.pages.slice(0,30);pageIndex=clamp(Number(value.pageIndex)||0,0,pages.length-1);state={...DEFAULT(),...deep(pages[pageIndex].state)};past=[];future=[];hist=[];renderAll({sync:true,editors:true});saveStored();notify('تنظیمات بازیابی شد؛ تصاویر در صورت وجود در همین مرورگر بارگیری می‌شوند.')}catch(err){notify(err.message,true)}e.target.value=''});
  $('resetProject').addEventListener('click',()=>{if(!confirm('تمام تنظیمات پروژه جاری پاک شود و از اول شروع کنیم؟'))return;pages=[{id:'page-'+Date.now(),name:'صفحه ۱',state:DEFAULT()}];pageIndex=0;state=deep(pages[0].state);past=[];future=[];hist=[];renderAll({sync:true,editors:true});saveStored();notify('پروژه تازه ساخته شد.')});
  document.addEventListener('keydown',e=>{const input=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||'');if((e.ctrlKey||e.metaKey)&&!e.altKey){if(e.key.toLowerCase()==='z'&&!input){e.preventDefault();e.shiftKey?redo():undo()}else if(e.key.toLowerCase()==='y'&&!input){e.preventDefault();redo()}}});
  }
-async function init(){try{document.documentElement.dataset.theme=localStorage.getItem('woso-standings-ui-theme')||'dark'}catch{}restore();attachEvents();syncControls();buildTeamEditors();drawSoon();if(state.data?.teams?.length){status('جدول آخرین دریافت ذخیره‌شده در مرورگر نمایش داده می‌شود. برای به‌روزرسانی دکمه دریافت را بزن.', 'ok');$('dataBadge').textContent=`${persian(state.data.teams.length)} تیم · ${persian(state.data.season)} · داده ذخیره‌شده`}await Promise.allSettled([loadLibraries(),loadMedia()]);try{await document.fonts.ready}catch{}drawSoon()}
+async function init(){try{document.documentElement.dataset.theme=localStorage.getItem('woso-standings-ui-theme')||'dark'}catch{}restore();attachEvents();syncControls();buildTeamEditors();drawSoon();if(state.data?.teams?.length){status(lastFetchLabel(state.dataFetchedAt)||'جدول ذخیره‌شده نمایش داده می‌شود؛ برای به‌روزرسانی دریافت کن.', 'ok');$('dataBadge').textContent=`${persian(state.data.teams.length)} تیم · ${persian(state.data.season)} · داده ذخیره‌شده`}if(!state.data?.teams?.length){status('پیش‌نمایش نمونه نمایش داده می‌شود؛ برای جدول تازه، «ساخت خودکار جدول» را بزن.');$('dataBadge').textContent='پیش‌نمایش نمونه · داده‌ها آنلاین نیستند'}await Promise.allSettled([loadLibraries(),loadMedia()]);try{await document.fonts.ready}catch{}drawSoon()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
