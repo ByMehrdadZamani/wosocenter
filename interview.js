@@ -148,6 +148,13 @@ function draw(){scheduled=false;if(!photo.complete||!photo.naturalWidth)return;p
 function scheduleRender(){if(historyReady&&!restoring)queueHistory();if(scheduled)return;scheduled=true;requestAnimationFrame(draw);}
 function downloadBlob(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
 async function toPNG(which){const c=document.createElement('canvas');c.width=W;c.height=H;paintPoster(c.getContext('2d'),which);return new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('PNG')), 'image/png'));}
+window.wosoGenerateExport=async function(scale){
+ if(![1,2].includes(scale))throw Error('مقیاس نامعتبر');
+ await document.fonts.ready;paginate();
+ const c=document.createElement('canvas');c.width=W*scale;c.height=H*scale;
+ const cx=c.getContext('2d',{alpha:false});cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cx.scale(scale,scale);
+ paintPoster(cx,pageIndex);return c;
+};
 $('#downloadTop').onclick=async()=>{try{await document.fonts.ready;const b=await toPNG(pageIndex);downloadBlob(b,`WoSo-Interview-${pageIndex+1}.png`);changed('تصویر PNG دریافت شد.');}catch{changed('دانلود انجام نشد. دوباره تلاش کنید.');}};
 // Browsers may request permission for multiple automatic downloads. No ZIP is generated.
 async function downloadSeparatePages(){

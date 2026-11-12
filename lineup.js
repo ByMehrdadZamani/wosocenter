@@ -134,7 +134,7 @@ function lNewSlots(team){
  const orderedNames=team==='barcelona'?barcelonaNames:team==='arsnl'?arsenalNames:[];
  return Array.from({length:11},(_,i)=>{
   const p=orderedNames.length?lPlayers.find(x=>x.teamId===team&&x.name===orderedNames[i]):null;
-  return {playerId:p?.id||'',name:p?.name||'',image:p?.image||'',imageKey:'',flag:p?.flag||'',flagKey:'',flagCustomized:false,positionOverride:'',photoScale:1};
+  return {playerId:p?.id||'',name:p?.name||'',image:p?.image||'',imageKey:'',flag:p?.flag||'',flagKey:'',flagCustomized:false,positionOverride:'',photoScale:1,faceFrame:null};
  });
 }
 function lFresh(team='barcelona'){
@@ -410,6 +410,7 @@ function lPlayerDialogShow(index){
  // Empty cards must never inherit a selection from another team or page.
  const current=lFindPlayer(slot.playerId);
  lPendingPlayerId=current&&slot.image===current.image?current.id:null;
+ lFaceDraft=lFaceSafe(slot.faceFrame);
  lPendingFlagId=slot.flag||current?.flag||'es';
  L('lineupFlagOptions').hidden=true;L('lineupFlagPick').setAttribute('aria-expanded','false');lFlagChoicesRender();
  L('lineupPlayerDialogTitle').textContent='کارت '+(index+1)+' · '+(lSpotList()[index]?.position||'GK');
@@ -439,11 +440,11 @@ function lPlayerDialogConfirm(){
   selected.flagCustomized=!!p&&selected.flag!==p.flag;
   selected.flagImage='';selected.flagKey='';
   selected.positionOverride=position===defaultPosition?'':position;
-  selected.photoScale=scale;
+  selected.photoScale=scale;selected.faceFrame=lFaceSafe(lFaceDraft);
  });
  lClose('lineupPlayerDialog');lNotify('تنظیمات کارت ثبت شد.');
 }
-function lPlayerDialogRemove(){lChange(()=>Object.assign(lSelectedSlot(),{playerId:'',name:'',image:'',imageKey:'',customCrop:null,flag:'',flagImage:'',flagKey:'',flagCustomized:false,positionOverride:'',photoScale:1}));lClose('lineupPlayerDialog');lNotify('بازیکن از کارت حذف شد.');}
+function lPlayerDialogRemove(){lChange(()=>Object.assign(lSelectedSlot(),{playerId:'',name:'',image:'',imageKey:'',customCrop:null,flag:'',flagImage:'',flagKey:'',flagCustomized:false,positionOverride:'',photoScale:1,faceFrame:null}));lClose('lineupPlayerDialog');lNotify('بازیکن از کارت حذف شد.');}
 function lLeagueDialogRender(){const q=lFilterText(L('lineupLeagueSearch').value);L('lineupLeagueGrid').innerHTML=lLeagues.filter(x=>lFilterText(x.name).includes(q)).map(x=>`<button type="button" data-lleague="${lEscape(x.name)}">${x.image?`<img src="${lEscape(x.image)}" loading="lazy" alt="">`:'🏆'}<span>${lEscape(x.name)}</span></button>`).join('')||'<div class="lineup-empty">لیگی با این نام یافت نشد؛ می‌توانید نام دلخواه را دستی وارد کنید.</div>';}
 function lFontDialogRender(){const q=lFilterText(L('lineupFontSearch').value);L('lineupFontGrid').innerHTML=LFONT.filter(f=>lFilterText(f.join(' ')).includes(q)).map(f=>`<button type="button" class="${(lFontTarget==='all'?lState.fontAll:lState.fonts[lFontTarget])===f[0]?'selected':''}" data-lfontpick="${f[0]}"><strong>${lEscape(f[1])}</strong><span class="font-sample" style="font-family:'${f[0]}',Tahoma,sans-serif">بارسلونا</span><small>${f[0]}</small></button>`).join('');}
 function lOpen(id){const el=L(id);if(!el.open)el.showModal();if(id==='lineupPlayerDialog')L('lineupPlayerDialogTitle').focus({preventScroll:true});}
@@ -465,6 +466,7 @@ function lUsePlayer(id){
  const p=lFindPlayer(id);if(!p)return;
  // Selecting a new player begins at the official calibrated 100% scale.
  if(lPendingPlayerId!==id){L('lineupPopupScale').value='100';L('lineupPopupScalePx').value='180';}
+ if(lPendingPlayerId!==p.id)lFaceDraft={zoom:1,x:0,y:0};
  lPendingPlayerId=p.id;
  L('lineupPopupName').value=p.name;
  L('lineupPopupPosition').value=lSpotList()[lSelected]?.position||'GK';
@@ -735,6 +737,9 @@ function lCard(spot,selected,highlight){const c=lCtx,s=lState,col=s.colors,slot=
    dx=spot.x-(sx+sw*.5)*scale;
    dy=y-(Number(player?.portraitHeadRise)||50)*spot.scale-sy*scale;
   }
+  if(slot.faceFrame){const f=lFaceSafe(slot.faceFrame),z=f.zoom,anchorY=y+30*spot.scale;
+   dx=spot.x+(dx-spot.x)*z+f.x*spot.scale;dy=anchorY+(dy-anchorY)*z+f.y*spot.scale;dw*=z;dh*=z;
+  }
   // Do NOT clip the crown to another row; geometry keeps a positive gap
   // between each previous card's bottom and the next portrait's hair.
   const borderInset=3.2*spot.scale;
@@ -880,4 +885,58 @@ async function lInit(){
  lDialogEvents();lSetInputs();lSync();lRender();lHistoryButtons();lLoadFont('Ario');await lRestoreMedia();lWarmPlayerImages();
  if(!persisted){lTeamDialogRender();lOpen('lineupTeamDialog');}
 }
+/* WoSoCenter v6 – per-slot framing for database player portraits. */
+let lFaceDraft=null, lFaceBefore=null, lFaceAccepted=false;
+function lFaceSafe(x){return {zoom:Math.max(.6,Math.min(3,Number(x?.zoom)||1)),x:Math.max(-180,Math.min(180,Number(x?.x)||0)),y:Math.max(-180,Math.min(180,Number(x?.y)||0))};}
+function lFaceUpdateValues(){const f=lFaceSafe(lFaceDraft);L('lineupFaceZoom').value=Math.round(f.zoom*100);L('lineupFaceX').value=Math.round(f.x);L('lineupFaceY').value=Math.round(f.y);L('lineupFaceZoomValue').textContent=Math.round(f.zoom*100).toLocaleString('fa-IR')+'٪';}
+function lFacePreview(){
+ const canvas=L('lineupFaceCanvas');if(!canvas||!lState)return;
+ const p=lFindPlayer(lPendingPlayerId),prior=lState.slots[lSelected],oldCtx=lCtx;
+ const provisional={...prior,playerId:p?.id||prior.playerId,image:p?.image||prior.image,name:L('lineupPopupName').value.trim()||p?.name||prior.name,flag:lPendingFlagId||p?.flag||prior.flag,faceFrame:lFaceSafe(lFaceDraft),photoScale:Number(L('lineupPopupScalePx').value)/180||1};
+ const c=canvas.getContext('2d');try{
+   c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,canvas.width,canvas.height);c.fillStyle=lState.colors.lower;c.fillRect(0,0,canvas.width,canvas.height);
+   c.save();c.scale(1.8,1.8);lCtx=c;lState.slots[lSelected]=provisional;
+   lCard({i:lSelected,x:120,y:108,scale:1,position:lSpotList()[lSelected]?.position||'MID'},false,false);
+ }finally{c.restore();lState.slots[lSelected]=prior;lCtx=oldCtx;}
+}
+function lFaceInit(){
+ const dialog=L('lineupFaceDialog'),canvas=L('lineupFaceCanvas');if(!dialog||!canvas)return;
+ L('lineupFaceAdjust').addEventListener('click',()=>{
+   const p=lFindPlayer(lPendingPlayerId),slot=lSelectedSlot();
+   if(!p&&!slot.image){lNotify('ابتدا یک بازیکن از بانک انتخاب کن.','error');return;}
+   lFaceDraft=lFaceSafe(lFaceDraft);lFaceBefore={...lFaceDraft};lFaceAccepted=false;
+   lFaceUpdateValues();lFacePreview();lOpen('lineupFaceDialog');
+   const src=p?.lineupPortrait||p?.image||slot.image;
+   if(src){const img=lImage(src);if(!img.complete)img.addEventListener('load',lFacePreview,{once:true});}
+ });
+ for(const id of ['lineupFaceZoom','lineupFaceX','lineupFaceY'])L(id).addEventListener('input',()=>{
+   lFaceDraft=lFaceSafe({zoom:Number(L('lineupFaceZoom').value)/100,x:Number(L('lineupFaceX').value),y:Number(L('lineupFaceY').value)});
+   lFaceUpdateValues();lFacePreview();
+ });
+ L('lineupFaceReset').addEventListener('click',()=>{lFaceDraft={zoom:1,x:0,y:0};lFaceUpdateValues();lFacePreview();});
+ L('lineupFaceCancel').addEventListener('click',()=>{lFaceDraft=lFaceBefore; lClose('lineupFaceDialog');});
+ L('lineupFaceSave').addEventListener('click',()=>{lFaceDraft=lFaceSafe(lFaceDraft);lFaceAccepted=true;lClose('lineupFaceDialog');lNotify('قاب‌بندی انتخاب شد؛ با دکمه ✓ کارت، تغییر را ثبت کن.');});
+ const pointers=new Map();let gesture=null;
+ const prepare=()=>{const pts=[...pointers.values()];if(pts.length>=2){const a=pts[0],b=pts[1];gesture={mode:2,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,dist:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),zoom:lFaceDraft.zoom,x:lFaceDraft.x,y:lFaceDraft.y};}else if(pts.length===1){gesture={mode:1,x:pts[0].x,y:pts[0].y,startX:lFaceDraft.x,startY:lFaceDraft.y};}else gesture=null;};
+ canvas.addEventListener('pointerdown',e=>{e.preventDefault();canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});lFaceDraft=lFaceSafe(lFaceDraft);prepare()});
+ canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!gesture)return;
+   const pts=[...pointers.values()],r=canvas.getBoundingClientRect(),factor=r.width/240;
+   if(pts.length===1&&gesture.mode===1){lFaceDraft=lFaceSafe({...lFaceDraft,x:gesture.startX+(pts[0].x-gesture.x)/factor,y:gesture.startY+(pts[0].y-gesture.y)/factor});}
+   else if(pts.length>=2&&gesture.mode===2){const a=pts[0],b=pts[1];const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y));lFaceDraft=lFaceSafe({zoom:gesture.zoom*d/gesture.dist,x:gesture.x+(mx-gesture.midX)/factor,y:gesture.y+(my-gesture.midY)/factor});}
+   lFaceUpdateValues();lFacePreview();
+ });
+ for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(type,e=>{pointers.delete(e.pointerId);prepare()});
+ canvas.addEventListener('wheel',e=>{if(!dialog.open)return;e.preventDefault();lFaceDraft=lFaceSafe({...lFaceSafe(lFaceDraft),zoom:lFaceSafe(lFaceDraft).zoom*Math.exp(-e.deltaY*.0016)});lFaceUpdateValues();lFacePreview()},{passive:false});
+ dialog.addEventListener('close',()=>{if(!lFaceAccepted)lFaceDraft=lFaceBefore; pointers.clear();gesture=null;});
+}
+/* The exact same drawing engine as a schematic poster, at both output sizes. */
+window.wosoGenerateExport = async function(scale){
+ if(![1,2].includes(scale))throw Error('مقیاس نامعتبر');
+ await lWaitResources();
+ const out=document.createElement('canvas');out.width=LW*scale;out.height=LH*scale;
+ const prior=lCtx;try{lCtx=out.getContext('2d',{alpha:false});lCtx.imageSmoothingEnabled=true;lCtx.imageSmoothingQuality='high';lCtx.scale(scale,scale);lDraw(false)}finally{lCtx=prior;}
+ return out;
+};
+lFaceInit();
+
 lInit().catch(e=>{console.error('Lineup init',e);lNotify('خطا در شروع شماتیک‌ساز. صفحه را دوباره بارگذاری کنید.','error')});

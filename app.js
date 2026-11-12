@@ -440,6 +440,12 @@ function drawPoster(canvas,pageState=state){if(!canvas)return;const savedState=s
   }}
 }c.save();roundPath(c,38,34,1004,1282,37);c.globalAlpha=.60;c.fillStyle=state.frameColor;c.fill();c.restore();drawBrand(c);drawDate(c);state.matches.forEach((m,i)=>drawGame(c,m,i));drawFooter(c);c.restore();state=savedState;}
 function render(){drawPoster($('poster'),state);}
+window.wosoGenerateExport=async function(scale){
+ if(![1,2].includes(scale))throw Error('مقیاس نامعتبر');
+ await Promise.all([ensureFonts(),preloadCurrentImages()]);
+ const c=document.createElement('canvas');c.width=WIDTH*scale;c.height=HEIGHT*scale;
+ drawPoster(c,state);return c;
+};
 // A missing or corrupted font must NEVER freeze the page, the page gallery,
 // an imported project, or the PNG download. Canvas uses a local fallback.
 const FONT_WAIT_MS=4500;

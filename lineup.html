@@ -5,8 +5,8 @@
  <meta name="theme-color" content="#100b19"><meta name="description" content="شماتیک‌ساز و ترکیب‌ساز فوتبال WoSoCenter؛ طراحی با عکس بازیکنان و خروجی PNG">
  <title>شماتیک‌ساز با ۳۱ آرایش فوتبال | WoSoCenter</title>
  <link rel="preload" href="assets/fonts/files/Ario-Dots1.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.12.0">
- <script src="lineup.js?v=6.13.0" defer></script>
+ <link rel="stylesheet" href="assets/fonts/fonts.css?v=4.1"><link rel="stylesheet" href="styles.css?v=5.9"><link rel="stylesheet" href="lineup.css?v=6.14.0">
+ <script src="lineup.js?v=6.14.0" defer></script>
 <style>
 /* A meaningful first frame while the deferred editor code and poster images load. */
 .woso-firstpaint-host{position:relative;isolation:isolate}
@@ -24,6 +24,8 @@
 @keyframes woso-fp-pulse{to{opacity:1;transform:scale(1.22)}}
 @media(prefers-reduced-motion:reduce){.woso-firstpaint .woso-fp-dots i{animation:none}}
 </style>
+<link rel="stylesheet" href="woso-download.css?v=6.0.0">
+<script defer src="woso-download.js?v=6.0.0"></script>
 </head>
 <body class="lineup-page">
 <header class="topbar woso-editor-topbar">
@@ -159,6 +161,7 @@
       <label>اندازه به پیکسل<input id="lineupPopupScalePx" type="number" inputmode="numeric" min="126" max="261" step="1" value="180"></label>
      </div>
     </div>
+    <button type="button" class="btn secondary full lineup-face-trigger" id="lineupFaceAdjust">⌗ تنظیم چهره بازیکن در کارت</button>
     <div class="lineup-popup-size-actions">
      <button id="lineupScaleReset" type="button" class="btn secondary lineup-scale-reset" title="بازنشانی اندازه تصویر">اندازه پیش‌فرض</button>
      <button id="lineupPlayerRemove" type="button" class="btn danger-text lineup-popup-icon" title="حذف بازیکن" aria-label="حذف بازیکن">×</button>
@@ -167,6 +170,14 @@
    </section>
   </div>
  </dialog>
+<dialog class="picker-dialog lineup-modal lineup-face-dialog" id="lineupFaceDialog" aria-labelledby="lineupFaceTitle">
+ <div class="dialog-head"><div><h2 id="lineupFaceTitle">تنظیم چهره بازیکن در کارت</h2><p>پیش‌نمایش زنده همان کارت؛ عکس را بکشید یا با دو انگشت زوم کنید.</p></div><button class="dialog-close" type="button" data-lclose="lineupFaceDialog" aria-label="بستن">×</button></div>
+ <div class="lineup-face-frame"><canvas width="432" height="540" id="lineupFaceCanvas" aria-label="پیش‌نمایش زنده قاب‌بندی بازیکن"></canvas><div class="lineup-face-grid" aria-hidden="true"></div></div>
+ <div class="lineup-face-fields"><label>بزرگ‌نمایی <output id="lineupFaceZoomValue">۱۰۰٪</output><input type="range" id="lineupFaceZoom" min="60" max="300" step="1" value="100"></label><div class="two-col"><label>جابه‌جایی افقی<input type="range" id="lineupFaceX" min="-180" max="180" step="1" value="0"></label><label>جابه‌جایی عمودی<input type="range" id="lineupFaceY" min="-180" max="180" step="1" value="0"></label></div></div>
+ <div class="lineup-face-actions"><button class="btn secondary" type="button" id="lineupFaceReset">↺ بازگشت به پیش‌فرض</button><button class="btn secondary" type="button" id="lineupFaceCancel">انصراف</button><button class="btn primary" type="button" id="lineupFaceSave">✓ تأیید قاب‌بندی</button></div>
+ <p class="hint compact">برای ثبت نهایی چهره انتخابی، دکمه ✓ تنظیمات کارت را هم بزنید.</p>
+</dialog>
+
 <dialog class="picker-dialog lineup-modal" id="lineupFontDialog"><div class="dialog-head"><div><h2>انتخاب فونت فارسی</h2><p>پیش‌نمایش واقعی با عبارت «بارسلونا»</p></div><button class="dialog-close" data-lclose="lineupFontDialog" type="button">×</button></div><div class="dialog-search"><input id="lineupFontSearch" type="search" placeholder="جست‌وجوی فونت…"></div><div id="lineupFontGrid" class="lineup-font-grid"></div></dialog>
 <dialog class="picker-dialog lineup-modal" id="lineupLeagueDialog"><div class="dialog-head"><div><h2>انتخاب لیگ / تورنمنت</h2><p>نام انتخابی در فیلد هدر قرار می‌گیرد و قابل ویرایش است.</p></div><button type="button" class="dialog-close" data-lclose="lineupLeagueDialog">×</button></div><div class="dialog-search"><input id="lineupLeagueSearch" type="search" placeholder="جست‌وجوی لیگ…"></div><div id="lineupLeagueGrid" class="lineup-league-grid"></div></dialog>
 <dialog class="picker-dialog lineup-modal lineup-pages-dialog" id="lineupPagesDialog"><div class="dialog-head"><div><h2>مدیریت صفحات شماتیک</h2><p>برای بازکردن هر صفحه روی تصویرش بزنید؛ سایر صفحات هم ذخیره می‌مانند.</p></div><button class="dialog-close" type="button" data-lclose="lineupPagesDialog">×</button></div><div class="lineup-pages-actions"><button type="button" id="lineupPageAdd" class="btn primary">＋ صفحه جدید</button><button type="button" id="lineupPageDuplicate" class="btn secondary">⧉ تکثیر صفحه</button><button type="button" id="lineupPageDownloadAll" class="btn secondary">↓ دانلود همه</button></div><div class="lineup-pages-grid" id="lineupPagesGrid"></div><p class="hint compact">همه صفحات با کیفیت ۲۱۶۰×۲۷۰۰ و به‌صورت فایل‌های PNG جداگانه دانلود می‌شوند. مرورگر ممکن است مجوز چند دانلود درخواست کند.</p></dialog>

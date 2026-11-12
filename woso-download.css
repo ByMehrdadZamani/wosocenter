@@ -1,0 +1,21 @@
+/* Shared WoSoCenter two-quality download dialog. Matches standings.css. */
+.woso-shared-download{box-sizing:border-box;position:fixed;margin:auto;max-width:550px;width:min(550px,calc(100vw - 20px));max-height:85dvh;overflow:auto;border-radius:18px;border:1px solid var(--edge,#41394c);background:var(--panel,#19131f);color:var(--text,#fff);padding:19px;box-shadow:0 25px 80px #0008;direction:rtl;font-family:Mikhak,Tahoma,sans-serif}
+.woso-shared-download::backdrop{background:#09070bba;backdrop-filter:blur(3px)}
+.woso-shared-download .dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.woso-shared-download .dialog-head h2{font-size:16px;margin:0 0 3px;color:var(--text,#fff)}
+.woso-shared-download .dialog-head p{font-size:11px;margin:0;color:var(--muted,#b2a3b9)}
+.woso-shared-download .dialog-close{width:34px;height:34px;flex:none;border-radius:9px;background:var(--panel2,#211d26);border:1px solid var(--edge,#41394c);color:var(--text,#fff);font-size:23px;cursor:pointer}
+.woso-shared-download .s-download-options{display:grid;gap:13px;margin:22px 0}
+.woso-shared-download .s-download-choice{box-sizing:border-box;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:18px 16px;min-height:136px;border:1px solid var(--edge,#41394c);background:var(--input,#110f17);border-radius:14px;color:var(--text,#fff);text-align:right;transition:transform .18s,box-shadow .18s,border-color .18s;width:100%;cursor:pointer;font-family:inherit}
+.woso-shared-download .s-download-choice:disabled{opacity:.6;cursor:wait}
+.woso-shared-download .s-download-choice:not(:disabled):hover{transform:translateY(-2px);border-color:var(--violet,#bc62d9);box-shadow:0 8px 28px #0003}
+.woso-shared-download .s-download-choice strong{font-size:16px}
+.woso-shared-download .s-download-choice span[dir=ltr]{font-size:13px;letter-spacing:.3px;color:var(--muted,#b2a3b9);font-family:system-ui,sans-serif}
+.woso-shared-download .s-download-choice small{font-size:12px;color:var(--muted,#b2a3b9)}
+.woso-shared-download .s-download-choice.recommended{border-color:#e8bf65;background:linear-gradient(120deg,#e8b94f30,var(--input,#110f17) 70%);box-shadow:0 6px 26px #b28b2430}
+.woso-shared-download .s-download-choice.recommended strong{color:#eac06b}
+.woso-shared-download .s-download-badge{position:absolute;left:14px;top:14px;border-radius:8px;padding:4px 8px;background:#b8892c;color:#1a1410;font-size:10px;font-weight:900}
+.woso-shared-download .s-download-badge.compact{background:var(--panel2,#211d26);color:var(--muted,#b2a3b9);border:1px solid var(--edge,#41394c)}
+.woso-shared-download .hint{font-size:11px;line-height:1.9;color:var(--muted,#b2a3b9)}
+@media(max-width:540px){.woso-shared-download .s-download-choice strong{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.woso-shared-download .s-download-choice{transition:none}}
