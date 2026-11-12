@@ -18,3 +18,40 @@
 @media(prefers-reduced-motion:reduce){.standings-page *{scroll-behavior:auto!important}}
 .s-library-grid[hidden],#patternUpload[hidden]{display:none!important}
 .standings-page .s-team-content .s-color-button{margin-top:4px}
+/* v4 – faithful WoSoCenter editor controls, Liga F poster refinements */
+.standings-page .woso-editor-topbar .top-actions{margin-inline-start:auto;justify-content:flex-end;flex-wrap:nowrap}
+.standings-page .history-actions{display:flex;gap:4px;padding:3px;align-items:center;background:var(--panel2);border:1px solid var(--edge);border-radius:11px}
+.standings-page .history-actions .tool-btn{background:transparent;border:0}
+.standings-page .standings-home{display:inline-flex;gap:7px;align-items:center}
+.standings-editor .asset-pick.large{height:61px;display:flex;align-items:center;margin-top:6px;text-align:right}
+.standings-editor .asset-pick .asset-sample{height:42px;width:42px;border-radius:8px;overflow:hidden;flex:none}
+.standings-editor .asset-pick .asset-sample img{width:100%;height:100%;object-fit:contain}
+.standings-editor .asset-pick .asset-pick-name{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-league-card{min-height:147px;align-content:start;position:relative}
+.s-league-card img{object-fit:contain;height:95px;background:var(--panel2)}
+.s-league-card:disabled{opacity:.48;cursor:not-allowed}
+.s-league-card small{font-size:11px;color:var(--violet)}
+.s-logo-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:12px 0}
+.s-logo-option{min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--input);border:1px solid var(--edge);color:var(--text);border-radius:12px;padding:12px}
+.s-logo-option:hover{border-color:var(--violet)}
+.s-logo-option img,.s-logo-none{width:80px;height:80px;object-fit:contain;border-radius:9px;background:var(--panel2);display:grid;place-items:center;font-size:11px}
+.s-logo-option strong{font-size:11px}
+.s-crop-frame{position:relative;max-height:540px;width:min(100%,432px);height:auto;aspect-ratio:4/5;isolation:isolate;overflow:hidden}
+.s-crop-frame canvas{height:100%;width:100%;display:block;cursor:grab;touch-action:none}
+.s-crop-frame canvas:active{cursor:grabbing}
+.s-crop-grid{position:absolute;inset:0;pointer-events:none;border:1px solid #fff6;opacity:.53;background:linear-gradient(to right,transparent calc(33.333% - .5px),#ffffffa1 33.333%,transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),#ffffffa1 66.666%,transparent calc(66.666% + .5px)),linear-gradient(to bottom,transparent calc(33.333% - .5px),#ffffffa1 33.333%,transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),#ffffffa1 66.666%,transparent calc(66.666% + .5px))}
+.s-pages-grid .s-page-open{background:none;color:var(--text);border:0;padding:0;display:flex;flex-direction:column;gap:7px;align-items:center;width:100%;cursor:pointer}
+.s-pages-grid .s-page-thumb{width:100%;height:auto;aspect-ratio:4/5;border-radius:8px;box-shadow:0 3px 12px #0005;background:#072450;display:block}
+.s-pages-grid .s-page-open:hover .s-page-thumb{outline:2px solid var(--violet)}
+.s-pages-grid .s-page{align-content:start}
+.s-pages-grid .s-page .s-page-tools{justify-content:space-between}
+.s-pages-grid .s-page strong{font-size:11px}
+.s-library-grid .s-library-card img{height:auto;aspect-ratio:4/5;object-fit:contain;background:var(--panel2)}
+#patternMy .s-library-card img{object-fit:cover}
+.s-modal-tabs{justify-content:stretch;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.s-modal-tabs button{border-radius:9px 9px 0 0;min-height:44px;text-align:center}
+.s-modal-tabs button.active{color:var(--violet);background:color-mix(in srgb,var(--violet) 15%,var(--panel2));border-bottom:2px solid var(--violet)}
+.s-library-card{justify-items:center;overflow:hidden}
+#headerLogoDialog .dialog-head,#leagueDialog .dialog-head{margin-bottom:13px}
+@media(max-width:850px){.standings-page .woso-editor-topbar{flex-wrap:wrap}.standings-page .woso-editor-topbar .identity{flex:0 0 100%}.standings-page .woso-editor-topbar .top-actions{width:auto;margin-inline-start:auto}}
+@media(max-width:540px){.standings-page .woso-editor-topbar .top-actions{width:100%;justify-content:flex-end}.standings-page .history-actions{margin-inline-start:auto}.s-logo-option img,.s-logo-none{width:56px;height:56px}.s-league-card img{height:75px}.s-pages-grid .s-page-tools button{font-size:9px}}

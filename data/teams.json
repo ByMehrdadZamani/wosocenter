@@ -490,5 +490,11 @@
     "name": "نورشلاند",
     "image": "assets/teams/nordsjaelland.webp",
     "color": "#ecce24"
+  },
+  {
+    "id": "eybar",
+    "name": "ایبار",
+    "image": "assets/teams/eybar.webp",
+    "color": "#073b74"
   }
 ]
