@@ -359,4 +359,13 @@ try{const saved=JSON.parse(localStorage.getItem(INTERVIEW_HISTORY_STORE)||'null'
  }} }catch(e){console.warn('Interview draft restore unavailable',e);}
 refreshControls();paginate();if(!history.length){history=[{data:snapshot(),key:snapshotKey(snapshot()),label:'شروع پروژه',at:new Date()}];historyPosition=0;}
 historyReady=true;refreshHistoryUI();document.fonts.ready.then(scheduleRender);scheduleRender();
+
+/* v6.1 — export a chosen interview page at the selected resolution. */
+window.wosoPageCount=()=>{paginate();return pages.length};
+window.wosoGeneratePageExport=async function(index,scale){
+ const i=Number(index);if(!Number.isInteger(i)||![1,2].includes(scale))throw Error('صفحه یا کیفیت نامعتبر');
+ await document.fonts.ready;paginate();if(i<0||i>=pages.length)throw Error('این صفحه موجود نیست');
+ const c=document.createElement('canvas');c.width=W*scale;c.height=H*scale;
+ const cx=c.getContext('2d',{alpha:false});cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cx.scale(scale,scale);paintPoster(cx,i);return c;
+};
 })();

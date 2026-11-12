@@ -159,6 +159,8 @@ function lValidate(raw){
   for(const slot of s.slots){const p=lFindPlayer(slot.playerId);if(p&&slot.image===p.image&&p.lineupPortrait)slot.photoScale=1;}
  }
  s.portraitCalibrationVersion=3;
+ // v6.1: saved cards with the old Rosalia portrait must use the refreshed database source.
+ for(const slot of s.slots){if(slot.playerId==='barca-38'&&!slot.imageKey)slot.image='assets/players/barcelona/player-38-rosalia-source-v2.webp';}
  for(const key of ['league','week','matchup','time','channel','title','coach','stadium'])s[key]=String(s[key]??def[key]).slice(0,110);
  // One-time color refinement: migrate only untouched v5.0 Barcelona template shades.
  if(raw?.colors&&s.paletteId==='barcelona'&&s.colors.header==='#920a36'&&s.colors.upper==='#0e3562'&&s.colors.lower==='#970d39'&&s.colors.accent==='#e6aa22'&&s.colors.side==='#edb824'){
@@ -874,7 +876,7 @@ async function lImport(e){const file=e.target.files?.[0];if(!file)return;try{if(
 async function lInit(){
  const themesafe=(()=>{try{return localStorage.getItem('wosocenter-ui-theme')==='light'}catch{return false}})();document.documentElement.dataset.theme=themesafe?'light':'dark';
  [lTeams,lPlayers,lLeagues,lPalettes,lNationalFlags,lReadyPalettes,lPatterns]=await Promise.all([
- lLoadJSON('data/teams.json',[]),lLoadJSON('data/players.json?v=6.13',[]),lLoadJSON('data/flags.json',[]),lLoadJSON('data/lineup-palettes.json',[]),lLoadJSON('data/national-flags.json',[]),lLoadJSON('data/lineup-ready-palettes.json',[]),lLoadJSON('data/patterns.json',[])]);
+ lLoadJSON('data/teams.json',[]),lLoadJSON('data/players.json?v=6.15.0',[]),lLoadJSON('data/flags.json',[]),lLoadJSON('data/lineup-palettes.json',[]),lLoadJSON('data/national-flags.json',[]),lLoadJSON('data/lineup-ready-palettes.json',[]),lLoadJSON('data/patterns.json',[])]);
  let persisted=null;try{persisted=JSON.parse(localStorage.getItem(LSTORE)||'null')}catch{}
  let savedPages=null;try{savedPages=JSON.parse(localStorage.getItem(LPAGES_STORE)||'null')}catch{}
  if(savedPages?.pages?.length){lPages=savedPages.pages.map((p,i)=>({id:String(p.id||'p'+i),name:String(p.name||'صفحه '+(i+1)),data:lValidate(p.data||lFresh())}));lPageIndex=Math.max(0,Math.min(lPages.length-1,Number(savedPages.active)||0));lState=lClone(lPages[lPageIndex].data);}
@@ -939,4 +941,17 @@ window.wosoGenerateExport = async function(scale){
 };
 lFaceInit();
 
+
+/* v6.1 — render each schematic page directly at the requested resolution. */
+window.wosoPageCount=()=>lPages.length;
+window.wosoGeneratePageExport=async function(index,scale){
+ const i=Number(index);if(!Number.isInteger(i)||i<0||i>=lPages.length||![1,2].includes(scale))throw Error('صفحه یا کیفیت نامعتبر');
+ if(lPages[lPageIndex])lPages[lPageIndex].data=lClone(lState);
+ const priorState=lState,priorCtx=lCtx;
+ try{
+  lState=lValidate(lClone(lPages[i].data));await lWaitResources();
+  const out=document.createElement('canvas');out.width=LW*scale;out.height=LH*scale;
+  lCtx=out.getContext('2d',{alpha:false});lCtx.imageSmoothingEnabled=true;lCtx.imageSmoothingQuality='high';lCtx.scale(scale,scale);lDraw(false);return out;
+ }finally{lState=priorState;lCtx=priorCtx;lRender();}
+};
 lInit().catch(e=>{console.error('Lineup init',e);lNotify('خطا در شروع شماتیک‌ساز. صفحه را دوباره بارگذاری کنید.','error')});

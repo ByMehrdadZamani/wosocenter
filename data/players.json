@@ -25,7 +25,7 @@
     ],
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-03.webp",
-    "portraitBrowY": 242.0,
+    "portraitBrowY": 242,
     "portraitEyeDistance": 127,
     "lineupPortrait": "assets/players/lineup-calibrated/barca-03.png",
     "lineupCalibration": {
@@ -141,7 +141,7 @@
     "lineupPortrait": "assets/players/lineup-calibrated/barca-07.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 96.0,
+      "headWidth": 96,
       "headHeight": 115.8,
       "crownY": 64
     },
@@ -289,7 +289,7 @@
     "lineupPortrait": "assets/players/lineup-calibrated/barca-11.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 99.0,
+      "headWidth": 99,
       "headHeight": 112.3,
       "crownY": 64
     },
@@ -327,7 +327,7 @@
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
       "headWidth": 98.2,
-      "headHeight": 131.0,
+      "headHeight": 131,
       "crownY": 64
     },
     "pickerPortrait": "assets/players/picker/barca-12.webp"
@@ -395,7 +395,7 @@
     ],
     "portraitHeadRise": 50,
     "thumb": "assets/players/thumbs/barca-14.webp",
-    "portraitBrowY": 229.0,
+    "portraitBrowY": 229,
     "portraitEyeDistance": 126,
     "lineupPortrait": "assets/players/lineup-calibrated/barca-14.png",
     "lineupCalibration": {
@@ -437,7 +437,7 @@
     "lineupPortrait": "assets/players/lineup-calibrated/barca-16.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 98.0,
+      "headWidth": 98,
       "headHeight": 113.4,
       "crownY": 64
     },
@@ -842,11 +842,11 @@
     "lineupPortrait": "assets/players/lineup-calibrated/barca-29-v2.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
-      "headWidth": 102.0,
-      "headHeight": 132.0,
+      "headWidth": 102,
+      "headHeight": 132,
       "crownY": 64,
-      "eyeLineY": 134.0,
-      "sourceToCardFactorRelativeToV1": 1.0,
+      "eyeLineY": 134,
+      "sourceToCardFactorRelativeToV1": 1,
       "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
     "pickerPortrait": "assets/players/picker/barca-29.webp",
@@ -871,7 +871,7 @@
       "headWidth": 116.3,
       "headHeight": 126.5,
       "crownY": 64,
-      "eyeLineY": 121.0,
+      "eyeLineY": 121,
       "sourceToCardFactorRelativeToV1": 1.14,
       "method": "Individual visual review with approximate Haar face metrics (nominal, not physical measurement); original user cutout resized uniformly, crown fixed at 64; geometry previews at 1.00, 0.84, 0.78 and 0.70"
     },
@@ -1019,7 +1019,7 @@
     "lineupPortrait": "assets/players/lineup-calibrated/barca-36-v2.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
-      "headWidth": 104.0,
+      "headWidth": 104,
       "headHeight": 128.5,
       "crownY": 64,
       "eyeLineY": 130.3,
@@ -1057,26 +1057,25 @@
     "id": "barca-38",
     "teamId": "barcelona",
     "name": "رزالیا دومینگز",
-    "image": "assets/players/barcelona/player-38.webp",
+    "image": "assets/players/barcelona/player-38-rosalia-source-v2.webp",
     "positionGroup": "MID",
     "category": "هافبک",
     "position": "MID",
     "flag": "es",
-    "sourceWidth": 1080,
-    "sourceHeight": 1080,
+    "sourceWidth": 835,
+    "sourceHeight": 1968,
     "sourceFormat": "WEBP",
-    "thumb": "assets/players/thumbs/barca-38.webp",
-    "lineupPortrait": "assets/players/lineup-calibrated/barca-38-v3.png",
+    "thumb": "assets/players/thumbs/barca-38-rosalia-thumb-v2.webp",
+    "lineupPortrait": "assets/players/lineup-calibrated/barca-38-rosalia-v2.png",
     "lineupCalibration": {
-      "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
-      "headWidth": 108.1,
-      "headHeight": 126.1,
+      "reference": "barca-24 / 4-3-3 / WoSoCenter 6.15",
+      "headWidth": 118,
+      "headHeight": 128,
       "crownY": 64,
-      "eyeLineY": 124.0,
-      "sourceToCardFactorRelativeToV1": 1.06,
-      "method": "Individually resized +6% from original user-supplied transparent cutout, uniform XY scaling; crown fixed at y=64; compatible with portrait guide 6.13 and unmodified lineup renderer"
+      "eyeLineY": 125,
+      "method": "Uniformly scaled transparent cutout; head centered in 300x310 transparent portrait, same 4:5 schematic layout as other Barcelona cards."
     },
-    "pickerPortrait": "assets/players/picker/barca-38.webp"
+    "pickerPortrait": "assets/players/picker/barca-38-rosalia-picker-v2.webp"
   },
   {
     "id": "barca-39",
@@ -1119,7 +1118,7 @@
     "lineupPortrait": "assets/players/lineup-calibrated/barca-40-v2.png",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3 / portrait guide 6.13",
-      "headWidth": 103.0,
+      "headWidth": 103,
       "headHeight": 134.3,
       "crownY": 64,
       "eyeLineY": 135.1,
@@ -1144,8 +1143,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-01.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1167,8 +1166,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-02.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1190,8 +1189,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-03.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1213,8 +1212,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-04.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1236,8 +1235,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-05.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1259,8 +1258,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-06.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1282,8 +1281,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-07.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1305,8 +1304,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-08.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1328,8 +1327,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-09.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1351,8 +1350,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-10.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1374,8 +1373,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-11.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1397,8 +1396,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-12.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1420,8 +1419,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-13.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1443,8 +1442,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-14.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1466,8 +1465,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-15.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1489,8 +1488,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-16.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1513,8 +1512,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-17-v613.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment",
       "verification": "v6.13: original Barcelona-matched 300x310 portrait; versioned URL to prevent stale full-body fallback"
@@ -1537,8 +1536,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-18.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1561,8 +1560,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-19.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1585,8 +1584,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-20.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1608,8 +1607,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-21.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1631,8 +1630,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-22.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1654,8 +1653,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-23.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1677,8 +1676,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-24.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1700,8 +1699,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-25.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1723,8 +1722,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-26.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },
@@ -1746,8 +1745,8 @@
     "lineupPortrait": "assets/players/lineup-calibrated/arsenal-27.webp",
     "lineupCalibration": {
       "reference": "barca-24 / 4-3-3",
-      "headWidth": 106.0,
-      "headHeight": 106.0,
+      "headWidth": 106,
+      "headHeight": 106,
       "crownY": 64,
       "method": "Barcelona-matched source portrait; face-width and crown alignment"
     },

@@ -162,7 +162,7 @@ function championGold(){
 function drawPoster(ctx){ctx.save();ctx.clearRect(0,0,W,H);drawBackground(ctx);
  const logoPaths={woso:'assets/interview/logo-woso.jpg',barca:'assets/interview/logo-barca.jpg'};
  const headerLogo=logoPaths[state.headerLogo];
- if(headerLogo){const im=imageFor(headerLogo);if(im){ctx.save();ctx.beginPath();ctx.roundRect(25,31,64,64,15);ctx.clip();ctx.drawImage(im,25,31,64,64);ctx.restore()}}
+ if(headerLogo){const im=imageFor(headerLogo);if(im){ctx.save();ctx.beginPath();ctx.roundRect(34,34,58,58,15);ctx.clip();ctx.drawImage(im,34,34,58,58);ctx.restore()}}
  const wordmark=tintedAsset(WORDMARK,state.brandColor||'#8c47bb');
  if(wordmark){const hh=clamp(Number(state.brandSize)||41,20,90),ww=Math.min(370,wordmark.width*hh/wordmark.height);ctx.drawImage(wordmark,107+state.brandX,63-hh/2+state.brandY,ww,hh)}
  write(ctx,computedTitle(),1049+state.titleX,73+state.titleY,state.titleSize,state.titleColor,state.titleFont,'bold','right',640);
@@ -373,4 +373,23 @@ $('addPage').addEventListener('click',()=>addPage(false));$('duplicatePage').add
  }
 async function init(){try{document.documentElement.dataset.theme=localStorage.getItem('woso-standings-ui-theme')||'dark'}catch{}restore();attachEvents();syncControls();buildTeamEditors();drawSoon();if(state.data?.teams?.length){status(lastFetchLabel(state.dataFetchedAt)||'جدول ذخیره‌شده نمایش داده می‌شود؛ برای به‌روزرسانی دریافت کن.', 'ok');$('dataBadge').textContent=`${persian(state.data.teams.length)} تیم · ${persian(state.data.season)} · داده ذخیره‌شده`}if(!state.data?.teams?.length){status('پیش‌نمایش نمونه نمایش داده می‌شود؛ برای جدول تازه، «ساخت خودکار جدول» را بزن.');$('dataBadge').textContent='پیش‌نمایش نمونه · داده‌ها آنلاین نیستند'}await Promise.allSettled([loadLibraries(),loadMedia()]);try{await document.fonts.ready}catch{}drawSoon()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+
+/* v6.1 — non-destructive export of any standings page, in either resolution. */
+window.wosoPageCount=()=>pages.length;
+window.wosoGeneratePageExport=async function(index,scale){
+ const i=Number(index);if(!Number.isInteger(i)||i<0||i>=pages.length||![1,2].includes(scale))throw Error('صفحه یا کیفیت نامعتبر');
+ if(pages[pageIndex])pages[pageIndex].state=deep(state);
+ const original=state;
+ try{
+  state={...DEFAULT(),...deep(pages[i].state)};
+  await document.fonts.ready;
+  const sources=sourcesForCurrentPage();
+  await Promise.all(sources.map(src=>new Promise(resolve=>{
+   const r=imageRecord(src);if(!r||r.status!=='loading')return resolve();
+   const finish=()=>resolve();r.img.addEventListener('load',finish,{once:true});r.img.addEventListener('error',finish,{once:true});setTimeout(finish,6500);
+  })));
+  const out=document.createElement('canvas');out.width=W*scale;out.height=H*scale;
+  const cx=out.getContext('2d',{alpha:false});cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cx.scale(scale,scale);drawPoster(cx);return out;
+ }finally{state=original;drawSoon();}
+};
 })();

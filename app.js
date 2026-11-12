@@ -572,3 +572,15 @@ async function main(){let uiLight=false;try{uiLight=localStorage.getItem('wosoce
  
  if(!patterns.length)patterns=fallbackPatterns;const available=new Set(patterns.map(p=>p.id));let migrated=false;for(const snapshot of [project,...history.map(h=>h.snapshot)])for(const pg of snapshot.pages||[]){if(!available.has(pg.data.patternId)){pg.data.patternId=patterns[0].id;migrated=true;}}persist();syncGlobals();refreshGames();refreshPalettes();refreshPages();updateHistoryButtons();queueRender();void preloadCurrentImages().then(queueRender).catch(console.warn);void ensureFonts().then(queueRender);if(!teams.length||!flags.length)message('بانک لوگو یا پرچم خالی است.','warning');}
 main().catch(e=>{console.error(e);message('بارگذاری اطلاعات انجام نشد؛ صفحه را دوباره باز کنید.','error');});
+
+/* v6.1 — export any fixture page without switching the active page. */
+window.wosoPageCount=()=>project.pages.length;
+window.wosoGeneratePageExport=async function(index,scale){
+ const page=typeof index==='string'?project.pages.find(p=>p.id===index):project.pages[Number(index)];
+ if(!page||![1,2].includes(scale))throw Error('صفحه یا کیفیت نامعتبر');
+ if(project.activePageId===page.id)page.data=JSON.parse(JSON.stringify(state));
+ await preloadForPage(page.data);
+ const fonts=new Set([page.data.dayFont,page.data.dateFont,page.data.footerFont,...page.data.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);
+ await loadFontFamilies([...fonts]);
+ const c=document.createElement('canvas');c.width=WIDTH*scale;c.height=HEIGHT*scale;drawPoster(c,page.data);return c;
+};
