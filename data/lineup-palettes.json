@@ -1134,5 +1134,21 @@
     "cardBorder": "#fbf5e8",
     "watermark": "#bf3a4a",
     "text": "#fbf5e8"
+  },
+  {
+    "id": "mrsy-2",
+    "name": "مارسی",
+    "teamId": "mrsy-2",
+    "header": "#08283C",
+    "upper": "#138FBF",
+    "lower": "#0C3B59",
+    "accent": "#D6B668",
+    "side": "#53C5E7",
+    "card1": "#148CB7",
+    "card2": "#0B4B69",
+    "cardName": "#0C354D",
+    "cardBorder": "#D6B668",
+    "watermark": "#2BAFD8",
+    "text": "#F5FAFF"
   }
 ]
