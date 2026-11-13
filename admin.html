@@ -5,22 +5,24 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#0b0820">
-<title>مدیریت آمار | WoSoCenter</title>
+<meta name="theme-color" content="#0d0b16">
+<title>مدیریت آمار | WosoCenter Studio</title>
+<link rel="icon" type="image/png" href="assets/lineup/woso-emblem-full.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="admin.css?v=1">
+<link rel="stylesheet" href="admin.css?v=2">
 <script defer src="woso-analytics.js?v=1"></script>
-<script defer src="admin.js?v=1"></script>
+<script defer src="admin.js?v=2"></script>
 </head>
 <body>
+<div class="home-orbit orbit-one" aria-hidden="true"></div><div class="home-orbit orbit-two" aria-hidden="true"></div>
 <header class="app-head">
- <div class="brand"><div class="brand-mark">W</div><div><strong>WoSoCenter</strong><span>داشبورد خصوصی مدیریت آمار</span></div></div>
- <a href="index.html" class="home-link">↗ بازگشت به سایت</a>
+ <div class="brand"><div class="brand-mark"><img src="assets/lineup/woso-emblem-full.png" alt="" width="40" height="40"></div><div><strong>استودیو <span class="brand-heading" style="display:inline">ووسو سنتر</span></strong><span>داشبورد خصوصی مدیریت آمار</span></div></div>
+ <div class="head-actions"><button type="button" id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز و شب"><span aria-hidden="true">☀</span><span>حالت روز</span></button><a href="index.html" class="home-link">↗ بازگشت به سایت</a></div>
 </header>
 <main class="shell">
  <section class="auth-panel" id="loginPanel">
-  <div class="auth-symbol">✦</div>
-  <h1>ورود مدیر سایت</h1>
+  <div class="auth-symbol"><img src="assets/lineup/woso-emblem-full.png" alt=""></div>
+  <h1>ورود به پنل استودیو ووسو سنتر</h1>
   <p>آمار بازدید و دانلودهای WoSoCenter فقط برای مدیر قابل مشاهده است.</p>
   <form id="loginForm">
    <label for="adminPassword">رمز ورود مدیریت</label>
@@ -32,7 +34,7 @@
  </section>
  <section id="dashboard" hidden>
   <div class="heading-row">
-   <div><h1>آمار سایت</h1><p>بازدیدهای واقعی صفحات و درخواست‌های شروع دانلود PNG</p></div>
+   <div><h1>گزارش <span>استودیو ووسو سنتر</span></h1><p>بازدید صفحات، دانلود PNG و عملکرد ابزارها</p><span id="todayJalali" class="today-chip">—</span></div>
    <div class="heading-actions"><label for="rangeSelect">بازه آماری</label><select id="rangeSelect" aria-label="بازه زمانی"><option value="7">۷ روز اخیر</option><option value="30" selected>۳۰ روز اخیر</option><option value="90">۹۰ روز اخیر</option></select><button type="button" id="refreshButton" class="btn soft">↻ به‌روزرسانی</button><button type="button" id="logoutButton" class="btn outline">خروج</button></div>
   </div>
   <p id="dashboardStatus" class="status" role="status" aria-live="polite"></p>
@@ -43,8 +45,8 @@
    <article class="metric"><span class="metric-label">دانلود این بازه</span><strong id="rangeDownloads">—</strong><small>همه ابزارها و صفحات</small></article>
   </div>
   <div class="sub-metrics"><span>نشست‌های تقریبی امروز: <b id="todaySessions">—</b></span><span>کل نشست‌های روزانه در بازه: <b id="periodSessions">—</b></span><span>دانلود با کیفیت بالا: <b id="highDownloads">—</b></span><span>دانلود با حجم بهینه: <b id="compactDownloads">—</b></span></div>
-  <section class="panel" aria-labelledby="trendsTitle"><div class="panel-head"><div><h2 id="trendsTitle">روند استفاده روزانه</h2><p>هر ستون میزان استفاده در یک روز را نشان می‌دهد.</p></div><div class="legend"><span><i class="view-dot"></i> بازدید</span><span><i class="download-dot"></i> دانلود</span></div></div><div class="chart-scroll"><div class="chart" id="trendChart"></div></div><p id="emptyChart" class="empty" hidden>هنوز آماری ثبت نشده. پس از نصب اسکریپت آمارگیری در صفحات، اطلاعات اینجا نمایش داده می‌شوند.</p></section>
-  <section class="panel" aria-labelledby="toolsTitle"><div class="panel-head"><div><h2 id="toolsTitle">عملکرد ابزارها</h2><p>مقایسه محبوبیت ابزارهای ووسو سنتر</p></div></div><div class="table-wrap"><table><thead><tr><th scope="col">صفحه / ابزار</th><th scope="col">بازدید</th><th scope="col">دانلود PNG</th><th scope="col">کیفیت بالا</th><th scope="col">حجم بهینه</th></tr></thead><tbody id="toolRows"></tbody></table></div></section>
+  <section class="panel" aria-labelledby="trendsTitle"><div class="panel-head"><div><h2 id="trendsTitle">روند بازدید و دانلود</h2><p>نمودار خطی پیوسته با تاریخ شمسی؛ هر نقطه، آمار یک روز است.</p></div><div class="legend"><span><i class="view-dot"></i> بازدید</span><span><i class="download-dot"></i> دانلود</span></div></div><div class="chart-scroll"><div class="chart" id="trendChart"></div></div><p id="emptyChart" class="empty" hidden>هنوز آماری ثبت نشده. پس از نصب اسکریپت آمارگیری در صفحات، اطلاعات اینجا نمایش داده می‌شوند.</p></section>
+  <section class="panel" aria-labelledby="toolsTitle"><div class="panel-head"><div><h2 id="toolsTitle">عملکرد ابزارها</h2><p>مقایسه دقیق پنج صفحه با آیکون‌های اختصاصی سایت</p></div></div><div class="table-wrap"><table><thead><tr><th scope="col">صفحه / ابزار</th><th scope="col">بازدید</th><th scope="col">دانلود PNG</th><th scope="col">کیفیت بالا</th><th scope="col">حجم بهینه</th></tr></thead><tbody id="toolRows"></tbody></table></div></section>
   <footer class="dashboard-foot"><span id="updatedTime">—</span><span id="zoneLabel">—</span><span>آمار تجمیعی و بدون ذخیره محتوای پوستر یا IP کاربران</span></footer>
  </section>
 </main>

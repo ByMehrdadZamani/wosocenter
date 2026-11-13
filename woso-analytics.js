@@ -6,6 +6,17 @@
  'use strict';
  const API = 'https://wosocenter-analytics.mr-mehrdadzamani1382.workers.dev';
  window.WoSoAnalytics = Object.freeze({endpoint:API});
+ // Shared UI additions load on every tool independently of analytics opt-outs.
+ // Keep them BEFORE Do-Not-Track / GPC checks: turning analytics off must not disable the editor.
+ const pageName=location.pathname.split('/').filter(Boolean).pop()||'index.html';
+ if(pageName!=='admin.html'){
+   const ui=document.createElement('script');ui.src='woso-site-ui.js?v=2';document.head.appendChild(ui);
+   if(pageName==='lineup.html'){
+     const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';stylesheet.href='woso-lineup-custom-player.css?v=2';document.head.appendChild(stylesheet);
+     const feature=document.createElement('script');feature.src='woso-lineup-custom-player.js?v=2';document.head.appendChild(feature);
+   }
+ }
+
  const map = {'':'home','index.html':'home','fixture.html':'fixture','lineup.html':'lineup','interview.html':'interview','standings.html':'standings'};
  const path = location.pathname.endsWith('/') ? 'index.html' : (location.pathname.split('/').filter(Boolean).pop() || 'index.html');
  const tool = map[path];

@@ -1,0 +1,37 @@
+/* WoSoCenter — session player UI + sticky face controls */
+.lineup-player-dialog .lineup-popup-scale-fields{display:none!important}
+.lineup-player-dialog #lineupScaleReset{display:none!important}
+.lineup-player-library .lineup-library-grid .woso-create-player-tile{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  min-height:158px;border:1.5px dashed #b879e8;background:linear-gradient(145deg,#4b276247,#8c49bc14);
+  color:var(--text);border-radius:15px;text-align:center;padding:14px 7px;
+}
+.woso-create-plus{display:grid;place-items:center;width:67px;height:67px;border-radius:50%;
+  background:linear-gradient(145deg,#af63db,#e0a6f6);color:#1d1029;
+  box-shadow:0 7px 22px #b765e144;font:600 40px/1 Arial,sans-serif}
+.lineup-library-grid .woso-create-player-tile strong{font-size:13px}
+.lineup-library-grid .woso-create-player-tile small{font-size:10px;color:var(--muted)}
+.lineup-library-grid .woso-create-player-tile:hover,.lineup-library-grid .woso-create-player-tile:focus-visible{
+  border-color:#ebc988;box-shadow:0 0 0 3px #d4a5f228;
+}
+.lineup-face-dialog{overflow-y:auto;overscroll-behavior:contain}
+.lineup-face-dialog .woso-face-top{
+ position:sticky;top:-1px;z-index:12;padding:11px 12px 13px;margin:-12px -12px 10px;
+ background:var(--panel,#201828);border-bottom:1px solid var(--edge,#624c70);
+ box-shadow:0 7px 19px #0004;backdrop-filter:blur(15px);
+}
+.lineup-face-dialog .woso-face-top .dialog-head{margin-bottom:11px}
+.lineup-face-dialog .woso-face-top .lineup-face-actions{margin:0;justify-content:flex-start}
+.lineup-face-dialog .woso-face-top .lineup-face-actions .btn{flex:1;min-height:41px;font-size:12px}
+.lineup-face-dialog .woso-face-top #lineupFaceSave{flex:1.6}
+.lineup-face-dialog .lineup-face-fields .woso-face-size-control{display:block;margin-bottom:16px;padding:12px;
+ background:color-mix(in srgb,var(--input,#191321),transparent 18%);border:1px solid var(--edge,#513b5d);border-radius:12px}
+.lineup-face-dialog .woso-face-size-control output{float:left;color:var(--violet,#d38be8);font-weight:700}
+.lineup-face-dialog .woso-face-size-control input{display:block;width:100%;margin-top:14px;accent-color:#b965d8}
+.lineup-face-dialog.woso-upload-mode #lineupFaceTitle{color:var(--violet,#c991e8)}
+@media(max-width:520px){
+ .lineup-face-dialog .woso-face-top{padding:10px 7px;margin:-12px -12px 9px}
+ .lineup-face-dialog .woso-face-top .lineup-face-actions{gap:5px}
+ .lineup-face-dialog .woso-face-top .lineup-face-actions .btn{padding:9px 5px;font-size:10px}
+ .lineup-player-library .lineup-library-grid .woso-create-player-tile{min-height:140px}
+}
