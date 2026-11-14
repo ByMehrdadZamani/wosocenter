@@ -82,3 +82,275 @@
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
  window.wosoOpenDownloadChooser=openChooser;
 })();
+
+/* WoSoCenter reliable-image layer — direct-upload edition, 2026-11.
+ * This existing shared script is loaded AFTER each editor's own script.
+ * Preserve the download code above. No new CDN, server, or deployment step.
+ */
+(() => {
+ 'use strict';
+ if(window.wosoReliableImages202611)return;
+ window.wosoReliableImages202611=true;
+ const delay=ms=>new Promise(done=>setTimeout(done,ms));
+ const visiblePath=location.pathname;
+
+ if(visiblePath.includes('fixture') && typeof window.preload==='function' &&
+    typeof images!=='undefined' && typeof patterns!=='undefined'){
+   const inflight=new Map(),failed=new Map();
+   const MAX_ATTEMPTS=3,MAX_LOAD_MS=20000;
+   const selectedPattern=()=>findPattern(state.patternId)||patterns[0];
+   const currentPatternMatches=src=>selectedPattern()?.image===src;
+   const syncSelected=src=>{if(currentPatternMatches(src))window.syncPattern?.()};
+   const loadOnce=src=>new Promise(resolve=>{
+     const img=new Image();img.decoding='async';
+     let finished=false;
+     const deadline=setTimeout(()=>finish(null),MAX_LOAD_MS);
+     function finish(result){
+       if(finished)return;
+       finished=true;clearTimeout(deadline);
+       img.onload=null;img.onerror=null;
+       if(!result)img.removeAttribute('src');
+       resolve(result);
+     }
+     img.onload=()=>finish(img.naturalWidth>0?img:null);
+     img.onerror=()=>finish(null);
+     img.src=src;
+   });
+   window.preload=function(src,{force=false}={}){
+     if(!src)return Promise.resolve(false);
+     if(images.get(src))return Promise.resolve(true);
+     if(inflight.has(src))return inflight.get(src);
+     const previous=failed.get(src);
+     if(!force&&previous&&previous.retryAt>Date.now())return Promise.resolve(false);
+     const job=(async()=>{
+       for(let attempt=0;attempt<MAX_ATTEMPTS;attempt++){
+         const image=await loadOnce(src);
+         if(image){
+           images.set(src,image);failed.delete(src);
+           // Unrelated images should not invalidate expensive recoloring caches.
+           for(const key of tinted.keys())if(key.startsWith(src+'|'))tinted.delete(key);
+           for(const key of hueCache.keys())if(key.startsWith('hsv|'+src+'|'))hueCache.delete(key);
+           syncSelected(src);queueRender();
+           return true;
+         }
+         if(attempt<MAX_ATTEMPTS-1)await delay(400*(2**attempt));
+       }
+       const count=Math.min(4,(failed.get(src)?.count||0)+1);
+       failed.set(src,{count,retryAt:Date.now()+Math.min(30000,1500*(2**count))});
+       console.warn('WoSoCenter: image unavailable; retry supported:',src);
+       if(currentPatternMatches(src)){
+         syncSelected(src);
+         message('بارگذاری پترن انجام نشد؛ دوباره انتخابش کن یا اتصال را بررسی کن.','warning');
+       }
+       return false;
+     })().finally(()=>{inflight.delete(src);syncSelected(src)});
+     inflight.set(src,job);syncSelected(src);
+     return job;
+   };
+
+   // A lightweight, independent thumbnail is enough for the 43px picker.
+   // In particular, never download the high-resolution image just for the picker.
+   window.syncPattern=function(){
+     const p=selectedPattern();if(!p)return;
+     if(state.patternId!==p.id)state.patternId=p.id;
+     const sample=document.getElementById('patternSample');
+     const thumbnail=p.thumb||p.image;
+     const retryThumb=sample?.dataset.thumbError==='1' &&
+       Number(sample.dataset.thumbRetryAt||0)<Date.now();
+     if(sample&&(sample.dataset.source!==thumbnail||retryThumb)){
+       sample.dataset.source=thumbnail;
+       sample.dataset.thumbError='0';
+       sample.textContent='';
+       const img=document.createElement('img');
+       img.alt='';img.loading='eager';img.decoding='async';
+       img.onload=()=>{if(sample.contains(img))sample.dataset.thumbError='0'};
+       img.onerror=()=>{
+         if(!sample.contains(img))return;
+         sample.dataset.thumbError='1';
+         sample.dataset.thumbRetryAt=String(Date.now()+3000);
+         img.remove();sample.textContent='▧';
+       };
+       img.src=thumbnail;sample.append(img);
+     }
+     const status=failed.get(p.image);
+     const failedNow=Boolean(status&&!inflight.has(p.image)&&!images.get(p.image));
+     const loading=Boolean(!failedNow&&!images.get(p.image));
+     document.getElementById('patternName').textContent=p.name+(failedNow?' · بارگذاری ناموفق':loading?' · در حال بارگذاری…':'');
+     const toggle=document.getElementById('patternTintToggle');
+     const recolorable=p.mode==='mask'||p.mode==='hue';
+     const enabled=p.mode==='mask'||(p.mode==='hue'&&state.patternTintEnabled);
+     toggle.checked=enabled;toggle.disabled=p.mode!=='hue';
+     document.getElementById('patternColorPicker').hidden=!recolorable||!enabled;
+     document.getElementById('patternTintHint').textContent=
+       p.mode==='mask'?'این پترن همیشه با رنگ انتخابی شما نمایش داده می‌شود.':
+       p.mode==='image'?'این تصویر فقط با رنگ اصلی نمایش داده می‌شود.':
+       enabled?'بخش‌های رنگی پترن دقیقاً با رنگ انتخابی نمایش داده می‌شوند؛ سایه‌ها حفظ می‌شوند.':'رنگ اصلی تصویر نمایش داده می‌شود.';
+   };
+
+   // Never silently export a poster with its selected background image missing.
+   if(typeof window.wosoGenerateExport==='function'){
+     const originalExport=window.wosoGenerateExport;
+     window.wosoGenerateExport=async function(scale){
+       const src=selectedPattern()?.image;
+       if(src&&!(await preload(src,{force:true})))
+         throw Error('پترن پس‌زمینه بارگذاری نشد. اتصال را بررسی و دوباره تلاش کن.');
+       return originalExport(scale);
+     };
+   }
+   if(typeof window.wosoGeneratePageExport==='function'){
+     const originalPageExport=window.wosoGeneratePageExport;
+     window.wosoGeneratePageExport=async function(index,scale){
+       const page=typeof index==='string'?project.pages.find(p=>p.id===index):project.pages[Number(index)];
+       const pattern=findPattern(page?.data?.patternId)||patterns[0];
+       if(pattern?.image&&!(await preload(pattern.image,{force:true})))
+         throw Error('پترن یکی از صفحات بارگذاری نشد. اتصال را بررسی و دوباره تلاش کن.');
+       return originalPageExport(index,scale);
+     };
+   }
+
+   // Concurrent preview-page generation; all original poster drawing is retained.
+   if(typeof window.refreshPageThumbs==='function')window.refreshPageThumbs=async function(){
+     const requestId=++thumbRefreshId;
+     const dialog=document.getElementById('pagesDialog');
+     const pages=project.pages.slice();let cursor=0;
+     const workers=Math.min(2,pages.length);
+     const work=async()=>{
+       while(cursor<pages.length){
+         if(requestId!==thumbRefreshId||!dialog.open)return;
+         const page=pages[cursor++];
+         const canvas=[...document.querySelectorAll('#pageTabs canvas[data-thumb-id]')]
+           .find(x=>x.dataset.thumbId===page.id);
+         if(!canvas)continue;
+         resizePageThumb(canvas);drawPoster(canvas,page.data);
+         try{
+           const fonts=new Set([page.data.dayFont,page.data.dateFont,page.data.footerFont,
+             ...page.data.matches.flatMap(m=>[m.leagueFont,m.timeFont])]);
+           await Promise.all([preloadForPage(page.data),loadFontFamilies([...fonts])]);
+         }catch(e){console.warn('WoSoCenter page preview resources',e)}
+         if(requestId!==thumbRefreshId||!dialog.open)return;
+         drawPoster(canvas,page.data);
+       }
+     };
+     await Promise.all(Array.from({length:workers},()=>work()));
+   };
+
+   // Choosing an already failed image is a deliberate request to retry now.
+   document.addEventListener('click',event=>{
+     const button=event.target instanceof Element?event.target.closest('[data-asset-id]'):null;
+     if(!button||pickContext?.kind!=='patternId')return;
+     const pattern=patterns.find(p=>p.id===button.dataset.assetId);
+     if(pattern)void preload(pattern.image,{force:true});
+   },true);
+   window.addEventListener('online',()=>{
+     const src=selectedPattern()?.image;
+     if(src&&!images.get(src))void preload(src,{force:true});
+     const sample=document.getElementById('patternSample');
+     if(sample?.dataset.thumbError==='1')sample.dataset.thumbRetryAt='0';
+     window.syncPattern();
+   });
+ }
+
+ if(visiblePath.includes('lineup') && typeof window.lImage==='function' &&
+    typeof lImgCache!=='undefined'){
+   const failures=new Map();
+   window.lImage=function(src){
+     if(!src)return null;
+     let record=lImgCache.get(src);
+     if(record){
+       if(!record.error)return record.image;
+       if(Date.now()<record.retryAfter)return null;
+       lImgCache.delete(src);
+     }
+     const prior=failures.get(src)||0;
+     record={image:new Image(),loaded:false,error:false,retryAfter:0};
+     lImgCache.set(src,record);
+     const image=record.image;image.decoding='async';
+     image.onload=()=>{
+       if(lImgCache.get(src)!==record)return;
+       record.loaded=true;record.error=false;failures.delete(src);
+       lRender();
+       if(L('lineupPagesDialog')?.open){clearTimeout(lThumbnailTimer);lThumbnailTimer=setTimeout(lPageDialogRender,250)}
+     };
+     image.onerror=()=>{
+       if(lImgCache.get(src)!==record)return;
+       record.error=true;
+       const count=Math.min(3,prior+1);failures.set(src,count);
+       const pause=count<3?650*(2**(count-1)):30000;
+       record.retryAfter=Date.now()+pause;
+       if(count<3)setTimeout(()=>{
+         if(lImgCache.get(src)!==record)return;
+         lImgCache.delete(src);window.lImage(src);lRender();
+       },pause);
+       lRender();
+       console.warn('WoSoCenter lineup image unavailable:',src);
+     };
+     image.src=src.startsWith('assets/players/lineup-calibrated/arsenal-')?src+'?v=6.11':src;
+     return image;
+   };
+   document.addEventListener('click',event=>{
+     const button=event.target instanceof Element?event.target.closest('[data-lpattern]'):null;
+     if(!button||lPatternType!=='graphic')return;
+     const pattern=lPatterns.find(p=>p.id===button.dataset.lpattern);
+     if(pattern&&lImgCache.get(pattern.image)?.error){
+       lImgCache.delete(pattern.image);failures.delete(pattern.image);
+     }
+   },true);
+   window.addEventListener('online',()=>{
+     const pattern=lPatterns.find(p=>p.id===lState.backgroundPatternId);
+     if(lState.backgroundPatternType==='graphic'&&pattern&&!lImgCache.get(pattern.image)?.loaded){
+       lImgCache.delete(pattern.image);failures.delete(pattern.image);
+       window.lImage(pattern.image);lRender();
+     }
+   });
+ }
+
+ if(visiblePath.includes('standings') && typeof window.imageRecord==='function' &&
+    typeof imgCache!=='undefined'){
+   const failures=new Map();
+   window.imageRecord=function(src){
+     if(!src)return null;
+     let record=imgCache.get(src);
+     if(record){
+       if(record.status!=='error'||Date.now()<record.retryAfter)return record;
+       imgCache.delete(src);
+     }
+     const prior=failures.get(src)||0;
+     record={status:'loading',img:new Image(),retryAfter:0};
+     imgCache.set(src,record);
+     const image=record.img;image.decoding='async';
+     image.onload=()=>{
+       if(imgCache.get(src)!==record)return;
+       record.status='ok';failures.delete(src);drawSoon();
+       if(document.getElementById('pagesDialog')?.open)renderPages();
+     };
+     image.onerror=()=>{
+       if(imgCache.get(src)!==record)return;
+       record.status='error';
+       const count=Math.min(3,prior+1);failures.set(src,count);
+       const pause=count<3?700*(2**(count-1)):30000;
+       record.retryAfter=Date.now()+pause;
+       if(count<3)setTimeout(()=>{
+         if(imgCache.get(src)!==record)return;
+         imgCache.delete(src);window.imageRecord(src);drawSoon();
+       },pause);
+       drawSoon();console.warn('WoSoCenter standings image unavailable:',src);
+     };
+     image.src=src;return record;
+   };
+   document.addEventListener('click',event=>{
+     const button=event.target instanceof Element?event.target.closest('[data-pattern-id]'):null;
+     if(!button)return;
+     const pattern=patterns.find(p=>p.id===button.dataset.patternId);
+     if(pattern&&imgCache.get(pattern.image)?.status==='error'){
+       imgCache.delete(pattern.image);failures.delete(pattern.image);
+     }
+   },true);
+   window.addEventListener('online',()=>{
+     const pattern=patterns.find(p=>p.id===state.patternId);
+     if(pattern&&imgCache.get(pattern.image)?.status!=='ok'){
+       imgCache.delete(pattern.image);failures.delete(pattern.image);
+       window.imageRecord(pattern.image);drawSoon();
+     }
+   });
+ }
+})();
