@@ -1,0 +1,13 @@
+/* Mac/Desktop player picker: prevent collapsed dialog body (v6.14.1). */
+@media (min-width: 741px) {
+  .lineup-player-dialog {
+    height: min(90vh, 900px);
+    height: min(90dvh, 900px);
+    box-sizing: border-box;
+  }
+
+  .lineup-player-dialog .lineup-player-body {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}
