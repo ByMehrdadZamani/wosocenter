@@ -10,14 +10,15 @@
 <link rel="icon" type="image/png" href="assets/lineup/woso-emblem-full.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="admin.css?v=2">
+<link rel="stylesheet" href="admin-v3.css?v=1">
 <script defer src="woso-analytics.js?v=1"></script>
-<script defer src="admin.js?v=2"></script>
+<script defer src="admin-v3.js?v=1"></script>
 </head>
 <body>
 <div class="home-orbit orbit-one" aria-hidden="true"></div><div class="home-orbit orbit-two" aria-hidden="true"></div>
 <header class="app-head">
- <div class="brand"><div class="brand-mark"><img src="assets/lineup/woso-emblem-full.png" alt="" width="40" height="40"></div><div><strong>استودیو <span class="brand-heading" style="display:inline">ووسو سنتر</span></strong><span>داشبورد خصوصی مدیریت آمار</span></div></div>
- <div class="head-actions"><button type="button" id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز و شب"><span aria-hidden="true">☀</span><span>حالت روز</span></button><a href="index.html" class="home-link">↗ بازگشت به سایت</a></div>
+  <div class="brand"><div class="brand-mark"><img src="assets/lineup/woso-emblem-full.png" alt="" width="40" height="40"></div><div><strong>استودیو <span class="brand-heading" style="display:inline">ووسو سنتر</span></strong><span>داشبورد خصوصی مدیریت آمار</span></div></div>
+  <div class="head-actions"><button type="button" id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز و شب"><span aria-hidden="true">☀</span><span>حالت روز</span></button><a href="index.html" class="home-link">↗ بازگشت به سایت</a></div>
 </header>
 <main class="shell">
  <section class="auth-panel" id="loginPanel">
@@ -34,20 +35,52 @@
  </section>
  <section id="dashboard" hidden>
   <div class="heading-row">
-   <div><h1>گزارش <span>استودیو ووسو سنتر</span></h1><p>بازدید صفحات، دانلود PNG و عملکرد ابزارها</p><span id="todayJalali" class="today-chip">—</span></div>
-   <div class="heading-actions"><label for="rangeSelect">بازه آماری</label><select id="rangeSelect" aria-label="بازه زمانی"><option value="7">۷ روز اخیر</option><option value="30" selected>۳۰ روز اخیر</option><option value="90">۹۰ روز اخیر</option></select><button type="button" id="refreshButton" class="btn soft">↻ به‌روزرسانی</button><button type="button" id="logoutButton" class="btn outline">خروج</button></div>
+   <div><h1>گزارش <span>استودیو ووسو سنتر</span></h1><p>بازدید صفحات، دانلود PNG و عملکرد ابزارها</p><span id="todayJalali" class="today-chip">—</span><span class="today-chip tehran-chip">◷ ساعت رسمی تهران · Asia/Tehran</span></div>
+   <div class="heading-actions"><label for="rangeSelect">بازه آماری</label>
+    <select id="rangeSelect" aria-label="بازه زمانی">
+     <option value="today">امروز</option><option value="yesterday">دیروز</option><option value="two-days-ago">دو روز پیش</option><option value="7">۷ روز اخیر</option><option value="30" selected>۳۰ روز اخیر</option><option value="90">۹۰ روز اخیر</option><option value="custom">انتخاب تاریخ شمسی</option>
+    </select>
+    <button type="button" id="refreshButton" class="btn soft">↻ به‌روزرسانی</button><button type="button" id="logoutButton" class="btn outline">خروج</button>
+   </div>
+  </div>
+  <div id="customDatePanel" class="date-range-panel" hidden>
+    <span class="date-range-label">انتخاب بازه دلخواه شمسی</span>
+    <button type="button" id="dateFromButton" class="date-choice" aria-label="انتخاب تاریخ شروع">شروع: —</button>
+    <span aria-hidden="true">تا</span>
+    <button type="button" id="dateToButton" class="date-choice" aria-label="انتخاب تاریخ پایان">پایان: —</button>
+    <button type="button" id="applyDateButton" class="btn soft">اعمال بازه</button>
+    <small class="date-range-limit">فعلاً داده‌های حداکثر ۹۰ روز اخیر قابل فیلتر است.</small>
+  </div>
+  <div id="jalaliPicker" class="jalali-picker" role="dialog" aria-label="انتخاب روز از تقویم شمسی" hidden>
+   <div class="jalali-picker-head"><button type="button" id="monthPrev" aria-label="ماه قبل">❯</button><strong id="jalaliMonthTitle">—</strong><button type="button" id="monthNext" aria-label="ماه بعد">❮</button></div>
+   <div class="jalali-weekdays" aria-hidden="true"><span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span></div>
+   <div id="jalaliDays" class="jalali-days" role="group" aria-label="روزهای ماه"></div>
+   <div class="jalali-picker-foot"><button type="button" id="pickerClose">بستن</button><button type="button" id="pickerToday">برو به امروز</button></div>
   </div>
   <p id="dashboardStatus" class="status" role="status" aria-live="polite"></p>
+  <p id="timezoneWarning" class="timezone-warning" hidden></p>
   <div class="metrics">
    <article class="metric"><span class="metric-label">بازدید امروز</span><strong id="todayViews">—</strong><small>تعداد باز شدن صفحات</small></article>
    <article class="metric"><span class="metric-label">دانلود امروز</span><strong id="todayDownloads">—</strong><small>شروع دانلودهای PNG</small></article>
    <article class="metric"><span class="metric-label">بازدید این بازه</span><strong id="rangeViews">—</strong><small id="periodCaption">۳۰ روز گذشته</small></article>
    <article class="metric"><span class="metric-label">دانلود این بازه</span><strong id="rangeDownloads">—</strong><small>همه ابزارها و صفحات</small></article>
   </div>
-  <div class="sub-metrics"><span>نشست‌های تقریبی امروز: <b id="todaySessions">—</b></span><span>کل نشست‌های روزانه در بازه: <b id="periodSessions">—</b></span><span>دانلود با کیفیت بالا: <b id="highDownloads">—</b></span><span>دانلود با حجم بهینه: <b id="compactDownloads">—</b></span></div>
-  <section class="panel" aria-labelledby="trendsTitle"><div class="panel-head"><div><h2 id="trendsTitle">روند بازدید و دانلود</h2><p>نمودار خطی پیوسته با تاریخ شمسی؛ هر نقطه، آمار یک روز است.</p></div><div class="legend"><span><i class="view-dot"></i> بازدید</span><span><i class="download-dot"></i> دانلود</span></div></div><div class="chart-scroll"><div class="chart" id="trendChart"></div></div><p id="emptyChart" class="empty" hidden>هنوز آماری ثبت نشده. پس از نصب اسکریپت آمارگیری در صفحات، اطلاعات اینجا نمایش داده می‌شوند.</p></section>
-  <section class="panel" aria-labelledby="toolsTitle"><div class="panel-head"><div><h2 id="toolsTitle">عملکرد ابزارها</h2><p>مقایسه دقیق پنج صفحه با آیکون‌های اختصاصی سایت</p></div></div><div class="table-wrap"><table><thead><tr><th scope="col">صفحه / ابزار</th><th scope="col">بازدید</th><th scope="col">دانلود PNG</th><th scope="col">کیفیت بالا</th><th scope="col">حجم بهینه</th></tr></thead><tbody id="toolRows"></tbody></table></div></section>
-  <footer class="dashboard-foot"><span id="updatedTime">—</span><span id="zoneLabel">—</span><span>آمار تجمیعی و بدون ذخیره محتوای پوستر یا IP کاربران</span></footer>
+  <div class="sub-metrics"><span>نشست‌های تقریبی امروز: <b id="todaySessions">—</b></span><span>جمع نشست‌های روزانه در بازه: <b id="periodSessions">—</b></span><span>دانلود با کیفیت بالا: <b id="highDownloads">—</b></span><span>دانلود با حجم بهینه: <b id="compactDownloads">—</b></span></div>
+  <section class="panel" aria-labelledby="trendsTitle">
+   <div class="panel-head"><div><h2 id="trendsTitle">نمودار خطی بازدید و دانلود</h2><p>روی نقطه‌های نمودار کلیک کن تا مقدار دقیق همان روز نمایش داده شود.</p></div><div class="legend"><span><i class="view-dot"></i> بازدید</span><span><i class="download-dot"></i> دانلود</span></div></div>
+   <div class="chart-scroll"><div class="chart" id="trendChart"></div></div>
+   <p id="emptyChart" class="empty" hidden>برای این بازه داده‌ای ثبت نشده است.</p>
+   <div class="chart-day-detail" id="chartSelectedDay" role="status" aria-live="polite">برای مشاهده جزئیات یک روز، روی نقطه نمودار کلیک کن.</div>
+  </section>
+  <section class="panel" aria-labelledby="dailyTitle"><div class="panel-head"><div><h2 id="dailyTitle">ریز آمار روزانه</h2><p>مقادیر دقیق روزهای بازه انتخابی</p></div></div><div class="table-wrap"><table><thead><tr><th>تاریخ شمسی</th><th>بازدید</th><th>دانلود</th><th>کیفیت بالا</th><th>حجم بهینه</th></tr></thead><tbody id="dailyRows"></tbody></table></div></section>
+  <section class="panel" aria-labelledby="toolsTitle"><div class="panel-head"><div><h2 id="toolsTitle">عملکرد ابزارها</h2><p id="toolsScopeInfo">مقایسه پنج صفحه سایت</p></div></div><div class="table-wrap"><table><thead><tr><th scope="col">صفحه / ابزار</th><th scope="col">بازدید</th><th scope="col">دانلود PNG</th><th scope="col">کیفیت بالا</th><th scope="col">حجم بهینه</th></tr></thead><tbody id="toolRows"></tbody></table></div></section>
+  <section class="panel" aria-labelledby="eventsTitle">
+   <div class="panel-head"><div><h2 id="eventsTitle">رویدادهای بازدیدکنندگان</h2><p>ساعت بازدید، صفحات مشاهده‌شده، دانلودها و نوع دستگاه؛ در صورت پشتیبانی Worker</p></div><span class="event-status-pill" id="eventsState">در حال بررسی</span></div>
+   <div class="event-filters" id="eventFilters" hidden><label for="sessionFilter">نمایش نشست</label><select id="sessionFilter"><option value="">همه نشست‌ها</option></select><span>شناسه نشست تصادفی است و هویت واقعی کاربر را نشان نمی‌دهد.</span></div>
+   <p class="event-help" id="eventsInfo">گزارش تفصیلی به ذخیره رویدادها در Cloudflare Worker نیاز دارد. نشست‌ها شناسه تصادفی دارند و معرف هویت واقعی افراد نیستند.</p>
+   <div class="table-wrap" id="eventsTableWrap" hidden><table><thead><tr><th>ساعت تهران</th><th>نشست</th><th>صفحه</th><th>رویداد</th><th>دستگاه</th><th>موقعیت تقریبی</th><th>جزئیات دانلود</th></tr></thead><tbody id="eventsRows"></tbody></table></div>
+  </section>
+  <footer class="dashboard-foot"><span id="updatedTime">—</span><span id="zoneLabel">—</span><span>آمار نشست‌ها تقریبی است؛ محتوای پوستر یا IP خام در اسکریپت فعلی جمع‌آوری نمی‌شود.</span></footer>
  </section>
 </main>
 </body>
