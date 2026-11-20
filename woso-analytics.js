@@ -1,10 +1,17 @@
-/* WoSoCenter Analytics Phase 1 — no cookies, no IP collection, no poster content.
+/* WoSoCenter Analytics v4.1 — high-entropy device model when browser permits.
+ * Client never handles visitor IP; Cloudflare Worker reads it server-side.
+ * No cookies, no poster content.
  * Only page views and actual initiated PNG downloads are reported.
  * Update the Worker URL here if Cloudflare assigns a different address.
  */
 (() => {
  'use strict';
- const API = 'https://wosocenter-analytics.mr-mehrdadzamani1382.workers.dev';
+ // Use an isolated Cloudflare Worker for the GitHub Pages preview site.
+ // This URL becomes valid only after creating the Worker under the same Cloudflare account.
+ const isPreview = location.pathname === '/wosocenter-preview' || location.pathname.startsWith('/wosocenter-preview/');
+ const API = isPreview
+   ? 'https://wosocenter-analytics-preview.mr-mehrdadzamani1382.workers.dev'
+   : 'https://wosocenter-analytics.mr-mehrdadzamani1382.workers.dev';
  window.WoSoAnalytics = Object.freeze({endpoint:API});
  // Shared UI additions load on every tool independently of analytics opt-outs.
  // Keep them BEFORE Do-Not-Track / GPC checks: turning analytics off must not disable the editor.
@@ -29,8 +36,14 @@
    session=sessionStorage.getItem(key);
    if(!session){session=crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'') : [...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('');sessionStorage.setItem(key,session)}
  }catch{session=[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('')}
- function send(event,quality='unknown'){
-  const payload=JSON.stringify({event,tool,quality,session});
+ // High-entropy device model may be unavailable, empty, or denied by the browser.
+ // Do not attempt fingerprinting or cross-session device correlation.
+ const modelHint = navigator.userAgentData?.getHighEntropyValues
+   ? navigator.userAgentData.getHighEntropyValues(['model']).then(v=>typeof v.model==='string' ? v.model.slice(0,80) : '').catch(()=>'')
+   : Promise.resolve('');
+ async function send(event,quality='unknown'){
+  const deviceModel=await Promise.race([modelHint,new Promise(resolve=>setTimeout(()=>resolve(''),900))]);
+  const payload=JSON.stringify({event,tool,quality,session,deviceModel});
   const url=API+'/api/track';
   try{
    if(navigator.sendBeacon && navigator.sendBeacon(url,new Blob([payload],{type:'text/plain'})))return;

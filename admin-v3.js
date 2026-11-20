@@ -118,10 +118,10 @@
 
   function selectedRange() {
     const t = todayISO(), choice = $('rangeSelect').value;
-    if (choice === 'today') return {from:t, to:t, text:'امروز', days:7, exactTools:false};
-    if (choice === 'yesterday') { const d = offsetISO(t, -1); return {from:d, to:d, text:'دیروز', days:90, exactTools:false}; }
-    if (choice === 'two-days-ago') { const d = offsetISO(t, -2); return {from:d, to:d, text:'دو روز پیش', days:90, exactTools:false}; }
-    if (choice === 'custom') return {from:fromDate, to:toDate, text:'از '+persianNumeric(fromDate)+' تا '+persianNumeric(toDate), days:90, exactTools:false};
+    if (choice === 'today') return {from:t, to:t, text:'امروز', days:7, exactTools:true};
+    if (choice === 'yesterday') { const d = offsetISO(t, -1); return {from:d, to:d, text:'دیروز', days:90, exactTools:true}; }
+    if (choice === 'two-days-ago') { const d = offsetISO(t, -2); return {from:d, to:d, text:'دو روز پیش', days:90, exactTools:true}; }
+    if (choice === 'custom') return {from:fromDate, to:toDate, text:'از '+persianNumeric(fromDate)+' تا '+persianNumeric(toDate), days:90, exactTools:true};
     const count = Number(choice) || 30;
     return {from:offsetISO(t, 1-count), to:t, text:fa(count)+' روز اخیر', days:count, exactTools:true};
   }
@@ -329,13 +329,14 @@
     const rows=dates.map(day=>map.get(day)||{});
     const sessionRows=dates.map(day=>sessions.get(day)||{});
     const t=todayISO();
-    $('todayViews').textContent=fa(metricValue(t,'views',map));
-    $('todayDownloads').textContent=fa(metricValue(t,'downloads',map));
+    const actualToday = data.todaySummary || {};
+    $('todayViews').textContent=fa(data.rangeApplied ? actualToday.views : metricValue(t,'views',map));
+    $('todayDownloads').textContent=fa(data.rangeApplied ? actualToday.downloads : metricValue(t,'downloads',map));
     $('rangeViews').textContent=fa(sum(rows,'views'));
     $('rangeDownloads').textContent=fa(sum(rows,'downloads'));
     $('highDownloads').textContent=fa(sum(rows,'high'));
     $('compactDownloads').textContent=fa(sum(rows,'compact'));
-    $('todaySessions').textContent=fa(metricValue(t,'sessions',sessions));
+    $('todaySessions').textContent=fa(data.rangeApplied ? actualToday.sessions : metricValue(t,'sessions',sessions));
     $('periodSessions').textContent=fa(sum(sessionRows,'sessions'));
     $('periodCaption').textContent=selection.text;
     $('todayJalali').textContent='امروز '+persianLong(t);
@@ -344,9 +345,10 @@
     $('zoneLabel').textContent='زمان نمایش: '+ZONE+' | روزبندی Worker: '+serverZone;
     $('timezoneWarning').hidden=serverZone===ZONE;
     $('timezoneWarning').textContent='توجه: نمایش تاریخ و ساعت بر اساس تهران است، اما گروه‌بندی روزانه Worker هنوز «'+serverZone+'» است. برای هماهنگی دقیق مرز روزها، لازم است timezone سرور نیز به Asia/Tehran تغییر کند.';
-    chartFor(dates,map);dailyTable(dates,map);toolTable(data.tools||[],selection.exactTools);
+    chartFor(dates,map);dailyTable(dates,map);toolTable(data.tools||[],Boolean(data.rangeApplied) || selection.exactTools);
   }
   let cachedEvents = [];
+  let eventsRequestId = 0, eventsNextCursor = null, eventsSelection = null, eventsLoadingMore = false;
   function renderEvents(events, rebuildFilters = true) {
     cachedEvents = events;
     if (rebuildFilters) {
@@ -361,7 +363,7 @@
     const body=$('eventsRows');body.replaceChildren();
     $('eventsTableWrap').hidden=false;
     $('eventsState').textContent='فعال';
-    $('eventsInfo').textContent='نمایش '+fa(visible.length)+' رویداد از '+fa(events.length)+' مورد در بازه؛ ساعت‌ها به وقت تهران هستند. شناسه نشست هویت واقعی فرد را مشخص نمی‌کند.';
+    $('eventsInfo').textContent='نمایش '+fa(visible.length)+' رویداد از '+fa(events.length)+' رویداد بارگذاری‌شده؛ ساعت‌ها به وقت تهران هستند. شناسه نشست تصادفی است؛ IP خام برای ۷ روز اخیر و فقط در پنل ادمین نمایش داده می‌شود. موقعیت مکانی تقریبی است.';
     for(const ev of visible) {
       const tr=document.createElement('tr');
       const time=ev.timestamp||ev.createdAt||ev.occurredAt||ev.time;
@@ -370,30 +372,56 @@
       const text=[time?(persianLong(time)+' '+tehranClock(time)):'—',
         ev.session?String(ev.session).slice(0,10)+'…':'—',toolName(ev.tool),eventLabel,
         [ev.deviceType,ev.deviceModel,ev.os,ev.browser].filter(Boolean).join(' / ')||'نامشخص',
+        ev.ipAddress||'—',
         [ev.country,ev.city].filter(Boolean).join('، ')||'نامشخص',
         [ev.fileType,ev.quality,ev.downloadType].filter(Boolean).join(' / ')||'—'];
       text.forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.append(td);});
       body.append(tr);
     }
     if(!visible.length){
-      const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=7;
+      const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=8;
       td.textContent='در این بازه رویدادی ثبت نشده است.';tr.append(td);body.append(tr);
     }
   }
   $('sessionFilter').addEventListener('change',()=>renderEvents(cachedEvents,false));
-  async function loadEvents(selection) {
-    $('eventFilters').hidden=true;
-    $('eventsTableWrap').hidden=true;$('eventsState').textContent='در حال بررسی';
+  async function loadEvents(selection, append = false) {
+    const id = append ? eventsRequestId : ++eventsRequestId;
+    if (append && (eventsLoadingMore || !eventsNextCursor)) return;
+    if (!append) {
+      cachedEvents = [];
+      eventsNextCursor = null;
+      eventsSelection = selection;
+      $('eventFilters').hidden=true;
+      $('eventsTableWrap').hidden=true;
+      $('eventsState').textContent='در حال بررسی';
+    } else eventsLoadingMore = true;
+    const more=$('eventsMoreButton');more.disabled=true;
     try {
       const params=new URLSearchParams({from:selection.from,to:selection.to,limit:'100',timezone:ZONE});
+      if (append && eventsNextCursor) params.set('before',eventsNextCursor);
       const data=await api('/api/admin/events?'+params.toString());
+      if (id !== eventsRequestId) return;
       if(!Array.isArray(data.events)) throw new Error('ساختار پاسخ رویدادها معتبر نیست.');
-      renderEvents(data.events);
+      eventsNextCursor = data.hasMore ? data.nextCursor : null;
+      const priorSelection = append ? $('sessionFilter').value : '';
+      const accumulated = append ? cachedEvents.concat(data.events) : data.events;
+      renderEvents(accumulated);
+      if (priorSelection && [...$('sessionFilter').options].some(o=>o.value===priorSelection)) {
+        $('sessionFilter').value=priorSelection;
+        renderEvents(accumulated,false);
+      }
     } catch(err) {
-      $('eventsState').textContent='نیازمند ارتقای Worker';
-      $('eventsInfo').textContent='Worker فعلی گزارش زمانِ تک‌تک بازدیدها، دستگاه، کشور/شهر و دانلود هر نشست را ارائه نمی‌کند. بخش نمودار و آمار تجمیعی فعال است؛ برای این جدول باید ذخیره رویدادها و API احرازشده در Cloudflare اضافه شود.';
+      if (id!==eventsRequestId) return;
+      $('eventsState').textContent='خطای دریافت رویدادها';
+      $('eventsInfo').textContent=err.status===404
+        ? 'در Worker هنوز API ثبت جزئیات بازدیدها فعال نیست.'
+        : 'دریافت رویدادها انجام نشد: '+err.message;
+    } finally {
+      eventsLoadingMore=false;
+      if(id===eventsRequestId){more.hidden=!eventsNextCursor;more.disabled=false;}
     }
   }
+  $('eventsMoreButton').addEventListener('click',()=>{if(eventsSelection)void loadEvents(eventsSelection,true)});
   async function refresh() {
     if(busy)return;
     const selection=selectedRange();
@@ -403,7 +431,8 @@
     }
     busy=true;$('refreshButton').disabled=true;status('در حال دریافت آمار…');
     try {
-      const data=await api('/api/admin/stats?days='+selection.days);
+      const params=new URLSearchParams({from:selection.from,to:selection.to,days:String(selection.days)});
+      const data=await api('/api/admin/stats?'+params.toString());
       render(data,selection);showDashboard(true);status('');
       void loadEvents(selection);
     } catch(err) {
