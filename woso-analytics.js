@@ -14,6 +14,8 @@
    if(pageName==='lineup.html'){
      const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';stylesheet.href='woso-lineup-custom-player.css?v=2';document.head.appendChild(stylesheet);
      const feature=document.createElement('script');feature.src='woso-lineup-custom-player.js?v=2';document.head.appendChild(feature);
+     // Footer brand selector, independently bundled for the development branch.
+     const brand=document.createElement('script');brand.src='woso-lineup-brand-picker.js?v=1';document.head.appendChild(brand);
    }
  }
 
