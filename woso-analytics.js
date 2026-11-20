@@ -29,7 +29,6 @@
  const map = {'':'home','index.html':'home','fixture.html':'fixture','lineup.html':'lineup','interview.html':'interview','standings.html':'standings'};
  const path = location.pathname.endsWith('/') ? 'index.html' : (location.pathname.split('/').filter(Boolean).pop() || 'index.html');
  const tool = map[path];
- if (navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true) return;
  let session;
  try{
    const key='wosocenter_analytics_session_v1';
