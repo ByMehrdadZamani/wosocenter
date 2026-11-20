@@ -1,0 +1,61 @@
+name: Sync WosoCenter development to preview
+
+on:
+  push:
+    branches:
+      - development
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wosocenter-preview-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-preview:
+    if: github.repository == 'ByMehrdadZamani/wosocenter'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify preview token exists
+        env:
+          PREVIEW_TOKEN: ${{ secrets.WOSO_PREVIEW_TOKEN }}
+        run: |
+          if [ -z "$PREVIEW_TOKEN" ]; then
+            echo '::error::Repository secret WOSO_PREVIEW_TOKEN is missing.'
+            exit 1
+          fi
+
+      - name: Checkout development source
+        uses: actions/checkout@v4
+        with:
+          ref: development
+          path: source
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Checkout preview development
+        uses: actions/checkout@v4
+        with:
+          repository: ByMehrdadZamani/wosocenter-preview
+          ref: development
+          path: preview
+          fetch-depth: 1
+          token: ${{ secrets.WOSO_PREVIEW_TOKEN }}
+
+      - name: Copy only project files and publish preview branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a --delete --exclude='.git/' --exclude='.github/' source/ preview/
+          cd preview
+          git config user.name 'WoSoCenter Preview Sync'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add --all
+          if git diff --cached --quiet; then
+            echo 'Preview is already up to date.'
+            exit 0
+          fi
+          git commit -m "Sync preview from development (${GITHUB_SHA})"
+          git push origin HEAD:development
