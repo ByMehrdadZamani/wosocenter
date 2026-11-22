@@ -1,10 +1,18 @@
-/* WoSoCenter Analytics Phase 1 — no cookies, no IP collection, no poster content.
+/* WoSoCenter Analytics v4.2 — high-entropy device model when browser permits.
+ * Client never handles visitor IP; Cloudflare Worker reads it server-side.
+ * Aggregate-only page/download counts for DNT/GPC: no device/IP/session or event history.
+ * No cookies, no poster content.
  * Only page views and actual initiated PNG downloads are reported.
  * Update the Worker URL here if Cloudflare assigns a different address.
  */
 (() => {
  'use strict';
- const API = 'https://wosocenter-analytics.mr-mehrdadzamani1382.workers.dev';
+ // Use an isolated Cloudflare Worker for the GitHub Pages preview site.
+ // This URL becomes valid only after creating the Worker under the same Cloudflare account.
+ const isPreview = location.pathname === '/wosocenter-preview' || location.pathname.startsWith('/wosocenter-preview/');
+ const API = isPreview
+   ? 'https://wosocenter-analytics-preview.mr-mehrdadzamani1382.workers.dev'
+   : 'https://wosocenter-analytics.mr-mehrdadzamani1382.workers.dev';
  window.WoSoAnalytics = Object.freeze({endpoint:API});
  // Shared UI additions load on every tool independently of analytics opt-outs.
  // Keep them BEFORE Do-Not-Track / GPC checks: turning analytics off must not disable the editor.
@@ -22,15 +30,28 @@
  const map = {'':'home','index.html':'home','fixture.html':'fixture','lineup.html':'lineup','interview.html':'interview','standings.html':'standings'};
  const path = location.pathname.endsWith('/') ? 'index.html' : (location.pathname.split('/').filter(Boolean).pop() || 'index.html');
  const tool = map[path];
- if(!tool || navigator.doNotTrack==='1' || navigator.globalPrivacyControl === true)return;
- let session;
- try{
-   const key='wosocenter_analytics_session_v1';
-   session=sessionStorage.getItem(key);
-   if(!session){session=crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'') : [...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('');sessionStorage.setItem(key,session)}
- }catch{session=[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('')}
- function send(event,quality='unknown'){
-  const payload=JSON.stringify({event,tool,quality,session});
+ if(!tool)return;
+ // No per-user identity or device hints for browsers signaling DNT / GPC.
+ // Such traffic contributes only anonymous totals in the server's daily_counts table.
+ const dnt=String(navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack||'').toLowerCase();
+ const aggregateOnly=dnt==='1'||dnt==='yes'||navigator.globalPrivacyControl===true;
+ let session='';
+ if(!aggregateOnly){
+   try{
+     const key='wosocenter_analytics_session_v1';
+     session=sessionStorage.getItem(key);
+     if(!session){session=crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'') : [...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('');sessionStorage.setItem(key,session)}
+   }catch{session=[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('')}
+ }
+ // High-entropy hints are never requested for aggregate-only traffic.
+ const modelHint = !aggregateOnly && navigator.userAgentData?.getHighEntropyValues
+   ? navigator.userAgentData.getHighEntropyValues(['model']).then(v=>typeof v.model==='string' ? v.model.slice(0,80) : '').catch(()=>'')
+   : Promise.resolve('');
+ async function send(event,quality='unknown'){
+  const data=aggregateOnly
+   ? {event,tool,quality,anonymous:true}
+   : {event,tool,quality,session,deviceModel:await Promise.race([modelHint,new Promise(resolve=>setTimeout(()=>resolve(''),900))])};
+  const payload=JSON.stringify(data);
   const url=API+'/api/track';
   try{
    if(navigator.sendBeacon && navigator.sendBeacon(url,new Blob([payload],{type:'text/plain'})))return;
