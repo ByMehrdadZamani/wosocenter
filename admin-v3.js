@@ -349,8 +349,21 @@
     $('timezoneWarning').textContent='توجه: نمایش تاریخ و ساعت بر اساس تهران است، اما گروه‌بندی روزانه Worker هنوز «'+serverZone+'» است. برای هماهنگی دقیق مرز روزها، لازم است timezone سرور نیز به Asia/Tehran تغییر کند.';
     chartFor(dates,map);dailyTable(dates,map);toolTable(data.tools||[],Boolean(data.rangeApplied) || selection.exactTools);
   }
-  let cachedEvents = [];
-  let eventsRequestId = 0, eventsNextCursor = null, eventsSelection = null, eventsLoadingMore = false;
+  let cachedEvents = [], detailedEvents = [], anonymousRows = [];
+  let eventsRequestId = 0, eventsNextCursor = null, anonymousNextOffset = null,
+      eventsSelection = null, eventsLoadingMore = false;
+  const EVENT_SORT_FMT = new Intl.DateTimeFormat('en-GB', {
+    timeZone:ZONE,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'
+  });
+  function eventSortKey(ev){
+    if(ev.anonymous) return ev.day+'T'+String(ev.hour).padStart(2,'0')+':00:00';
+    const p=Object.fromEntries(EVENT_SORT_FMT.formatToParts(new Date(ev.timestamp)).filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+    return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
+  }
+  function combinedEvents(){
+    return detailedEvents.concat(anonymousRows).sort((a,b)=>eventSortKey(b).localeCompare(eventSortKey(a)));
+  }
+
   function renderEvents(events, rebuildFilters = true) {
     cachedEvents = events;
     if (rebuildFilters) {
@@ -365,18 +378,26 @@
     const body=$('eventsRows');body.replaceChildren();
     $('eventsTableWrap').hidden=false;
     $('eventsState').textContent='فعال';
-    $('eventsInfo').textContent='نمایش '+fa(visible.length)+' رویداد از '+fa(events.length)+' رویداد بارگذاری‌شده؛ ساعت‌ها به وقت تهران هستند. شناسه نشست تصادفی است؛ IP خام برای ۷ روز اخیر و فقط در پنل ادمین نمایش داده می‌شود. موقعیت مکانی تقریبی است.';
+    const totalAnonymous = events.filter(x=>x.anonymous).reduce((sum,x)=>sum+numeric(x.count),0);
+    $('eventsInfo').textContent='نمایش '+fa(visible.length)+' ردیف از '+fa(events.length)+' ردیف بارگذاری‌شده؛ شامل '+fa(totalAnonymous)+' رخداد ناشناس در گروه‌های ساعتی. بازدیدهای ناشناس بدون IP، مدل، شناسه نشست یا زمان دقیق ذخیره می‌شوند. ساعت‌ها به وقت تهران هستند. برای رویدادهای تفصیلی، IP تا ۷ روز قابل نمایش است.';
     for(const ev of visible) {
       const tr=document.createElement('tr');
       const time=ev.timestamp||ev.createdAt||ev.occurredAt||ev.time;
       const action=ev.event||ev.type||'—';
       const eventLabel=action==='page_view'?'بازدید صفحه':action==='download'?'شروع دانلود':String(action);
-      const text=[time?(persianLong(time)+' '+tehranClock(time)):'—',
-        ev.session?String(ev.session).slice(0,10)+'…':'—',toolName(ev.tool),eventLabel,
-        [ev.deviceType,ev.deviceModel,ev.os,ev.browser].filter(Boolean).join(' / ')||'نامشخص',
-        ev.ipAddress||'—',
-        [ev.country,ev.city].filter(Boolean).join('، ')||'نامشخص',
-        [ev.fileType,ev.quality,ev.downloadType].filter(Boolean).join(' / ')||'—'];
+      const hourStart=ev.anonymous?fa(ev.hour).padStart(2,'۰'):'',
+            hourEnd=ev.anonymous?fa((ev.hour+1)%24).padStart(2,'۰'):'';
+      const timeLabel=ev.anonymous
+        ? persianLong(ev.day)+' · '+hourStart+':۰۰ تا '+hourEnd+':۰۰'
+        : time?(persianLong(time)+' '+tehranClock(time)):'—';
+      const text=[timeLabel,
+        ev.anonymous?'ناشناس':ev.session?String(ev.session).slice(0,10)+'…':'—',
+        toolName(ev.tool),ev.anonymous?eventLabel+' ناشناس × '+fa(ev.count):eventLabel,
+        ev.anonymous?'ثبت نمی‌شود':[ev.deviceType,ev.deviceModel,ev.os,ev.browser].filter(Boolean).join(' / ')||'نامشخص',
+        ev.anonymous?'—':ev.ipAddress||'—',
+        ev.anonymous?'—':[ev.country,ev.city].filter(Boolean).join('، ')||'نامشخص',
+        ev.event==='download'?[ev.anonymous?'PNG':ev.fileType,ev.quality].filter(Boolean).join(' / '):'—'];
+      if(ev.anonymous)tr.classList.add('anonymous-event-row');
       text.forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.append(td);});
       body.append(tr);
     }
@@ -388,10 +409,10 @@
   $('sessionFilter').addEventListener('change',()=>renderEvents(cachedEvents,false));
   async function loadEvents(selection, append = false) {
     const id = append ? eventsRequestId : ++eventsRequestId;
-    if (append && (eventsLoadingMore || !eventsNextCursor)) return;
+    if (append && (eventsLoadingMore || (!eventsNextCursor && anonymousNextOffset === null))) return;
     if (!append) {
-      cachedEvents = [];
-      eventsNextCursor = null;
+      cachedEvents = []; detailedEvents = []; anonymousRows = [];
+      eventsNextCursor = null; anonymousNextOffset = 0;
       eventsSelection = selection;
       $('eventFilters').hidden=true;
       $('eventsTableWrap').hidden=true;
@@ -401,12 +422,21 @@
     try {
       const params=new URLSearchParams({from:selection.from,to:selection.to,limit:'100',timezone:ZONE});
       if (append && eventsNextCursor) params.set('before',eventsNextCursor);
-      const data=await api('/api/admin/events?'+params.toString());
+      const anonParams=new URLSearchParams({from:selection.from,to:selection.to,limit:'200',offset:String(anonymousNextOffset||0)});
+      const [details, anon]=await Promise.all([
+        (!append || eventsNextCursor) ? api('/api/admin/events?'+params.toString()) : Promise.resolve({events:[],hasMore:false,nextCursor:null}),
+        (!append || anonymousNextOffset !== null) ? api('/api/admin/anonymous-events?'+anonParams.toString()) : Promise.resolve({events:[],hasMore:false,nextOffset:null})
+      ]);
       if (id !== eventsRequestId) return;
-      if(!Array.isArray(data.events)) throw new Error('ساختار پاسخ رویدادها معتبر نیست.');
-      eventsNextCursor = data.hasMore ? data.nextCursor : null;
+      if(!Array.isArray(details.events) || !Array.isArray(anon.events)) throw new Error('ساختار پاسخ رویدادها معتبر نیست.');
+      eventsNextCursor = details.hasMore ? details.nextCursor : null;
+      anonymousNextOffset = anon.hasMore ? anon.nextOffset : null;
       const priorSelection = append ? $('sessionFilter').value : '';
-      const accumulated = append ? cachedEvents.concat(data.events) : data.events;
+      detailedEvents = append ? detailedEvents.concat(details.events) : details.events;
+      const mapped=anon.events.map(e=>({anonymous:true,day:String(e.day),hour:Number(e.hour),
+        tool:e.tool,event:e.event,quality:e.quality,count:Number(e.count)||0}));
+      anonymousRows = append ? anonymousRows.concat(mapped) : mapped;
+      const accumulated=combinedEvents();
       renderEvents(accumulated);
       if (priorSelection && [...$('sessionFilter').options].some(o=>o.value===priorSelection)) {
         $('sessionFilter').value=priorSelection;
@@ -416,11 +446,11 @@
       if (id!==eventsRequestId) return;
       $('eventsState').textContent='خطای دریافت رویدادها';
       $('eventsInfo').textContent=err.status===404
-        ? 'در Worker هنوز API ثبت جزئیات بازدیدها فعال نیست.'
+        ? 'Worker باید ابتدا به نسخه 4.3 ارتقا پیدا کند تا رویدادهای ناشناس نمایش داده شوند.'
         : 'دریافت رویدادها انجام نشد: '+err.message;
     } finally {
       eventsLoadingMore=false;
-      if(id===eventsRequestId){more.hidden=!eventsNextCursor;more.disabled=false;}
+      if(id===eventsRequestId){more.hidden=!eventsNextCursor && anonymousNextOffset===null;more.disabled=false;}
     }
   }
   $('eventsMoreButton').addEventListener('click',()=>{if(eventsSelection)void loadEvents(eventsSelection,true)});
