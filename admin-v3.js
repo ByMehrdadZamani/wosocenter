@@ -334,6 +334,8 @@
     $('todayDownloads').textContent=fa(data.rangeApplied ? actualToday.downloads : metricValue(t,'downloads',map));
     $('rangeViews').textContent=fa(sum(rows,'views'));
     $('rangeDownloads').textContent=fa(sum(rows,'downloads'));
+    $('anonymousViews').textContent=fa(sum(rows,'anonymousViews'));
+    $('anonymousDownloads').textContent=fa(sum(rows,'anonymousDownloads'));
     $('highDownloads').textContent=fa(sum(rows,'high'));
     $('compactDownloads').textContent=fa(sum(rows,'compact'));
     $('todaySessions').textContent=fa(data.rangeApplied ? actualToday.sessions : metricValue(t,'sessions',sessions));

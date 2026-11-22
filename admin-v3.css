@@ -44,3 +44,7 @@
 .event-filters span{font-size:11px}
 
 .events-more{margin-top:12px;display:inline-flex}.events-more[hidden]{display:none!important}
+
+/* Anonymous aggregate counts are included in overall totals, never in event history. */
+.anonymous-overview{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:12px;padding:12px 16px;background:var(--panel2);border:1px solid var(--line);border-radius:13px;color:var(--ink);font-size:12px}
+.anonymous-overview span{font-weight:800}.anonymous-overview b{color:var(--gold);font-size:15px}.anonymous-overview small{flex-basis:100%;color:var(--muted);font-size:11px;line-height:1.8}
